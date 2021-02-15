@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  backend:
+    image: essayb:backend
+    container_name: essayb-backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    ports:
+      - 8888:8888
+
+  frontend:
+    image: essayb:frontend
+    container_name: essayb-frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
