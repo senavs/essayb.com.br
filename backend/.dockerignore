@@ -1,0 +1,5 @@
+.dockerignore
+Dockerfile
+requirements.txt
+pep8.sh
+.flake8

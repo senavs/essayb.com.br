@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  backend:
+    image: essayb:backend-dev
+    container_name: essayb-backend-dev
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/api:/code/api
+      - ./backend/setup.py:/code/setup.py
+    ports:
+      - 8888:8888
+
+  frontend:
+    image: essayb:frontend-dev
+    container_name: essayb-frontend-dev
+    build:
+      context: frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend/src:/code/src/
+      - ./frontend/public:/code/public/
+      - ./frontend/package.json:/code/package.json
+      - ./frontend/package-lock.json:/code/package-lock.json
+    ports:
+      - 8080:8080

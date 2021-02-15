@@ -1,0 +1,8 @@
+FROM node
+
+COPY . /code/
+
+WORKDIR /code
+RUN npm install
+
+CMD ["npm", "start", "8080", "-s", "build"]
