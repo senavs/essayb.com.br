@@ -7,9 +7,13 @@ services:
     container_name: essayb-backend-dev
     build:
       context: backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    environment:
+      DEPLOY_DEBUG: "true"
+      DEPLOY_RELOAD: "true"
     volumes:
       - ./backend/api:/code/api
+      - ./backend/logs:/code/logs
       - ./backend/setup.py:/code/setup.py
     ports:
       - 8888:8888

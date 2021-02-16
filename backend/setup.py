@@ -14,6 +14,7 @@ run_requirements = [
     'fastapi==0.63.0',
     'gunicorn==20.0.4',
     'httptools==0.1.1',
+    'loguru==0.5.3',
     'PyJWT==2.0.1',
     'SQLAlchemy==1.3.23',
     'uvicorn==0.13.3',
