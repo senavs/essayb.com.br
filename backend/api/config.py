@@ -9,4 +9,11 @@ class DeploySettings(BaseSettings):
     DEPLOY_ACCESS_LOG: bool = False
 
 
+class LoggingSetting(BaseSettings):
+    LOGURU_FORMAT: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <bold>{message}</bold>'
+    LOGGING_IGNORED_PATHS: str = '/metrics /health /docs /redoc /openapi.json /favicon.ico'
+    LOGGING_FILE: bool = True
+
+
 deploy = DeploySettings()
+logging = LoggingSetting()
