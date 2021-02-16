@@ -8,6 +8,8 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
+    volumes:
+      - ./backend/logs:/code/logs
     ports:
       - 8888:8888
 
