@@ -9,6 +9,7 @@ function NavBar() {
 
   // vars and stats
   const isAuthenticated = false
+  const isPremium = false
 
   // render
   return (
@@ -20,7 +21,8 @@ function NavBar() {
 
           {/* subscribe button */}
           <div className="col-4 d-flex justify-content-start align-self-end">
-            <Link to="/subscribe" className="link-secondary">Subscribe</Link>
+            {isPremium || < Link to="/subscribe" className="link-secondary">Subscribe</Link>}
+
           </div>
           {/* brand button */}
           <div className="col-4 d-flex justify-content-center align-self-end">
@@ -54,7 +56,7 @@ function NavBar() {
         <Link to="/" className="p-2 mx-auto link-secondary">Travel</Link>
       </div>
 
-    </div>
+    </div >
   );
 }
 
