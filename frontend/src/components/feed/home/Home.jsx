@@ -1,5 +1,5 @@
-function Home() {
-  
+export default function Home() {
+
   // render
   return (
     <div className="container">
@@ -8,5 +8,3 @@ function Home() {
   )
 
 }
-
-export default Home;

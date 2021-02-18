@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-function Avatar({ userPicture, width }) {
+export default function Avatar({ userPicture, width }) {
   // vars
   userPicture = userPicture || '/static/default-avatar.png'
   width = width || '32px'
@@ -11,5 +11,3 @@ function Avatar({ userPicture, width }) {
     </Link>
   );
 }
-
-export default Avatar;

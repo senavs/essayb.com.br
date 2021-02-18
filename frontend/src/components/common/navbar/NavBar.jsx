@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './NavBar.css'
 import Avatar from '../avatar/Avatar'
 
-function NavBar() {
+export default function NavBar() {
   // TODO: get user authentication
   // TODO: get categories from backend
 
@@ -59,5 +59,3 @@ function NavBar() {
     </div >
   );
 }
-
-export default NavBar;
