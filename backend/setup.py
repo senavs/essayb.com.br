@@ -16,6 +16,7 @@ run_requirements = [
     'httptools==0.1.1',
     'loguru==0.5.3',
     'PyJWT==2.0.1',
+    'psycopg2==2.8.6',
     'SQLAlchemy==1.3.23',
     'uvicorn==0.13.3',
     'uvloop==0.15.0'
