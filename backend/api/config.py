@@ -6,6 +6,11 @@ class AuthSetting(BaseSettings):
     EXPIRED_MINUTES: int = 10080  # 7 days
 
 
+class DatabaseSettings(BaseSettings):
+    DATABASE_URI: str
+    DATABASE_RESET: bool = False
+
+
 class DeploySettings(BaseSettings):
     DEPLOY_HOST: str = '0.0.0.0'
     DEPLOY_PORT: int = 8888
@@ -21,5 +26,6 @@ class LoggingSetting(BaseSettings):
 
 
 auth = AuthSetting()
+database = DatabaseSettings()
 deploy = DeploySettings()
 logging = LoggingSetting()

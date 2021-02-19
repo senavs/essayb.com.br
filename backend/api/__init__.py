@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from . import config
+from .database.loader import Bootloader
 from .modules.errorhandler import exception_handlers
 from .modules.middlewares import LoggingMiddleware, ProcessTimeMiddleware
 
@@ -25,3 +26,6 @@ if config.logging.LOGGING_FILE:
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
 app.add_middleware(ProcessTimeMiddleware)
 app.add_middleware(LoggingMiddleware)
+
+# others
+bootloader = Bootloader()
