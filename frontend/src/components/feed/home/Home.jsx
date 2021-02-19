@@ -7,7 +7,8 @@ export default function Home() {
   // render
   return (
     <div className="container">
-      <h1 className="pb-2 mb-4 fst-italic border-bottom">Most viewed today</h1>
+
+      {/* main essays of the day */}
       <div className="row">
         <div className="col-12 mb-3">
           <MainCard author="essayB" category="U.S" title="BitCoin and Elon Musk" backgroundImage="/static/default-maincard-background.jpeg" url="/essay/bitcoin-and-elon-musk" />
@@ -18,6 +19,12 @@ export default function Home() {
         <div className="col-12 col-md-6 mb-3">
           <MainCard author="essayB" category="U.S" title="BitCoin and Elon Musk" backgroundImage="/static/default-maincard-background.jpeg" url="/essay/bitcoin-and-elon-musk" />
         </div>
+
+        {/* last essays */}
+        <div className="col-12 col-md-8">
+          <h1 className="pt-5 mb-4 fst-italic border-bottom">Last essays</h1>
+        </div>
+
       </div>
     </div>
   )

@@ -13,7 +13,7 @@ export default function NavBar() {
 
   // render
   return (
-    <div className="container">
+    <div className="container mb-5">
 
       {/* main navbar */}
       <div className="py-3 border-bottom border-lg-secondary">
