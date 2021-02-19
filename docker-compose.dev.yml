@@ -2,6 +2,16 @@ version: '3'
 
 services:
 
+  database:
+    image: postgres
+    container_name: essayb-database-dev
+    environment:
+      POSTGRES_DB: ESSAYB_DEV
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: toor
+    ports:
+      - 5432:5432
+
   backend:
     image: essayb:backend-dev
     container_name: essayb-backend-dev
@@ -11,6 +21,7 @@ services:
     environment:
       DEPLOY_DEBUG: "true"
       DEPLOY_RELOAD: "true"
+      DATABASE_URI: 'postgres://root:toor@database/ESSAYB_DEV'
     volumes:
       - ./backend/api:/code/api
       - ./backend/logs:/code/logs

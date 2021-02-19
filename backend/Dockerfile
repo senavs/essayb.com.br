@@ -1,5 +1,7 @@
 FROM python:3.9-buster
 
+RUN apt-get install libpq-dev
+
 COPY setup.py code/
 COPY api /code/api/
 
