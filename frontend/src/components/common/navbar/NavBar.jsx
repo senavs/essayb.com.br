@@ -26,7 +26,7 @@ export default function NavBar() {
           </div>
           {/* brand button */}
           <div className="col-4 d-flex justify-content-center align-self-end">
-            <Link to="/"><img src="/static/brand.png" alt="essayb brand" width="25rem" /></Link>
+            <Link to="/"><img className="brand" src="/static/brand.png" alt="essayb brand" width="25rem" /></Link>
           </div>
           {/* sign up button */}
           <div className="col-4 d-flex justify-content-end align-self-end">
