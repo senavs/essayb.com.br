@@ -47,7 +47,7 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
         if not user.check_password(password):
             raise HTTPException(401, 'wrong password')
 
-        user = user.to_dict(exclude=['PASSWORD', 'CREATED_AT', 'UPDATED_AT'])
+        user = user.to_dict(exclude=['PASSWORD', 'PROFILE_IMAGE', 'CREATED_AT', 'UPDATED_AT'])
         token = to_token(user)
     return AuthModel(token, user)
 
