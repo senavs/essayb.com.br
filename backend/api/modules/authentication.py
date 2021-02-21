@@ -31,7 +31,7 @@ def from_token(token: str) -> dict:
     try:
         user = jwt.decode(token, config.auth.SECRET_KEY, algorithms=["HS256"])['user']
     except jwt.ExpiredSignatureError:
-        raise HTTPException(403, 'expired token')
+        raise HTTPException(401, 'expired token')
     except (jwt.InvalidTokenError, KeyError):
         raise HTTPException(401, 'invalid token')
 
@@ -43,9 +43,9 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
 
     with DatabaseClient() as conn:
         if not (user := conn.query(User).filter_by(USERNAME=username).first()):
-            raise HTTPException(404, 'user not found')
+            raise HTTPException(401, 'user not found')
         if not user.check_password(password):
-            raise HTTPException(403, 'wrong password')
+            raise HTTPException(401, 'wrong password')
 
         user = user.to_dict(exclude=['PASSWORD', 'CREATED_AT', 'UPDATED_AT'])
         token = to_token(user)
@@ -57,7 +57,7 @@ def logout(token: str):
 
     with DatabaseClient() as conn:
         if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
-            raise HTTPException(403, 'expired token')
+            raise HTTPException(401, 'expired token')
         TokenBlacklist(TOKEN=token).insert(conn)
 
 
@@ -74,7 +74,7 @@ def login_required(authentication: str = Header(..., alias='Authorization')) -> 
     # validates if its and expired token
     with DatabaseClient() as conn:
         if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
-            raise HTTPException(403, 'expired token')
+            raise HTTPException(401, 'expired token')
 
     # validates if is a valid token
     user = from_token(token)
