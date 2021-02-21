@@ -1,6 +1,10 @@
 from pydantic import BaseSettings, Field
 
-from .user import User
+
+class CustomUser(BaseSettings):
+    id_user: int
+    username: str = Field(max_length=32)
+    is_premium: bool
 
 
 class LoginRequest(BaseSettings):
@@ -10,7 +14,7 @@ class LoginRequest(BaseSettings):
 
 class LoginResponse(BaseSettings):
     token: str
-    user: User
+    user: CustomUser
 
 
 class LogoutResponse(BaseSettings):

@@ -8,6 +8,9 @@ from . import DeclarativeBase, Session
 class DatabaseClient:
     _session = _query = None
 
+    def __init__(self, *, connection: 'DatabaseClient' = None):
+        self._connection = connection
+
     @property
     def session(self) -> Session:
         return self._session
@@ -37,6 +40,9 @@ class DatabaseClient:
         self.session.rollback()
 
     def __enter__(self) -> 'DatabaseClient':
+        if self._connection:
+            return self._connection
+
         self._session = Session()
         self._query = self.session.query
         return self

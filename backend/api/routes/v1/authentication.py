@@ -15,6 +15,7 @@ def _login(body: LoginRequest):
 @router.post('/logout', summary='User logout', status_code=200, response_model=LogoutResponse)
 def _logout(auth: AuthModel = Depends(login_required)):
     logout(auth.token)
+    return {}
 
 
 @router.post('/validate', summary='Validate user token', status_code=200, response_model=ValidateResponse)
