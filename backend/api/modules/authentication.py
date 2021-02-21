@@ -61,7 +61,7 @@ def logout(token: str):
         TokenBlacklist(TOKEN=token).insert(conn)
 
 
-def login_required(authentication: str = Header(..., alias='Authorization')) -> Union[AuthModel, tuple[str, dict]]:
+def login_required(authentication: str = Header(..., alias='JWT-Token')) -> Union[AuthModel, tuple[str, dict]]:
     """Function to use with fastapi.Depends in routes to verify user is logged in"""
 
     # validates static authorization token
