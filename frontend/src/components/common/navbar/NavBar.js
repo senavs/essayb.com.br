@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import './NavBar.css'
-import Avatar from '../avatar/Avatar'
+import Avatar from '../../profile/avatar/Avatar'
 
 export default function NavBar() {
   // TODO: get user authentication
@@ -10,10 +10,14 @@ export default function NavBar() {
   // vars and stats
   const isAuthenticated = false
   const isPremium = false
+  const categories = [
+    'World', 'U.S', 'Technology', 'Design', 'Culture', 'Business',
+    'Politics', 'Opinion', 'Science', 'Health', 'Style', 'Travel'
+  ]
 
   // render
   return (
-    <div className="container">
+    <div className="container mb-5">
 
       {/* main navbar */}
       <div className="py-3 border-bottom border-lg-secondary">
@@ -26,7 +30,7 @@ export default function NavBar() {
           </div>
           {/* brand button */}
           <div className="col-4 d-flex justify-content-center align-self-end">
-            <Link to="/"><img src="/static/brand.png" alt="essayb brand" width="25rem" /></Link>
+            <Link to="/"><img className="brand" src="/static/brand.png" alt="essayb brand" width="25rem" /></Link>
           </div>
           {/* sign up button */}
           <div className="col-4 d-flex justify-content-end align-self-end">
@@ -42,18 +46,7 @@ export default function NavBar() {
 
       {/* scroller navbar */}
       <div className="nav border-bottom border-lg-secondary mb-3 d-flex flex-nowrap justify-content-between">
-        <Link to="/" className="p-2 mx-auto link-secondary">World</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">U.S</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Technology</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Design</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Culture</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Business</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Politics</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Opinion</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Science</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Health</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Style</Link>
-        <Link to="/" className="p-2 mx-auto link-secondary">Travel</Link>
+        {categories.map((element, index) => <Link key={index} to="/" className="p-2 mx-auto link-secondary">{element}</Link>)}
       </div>
 
     </div >

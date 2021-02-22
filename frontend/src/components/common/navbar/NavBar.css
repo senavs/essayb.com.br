@@ -3,3 +3,11 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+.brand {
+  transition: transform .3s;
+}
+
+.brand:hover {
+  transform: scale(1.5);
+}
