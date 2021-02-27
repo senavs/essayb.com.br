@@ -1,19 +1,30 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
-import './NavBar.css'
 import Avatar from '../../profile/avatar/Avatar'
+import AuthService from '../../../services/Auth'
+import { AuthContext } from '../../../context/AuthProvider'
+
+import './NavBar.css'
+
 
 export default function NavBar() {
-  // TODO: get user authentication
-  // TODO: get categories from backend
+  // context
+  const { auth, deleteAuth } = useContext(AuthContext)
 
   // vars and stats
-  const isAuthenticated = false
-  const isPremium = false
   const categories = [
     'World', 'U.S', 'Technology', 'Design', 'Culture', 'Business',
     'Politics', 'Opinion', 'Science', 'Health', 'Style', 'Travel'
   ]
+
+  // functions
+  const handlerLogout = (event) => {
+    event.preventDefault()
+    AuthService.logout(auth.token)
+      .then(deleteAuth)
+      .catch(console.log)
+  }
 
   // render
   return (
@@ -25,7 +36,11 @@ export default function NavBar() {
 
           {/* subscribe button */}
           <div className="col-4 d-flex justify-content-start align-self-end">
-            {isPremium || < Link to="/subscribe" className="link-secondary">Subscribe</Link>}
+            {
+              (!auth.user || (auth.user && !auth.user.is_premium))
+                ? < Link to="/subscribe" className="link-secondary">Subscribe</Link>
+                : null
+            }
 
           </div>
           {/* brand button */}
@@ -35,9 +50,19 @@ export default function NavBar() {
           {/* sign up button */}
           <div className="col-4 d-flex justify-content-end align-self-end">
             {
-              isAuthenticated
-                ? <Avatar />
-                : <Link to='/signup' className="btn btn-sm btn-outline-secondary">Sign up</Link>
+              (Object.keys(auth).length !== 0)
+                ? (
+                  <>
+                    <Avatar />
+                    <Link to='/logout' className="btn btn-sm btn-outline-secondary ms-2" onClick={handlerLogout}><i className="bi bi-box-arrow-right"></i></Link>
+                  </>
+                )
+                : (
+                  <>
+                    <Link to='/login' className="btn btn-sm btn-outline-secondary ms-2">Login</Link>
+                    <Link to='/signup' className="btn btn-sm btn-outline-secondary ms-2 text-nowrap">Sign up</Link>
+                  </>
+                )
             }
           </div>
 
