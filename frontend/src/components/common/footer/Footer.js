@@ -1,7 +1,7 @@
-import './Footer.css'
+import style from './Footer.module.css'
+
 
 export default function Footer() {
-
   // functions
   const toTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -9,7 +9,7 @@ export default function Footer() {
 
   // render
   return (
-    <div className="footer py-5 text-center border-top text-secondary">
+    <div className={`${style.footer} py-3 text-center border-top text-secondary`}>
       <div>
         <span>Essay Blog develop by </span>
         <a href="https://github.com/Jmarcelo98">Jmarcelo98</a><span>/</span>
@@ -18,7 +18,7 @@ export default function Footer() {
         <a href="https://github.com/ygoliveira">ygoliveira</a><span>.</span>
       </div>
       <div>
-        <span className="to-top text-primary" onClick={toTop}>Back to top</span>
+        <span className="text-primary" role="button" onClick={toTop}>Back to top</span>
       </div>
     </div>
   )

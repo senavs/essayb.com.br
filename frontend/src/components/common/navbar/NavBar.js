@@ -1,11 +1,9 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
-
-import Avatar from '../../profile/avatar/Avatar'
-import AuthService from '../../../services/Auth'
 import { AuthContext } from '../../../context/auth'
-
-import './NavBar.css'
+import AuthService from '../../../services/Auth'
+import Avatar from '../../profile/avatar/Avatar'
+import style from  './NavBar.module.css'
 
 
 export default function NavBar() {
@@ -28,10 +26,10 @@ export default function NavBar() {
 
   // render
   return (
-    <div className="container mb-5">
+    <div className={`${style.navbar} container`}>
 
       {/* main navbar */}
-      <div className="py-3 border-bottom border-lg-secondary">
+      <div className="border-bottom border-lg-secondary py-2">
         <div className="row">
 
           {/* subscribe button */}
@@ -41,7 +39,6 @@ export default function NavBar() {
                 ? < Link to="/subscribe" className="link-secondary">Subscribe</Link>
                 : null
             }
-
           </div>
           {/* brand button */}
           <div className="col-4 d-flex justify-content-center align-self-end">
@@ -70,7 +67,7 @@ export default function NavBar() {
       </div>
 
       {/* scroller navbar */}
-      <div className="nav border-bottom border-lg-secondary mb-3 d-flex flex-nowrap justify-content-between">
+      <div className={`${style.horizontalNavbar} nav border-bottom border-lg-secondary mb-3 d-flex flex-nowrap justify-content-between`}>
         {categories.map((element, index) => <Link key={index} to="/" className="p-2 mx-auto link-secondary">{element}</Link>)}
       </div>
 
