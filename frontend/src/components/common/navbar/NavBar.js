@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import Avatar from '../../profile/avatar/Avatar'
 import AuthService from '../../../services/Auth'
-import { AuthContext } from '../../../context/AuthProvider'
+import { AuthContext } from '../../../context/auth'
 
 import './NavBar.css'
 

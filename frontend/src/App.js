@@ -1,14 +1,11 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-
-
-import NavBar from './components/common/navbar/NavBar'
-import SignUp from './components/profile/signup/SignUp'
 import Footer from './components/common/footer/Footer'
+import NavBar from './components/common/navbar/NavBar'
 import NotFound from './components/common/notfound/NotFound'
 import Home from './components/feed/home/Home'
 import Login from './components/profile/login/Login'
-
-import AuthProvider from './context/AuthProvider'
+import SignUp from './components/profile/signup/SignUp'
+import { AuthProvider } from './context/auth'
 
 
 function App() {
