@@ -89,4 +89,5 @@ def login_required(authentication: str = Header(..., alias='JWT-Token')) -> Unio
 
     # validates if is a valid token
     user = from_token(token)
+    logger.info(f'@{user["username"]} validated token')
     return AuthModel(token, user)
