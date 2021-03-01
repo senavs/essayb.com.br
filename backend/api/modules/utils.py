@@ -1,8 +1,18 @@
+import re
+from base64 import b64decode, b64encode
 from binascii import Error as Base64Error
-from base64 import b64encode, b64decode
+from collections import namedtuple
 from typing import Union
 
 from fastapi import HTTPException
+
+RE_USERNAME = re.compile(r'[^0-9a-zA-Z_.]')
+ValidUsername = namedtuple('ValidUsername', 'valid suggestion')
+
+
+def validates_username(username: str) -> ValidUsername:
+    suggestion = RE_USERNAME.sub('', username)
+    return ValidUsername(suggestion == username, suggestion)
 
 
 def make_query(*, ignore_none: bool = True, **kwargs):

@@ -3,7 +3,6 @@ from pydantic import BaseSettings
 
 class AuthSetting(BaseSettings):
     SECRET_KEY: str = '16da5228ba6585e0082d1f3371cd8a20'
-    EXPIRED_MINUTES: int = 10080  # 7 days
 
 
 class DatabaseSettings(BaseSettings):
