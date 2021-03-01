@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
 import { AuthContext } from '../../../context/auth'
-import AuthService from '../../../services/auth'
 
 
 export default function Login() {

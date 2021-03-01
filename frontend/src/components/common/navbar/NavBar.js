@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../../context/auth'
-import Avatar from '../../profile/avatar/Avatar'
+import Avatar from '../../user/avatar/Avatar'
 import style from './NavBar.module.css'
 
 
