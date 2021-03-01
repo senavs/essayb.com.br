@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import Body from './components/common/body/Body'
 import Footer from './components/common/footer/Footer'
 import NavBar from './components/common/navbar/NavBar'
 import NotFound from './components/common/notfound/NotFound'
@@ -14,12 +15,14 @@ function App() {
       <Router>
         <NavBar />
 
-        <Switch>
-          <Route exact={true} path="/" component={Home} />
-          <Route exact={true} path="/signup" component={SignUp} />
-          <Route exact={true} path="/login" component={Login} />
-          <Route path="*" component={NotFound} />
-        </Switch>
+        <Body>
+          <Switch>
+            <Route exact={true} path="/" component={Home} />
+            <Route exact={true} path="/signup" component={SignUp} />
+            <Route exact={true} path="/login" component={Login} />
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Body>
 
         <Footer />
       </Router>
