@@ -5,6 +5,7 @@ from typing import Union
 import jwt
 from fastapi import Header, HTTPException
 
+from .utils import to_base64
 from .. import config
 from ..database import TokenBlacklist, User
 from ..database.client import DatabaseClient
@@ -47,7 +48,9 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
         if not user.check_password(password):
             raise HTTPException(401, 'wrong password')
 
-        user = user.to_dict(exclude=['PASSWORD', 'PROFILE_IMAGE', 'CREATED_AT', 'UPDATED_AT'])
+        user = user.to_dict(exclude=['PASSWORD', 'CREATED_AT', 'UPDATED_AT'])
+        if user.get('profile_image'):
+            user['profile_image'] = to_base64(user['profile_image'])
         token = to_token(user)
     return AuthModel(token, user)
 
