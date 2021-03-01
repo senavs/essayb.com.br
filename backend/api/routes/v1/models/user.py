@@ -34,11 +34,27 @@ class CreateRequest(BaseSettings):
     profile_image: bytes = None
 
     @validator('profile_image', pre=True)
-    def from_image(cls, value: str) -> Union[bytes, None]:
+    def to_image(cls, value: str) -> Union[bytes, None]:
         if not value:
             return None
         return from_base64(value)
 
 
 class CreateResponse(User):
+    pass
+
+
+class UpdateRequest(BaseSettings):
+    password: str = None
+    new_password: str = None
+    profile_image: bytes = None
+
+    @validator('profile_image', pre=True)
+    def to_image(cls, value: str) -> Union[bytes, None]:
+        if not value:
+            return None
+        return from_base64(value)
+
+
+class UpdateResponse(User):
     pass
