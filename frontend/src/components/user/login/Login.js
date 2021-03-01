@@ -1,13 +1,11 @@
 import { useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
-
-import AuthService from '../../../services/Auth'
-import { AuthContext } from '../../../context/AuthProvider'
+import { AuthContext } from '../../../context/auth'
 
 
 export default function Login() {
-  // context
-  const { auth, setAuth } = useContext(AuthContext)
+  // contexts
+  const { auth, login } = useContext(AuthContext)
 
   // states
   const history = useHistory()
@@ -22,18 +20,14 @@ export default function Login() {
       [name]: value
     })
   }
-
   const handlerSubmit = (event) => {
     event.preventDefault()
     setErrorMessage('')
 
     // call api to login user
-    AuthService.login(formValue.username, formValue.password)
-      .then((res) => {
-        setAuth(res)
-        history.push('/')
-      })
-      .catch((err) => setErrorMessage(err.message))
+    login(formValue.username, formValue.password,
+      () => history.push('/'),
+      (err) => setErrorMessage(err.message))
   }
 
   // render

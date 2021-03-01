@@ -34,7 +34,7 @@ class CreateRequest(BaseSettings):
     profile_image: bytes = None
 
     @validator('profile_image', pre=True)
-    def from_image(cls, value: str) -> Union[bytes, None]:
+    def to_image(cls, value: str) -> Union[bytes, None]:
         if not value:
             return None
         return from_base64(value)
@@ -50,7 +50,7 @@ class UpdateRequest(BaseSettings):
     profile_image: bytes = None
 
     @validator('profile_image', pre=True)
-    def from_image(cls, value: str) -> Union[bytes, None]:
+    def to_image(cls, value: str) -> Union[bytes, None]:
         if not value:
             return None
         return from_base64(value)

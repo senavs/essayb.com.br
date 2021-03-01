@@ -1,5 +1,6 @@
-.main-card {
+.mainCard {
   position: relative;
+  text-shadow: 0 0 5px rgb(0, 0, 0);
 }
 
 .background img {
@@ -11,7 +12,7 @@
   transition: transform .3s;
 }
 
-.main-card:hover img {
+.mainCard:hover img {
   transform: scale(1.3);
 }
 
@@ -19,11 +20,6 @@
   height: 250px;
 }
 
-.clickable-card {
+.clickableCard {
   text-decoration: none;
-}
-
-.category,
-.title .text-white {
-  text-shadow: 0 0 5px rgb(0, 0, 0);
 }
