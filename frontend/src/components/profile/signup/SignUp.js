@@ -1,9 +1,13 @@
-import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import AuthService from '../../../services/Auth'
+import { useContext, useState } from 'react'
+import { Redirect, useHistory } from 'react-router-dom'
+import { AuthContext } from '../../../context/auth'
+import UserService from '../../../services/user'
 
 
 export default function SignUp() {
+  // contexts
+  const { auth } = useContext(AuthContext)
+
   // states
   const history = useHistory()
   const [formValue, setFormValue] = useState({ username: '', password: '', confirmPassword: '' })
@@ -17,8 +21,7 @@ export default function SignUp() {
       [name]: value
     })
   }
-
-  const handlerSubmit = (event) => {
+  const onSubmit = (event) => {
     event.preventDefault()
     setErrorMessage('')
 
@@ -26,14 +29,17 @@ export default function SignUp() {
     if (formValue.password !== formValue.confirmPassword) {
       return setErrorMessage("Passwords did not match.")
     }
-
     // call api to craete new user
-    AuthService.signup(formValue.username, formValue.password)
+    UserService.create(formValue.username, formValue.password)
       .then(() => history.push('/login'))
       .catch((err) => setErrorMessage(err.message))
   }
 
   // render
+  if (auth.token) {
+    return <Redirect to="/" />
+  }
+
   return (
     <div className="container">
       <div className="row">
@@ -42,7 +48,7 @@ export default function SignUp() {
             <h1 className="mb-4 fst-italic border-bottom">Sign up</h1>
           </div>
           <div className="container mb-3 border rounded p-3 shadow-sm">
-            <form onSubmit={handlerSubmit}>
+            <form onSubmit={onSubmit}>
               <div className="mb-3">
                 <label className="form-label">Username</label>
                 <input type="text" maxLength="32" className="form-control" name="username" value={formValue.username} onChange={handlerForm} required />

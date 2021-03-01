@@ -1,28 +1,19 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../../context/auth'
-import AuthService from '../../../services/Auth'
 import Avatar from '../../profile/avatar/Avatar'
 import style from  './NavBar.module.css'
 
 
 export default function NavBar() {
   // context
-  const { auth, deleteAuth } = useContext(AuthContext)
+  const { auth, logout } = useContext(AuthContext)
 
   // vars and stats
   const categories = [
     'World', 'U.S', 'Technology', 'Design', 'Culture', 'Business',
     'Politics', 'Opinion', 'Science', 'Health', 'Style', 'Travel'
   ]
-
-  // functions
-  const handlerLogout = (event) => {
-    event.preventDefault()
-    AuthService.logout(auth.token)
-      .then(deleteAuth)
-      .catch(console.log)
-  }
 
   // render
   return (
@@ -51,7 +42,7 @@ export default function NavBar() {
                 ? (
                   <>
                     <Avatar />
-                    <Link to='/logout' className="btn btn-sm btn-outline-secondary ms-2" onClick={handlerLogout}><i className="bi bi-box-arrow-right"></i></Link>
+                    <Link to='/' className="btn btn-sm btn-outline-secondary ms-2" onClick={logout}><i className="bi bi-box-arrow-right"></i></Link>
                   </>
                 )
                 : (
