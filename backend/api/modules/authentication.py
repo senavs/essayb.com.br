@@ -1,16 +1,15 @@
-from datetime import datetime
-
-from loguru import logger
 from collections import namedtuple
+from datetime import datetime
 from typing import Union
 
 import jwt
 from fastapi import Header, HTTPException
+from loguru import logger
 
-from .utils import to_base64
 from .. import config
 from ..database import TokenBlacklist, User
 from ..database.client import DatabaseClient
+from .utils import to_base64
 
 AuthModel = namedtuple('AuthModel', 'token user')
 

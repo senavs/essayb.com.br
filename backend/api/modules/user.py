@@ -1,11 +1,11 @@
-from loguru import logger
 from typing import Union
 
 from fastapi import HTTPException
+from loguru import logger
 
-from .utils import make_query
 from ..database import User
 from ..database.client import DatabaseClient
+from .utils import make_query, validates_username
 
 
 def search(id_user: int = None, username: str = None, *, connection: DatabaseClient = None) -> dict:
@@ -28,6 +28,11 @@ def create(username: str, password: str, profile_image: Union[str, bytes] = None
         if conn.query(User).filter_by(USERNAME=username).first():
             logger.error('user already registered')
             raise HTTPException(400, 'user already register')
+
+        logger.info('validating username')
+        if not (valid_username := validates_username(username)).valid:
+            logger.error(f'invalid {username} username')
+            raise HTTPException(400, f'invalid username. try {valid_username.suggestion}')
 
         logger.info(f'creating {username} user')
         user = User(USERNAME=username, PASSWORD=password, PROFILE_IMAGE=profile_image)

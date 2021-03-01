@@ -1,5 +1,5 @@
 from bcrypt import checkpw, gensalt, hashpw
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, LargeBinary
+from sqlalchemy import Boolean, Column, DateTime, Integer, LargeBinary, String
 from sqlalchemy.orm import validates
 from sqlalchemy.sql import func
 

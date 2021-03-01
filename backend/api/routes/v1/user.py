@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateResponse, UpdateRequest
 from ...modules.authentication import AuthModel, login_required
 from ...modules.user import create, search, update
+from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateRequest, UpdateResponse
 
 router = APIRouter(prefix='/users', tags=['User'])
 
