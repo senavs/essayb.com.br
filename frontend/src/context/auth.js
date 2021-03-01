@@ -19,7 +19,6 @@ export function AuthProvider({ children }) {
       .catch(reject)
   }
   const logout = (resolve, reject) => {
-    console.log(auth)
     if (auth.token) {
       AuthService.logout(auth.token)
         .then(resolve)
