@@ -1,5 +1,7 @@
 FROM node
 
+ENV PORT=8080
+
 COPY . /code/
 
 WORKDIR /code
