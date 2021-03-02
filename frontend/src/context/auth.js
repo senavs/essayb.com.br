@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useEffect } from 'react'
 import AuthService from '../services/auth'
 import { useLocalStorage } from '../utils/hooks'
 
@@ -8,6 +8,13 @@ export const AuthContext = createContext({})
 export function AuthProvider({ children }) {
   // states
   const [auth, setAuth, deleteAuth] = useLocalStorage('auth')
+
+  // efects
+  useEffect(() => {
+    if (auth.token) {
+      AuthService.validate(auth.token).then(setAuth).catch(deleteAuth)
+    }
+  }, [])
 
   // functions
   const login = (username, password, resolve, reject) => {
@@ -19,7 +26,6 @@ export function AuthProvider({ children }) {
       .catch(reject)
   }
   const logout = (resolve, reject) => {
-    console.log(auth)
     if (auth.token) {
       AuthService.logout(auth.token)
         .then(resolve)

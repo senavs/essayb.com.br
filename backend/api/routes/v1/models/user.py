@@ -3,7 +3,7 @@ from typing import Union
 
 from pydantic import BaseSettings, Field, validator
 
-from ....modules.utils import to_base64, from_base64
+from ....modules.utils import from_base64, to_base64
 
 
 class User(BaseSettings):

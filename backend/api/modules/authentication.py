@@ -1,14 +1,15 @@
 from collections import namedtuple
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Union
 
 import jwt
 from fastapi import Header, HTTPException
+from loguru import logger
 
-from .utils import to_base64
 from .. import config
 from ..database import TokenBlacklist, User
 from ..database.client import DatabaseClient
+from .utils import to_base64
 
 AuthModel = namedtuple('AuthModel', 'token user')
 
@@ -18,7 +19,6 @@ def to_token(user: dict) -> str:
 
     payload = {
         'iat': datetime.utcnow(),
-        'exp': datetime.utcnow() + timedelta(minutes=config.auth.EXPIRED_MINUTES),
         'user': user
     }
     token = jwt.encode(payload, config.auth.SECRET_KEY, algorithm="HS256")
@@ -31,8 +31,6 @@ def from_token(token: str) -> dict:
 
     try:
         user = jwt.decode(token, config.auth.SECRET_KEY, algorithms=["HS256"])['user']
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(401, 'expired token')
     except (jwt.InvalidTokenError, KeyError):
         raise HTTPException(401, 'invalid token')
 
@@ -43,15 +41,22 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
     """Login user and get token"""
 
     with DatabaseClient() as conn:
+        logger.info('validating user')
         if not (user := conn.query(User).filter_by(USERNAME=username).first()):
+            logger.error(f'user @{username} not found')
             raise HTTPException(401, 'user not found')
         if not user.check_password(password):
+            logger.error(f'wrong password for @{username} user')
             raise HTTPException(401, 'wrong password')
 
         user = user.to_dict(exclude=['PASSWORD', 'CREATED_AT', 'UPDATED_AT'])
         if user.get('profile_image'):
+            logger.info('profile image bytes to base64')
             user['profile_image'] = to_base64(user['profile_image'])
+
+        logger.info('generating token')
         token = to_token(user)
+
     return AuthModel(token, user)
 
 
@@ -60,7 +65,9 @@ def logout(token: str):
 
     with DatabaseClient() as conn:
         if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
+            logger.error('token already expired')
             raise HTTPException(401, 'expired token')
+        logger.info('expiring user token')
         TokenBlacklist(TOKEN=token).insert(conn)
 
 
@@ -81,4 +88,5 @@ def login_required(authentication: str = Header(..., alias='JWT-Token')) -> Unio
 
     # validates if is a valid token
     user = from_token(token)
+    logger.info(f'@{user["username"]} validated token')
     return AuthModel(token, user)
