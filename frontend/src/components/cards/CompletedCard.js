@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
-import style from './MainCard.module.css'
+
+import style from '../../styles/components/cards/CompletedCard.module.css'
 
 
-export default function MainCard({ author, category, title, backgroundImage, url }) {
+export default function CompletedCard({ author, category, title, backgroundImage, url }) {
 
   //render
   return (
-    <div className={`${style.mainCard} border rounded-3 shadow-sm overflow-hidden`}>
+    <div className={`${style.completedCard} border rounded-3 shadow-sm overflow-hidden`}>
       <Link className={style.clickableCard} to={url}>
         <div className={style.background}>
           <img src={backgroundImage} alt="thumbnail" />

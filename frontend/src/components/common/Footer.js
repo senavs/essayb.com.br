@@ -1,9 +1,9 @@
-import style from './Footer.module.css'
+import style from '../../styles/components/common/Footer.module.css'
 
 
 export default function Footer() {
   // functions
-  const toTop = () => {
+  function toTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 

@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
-import { AuthContext } from '../../../context/auth'
+
+import { AuthContext } from '../../contexts/auth'
 
 
 export default function Login() {
@@ -13,14 +14,14 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState('')
 
   // functions
-  const handlerForm = (event) => {
+  function onChange(event) {
     const { name, value } = event.target
     setFormValue({
       ...formValue,
       [name]: value
     })
   }
-  const handlerSubmit = (event) => {
+  function onSubmit(event) {
     event.preventDefault()
     setErrorMessage('')
 
@@ -43,17 +44,38 @@ export default function Login() {
             <h1 className="mb-4 fst-italic border-bottom">Login</h1>
           </div>
           <div className="container mb-3 border rounded p-3 shadow-sm">
-            <form onSubmit={handlerSubmit}>
+            <form onSubmit={onSubmit}>
+
               <div className="mb-3">
                 <label className="form-label">Username</label>
-                <input type="text" maxLength="32" className="form-control" name="username" value={formValue.username} onChange={handlerForm} required />
+                <input
+                  name="username"
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter your username. Eg: essayb"
+                  maxLength={32}
+                  value={formValue.username}
+                  onChange={onChange}
+                  required
+                />
               </div>
+
               <div className="mb-3">
                 <label className="form-label">Password</label>
-                <input type="password" className="form-control" name="password" value={formValue.password} onChange={handlerForm} required />
+                <input
+                  name="password"
+                  type="password"
+                  className="form-control"
+                  placeholder="Enter your password"
+                  value={formValue.password}
+                  onChange={onChange}
+                  required
+                />
               </div>
+
               <small className="d-block mb-3 text-danger">{errorMessage}</small>
               <button type="submit" className="btn btn-primary" >Login</button>
+
             </form>
           </div>
         </div>

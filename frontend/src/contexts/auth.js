@@ -1,4 +1,5 @@
 import { createContext, useEffect } from 'react'
+
 import AuthService from '../services/auth'
 import { useLocalStorage } from '../utils/hooks'
 
@@ -17,7 +18,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   // functions
-  const login = (username, password, resolve, reject) => {
+  function login(username, password, resolve, reject) {
     AuthService.login(username, password)
       .then(res => {
         setAuth(res)
@@ -25,7 +26,7 @@ export function AuthProvider({ children }) {
       })
       .catch(reject)
   }
-  const logout = (resolve, reject) => {
+  function logout(resolve, reject) {
     if (auth.token) {
       AuthService.logout(auth.token)
         .then(resolve)
@@ -33,7 +34,7 @@ export function AuthProvider({ children }) {
     }
     deleteAuth()
   }
-  const validate = (resolve, reject) => {
+  function validate(resolve, reject) {
     if (auth.token) {
       AuthService.validate(auth.token)
         .then(resolve)
@@ -43,7 +44,6 @@ export function AuthProvider({ children }) {
         })
     }
   }
-
 
   // render
   return (

@@ -1,7 +1,9 @@
 import { useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
-import { AuthContext } from '../../../context/auth'
-import UserService from '../../../services/user'
+
+import { AuthContext } from '../../contexts/auth'
+import UserService from '../../services/user'
+import { validatePassword, validateUsername } from '../../utils/form'
 
 
 export default function SignUp() {
@@ -14,22 +16,24 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState('')
 
   // functions
-  const handlerForm = (event) => {
+  function onChange(event) {
     const { name, value } = event.target
     setFormValue({
       ...formValue,
       [name]: value
     })
   }
-  const onSubmit = (event) => {
+  function onSubmit(event) {
     event.preventDefault()
     setErrorMessage('')
 
-    // valdiate passwords
-    if (formValue.password !== formValue.confirmPassword) {
-      return setErrorMessage("Passwords did not match.")
+    if (!validateUsername(formValue.username)) {
+      return setErrorMessage("invalid username or password")
     }
-    // call api to craete new user
+    if (!validatePassword(formValue.password, formValue.confirmPassword)) {
+      return setErrorMessage("invalid username or password")
+    }
+
     UserService.create(formValue.username, formValue.password)
       .then(() => history.push('/login'))
       .catch((err) => setErrorMessage(err.message))
@@ -44,25 +48,56 @@ export default function SignUp() {
     <div className="container">
       <div className="row">
         <div className="offset-md-4 col-md-4 col-12">
+
           <div className="col">
             <h1 className="mb-4 fst-italic border-bottom">Sign up</h1>
           </div>
+
           <div className="container mb-3 border rounded p-3 shadow-sm">
             <form onSubmit={onSubmit}>
               <div className="mb-3">
                 <label className="form-label">Username</label>
-                <input type="text" maxLength="32" className="form-control" name="username" value={formValue.username} onChange={handlerForm} required />
+                <input
+                  name="username"
+                  type="text"
+                  className="form-control"
+                  placeholder="Eg: essayb"
+                  maxLength={32}
+                  value={formValue.username}
+                  onChange={onChange}
+                  required
+                />
+                <small className="form-text">Only letters (A-Z a-z), numbers (0-9), dot and underscore.</small>
               </div>
+
               <div className="mb-3">
                 <label className="form-label">Password</label>
-                <input type="password" className="form-control" name="password" value={formValue.password} onChange={handlerForm} required />
+                <input
+                  name="password"
+                  type="password"
+                  className="form-control"
+                  placeholder="Your password"
+                  value={formValue.password}
+                  onChange={onChange}
+                  required />
               </div>
+
               <div className="mb-3">
                 <label className="form-label">Confirm password</label>
-                <input type="password" className="form-control" name="confirmPassword" value={formValue.confirmPassword} onChange={handlerForm} required />
+                <input
+                  name="confirmPassword"
+                  type="password"
+                  className="form-control"
+                  placeholder="Confirm your password"
+                  value={formValue.confirmPassword}
+                  onChange={onChange}
+                  required
+                />
               </div>
+
               <small className="d-block mb-3 text-danger">{errorMessage}</small>
               <button type="submit" className="btn btn-primary" >Sign up</button>
+
             </form>
           </div>
         </div>

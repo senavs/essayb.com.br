@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { urls } from '../config'
+import { urls } from '../config/backend'
 
 
 export default class UserService {
