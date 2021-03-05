@@ -5,7 +5,7 @@ export default function Avatar({ profileImage, username, width }) {
   // vars
   const profileUrl = username ? `/profile/${username}` : '/profile'
   profileImage = profileImage ? `data:image/png;base64,${profileImage}` : '/static/default-avatar.jpg'
-  width = width || '32px'
+  width = width || '2rem'
 
   // render
   return (
