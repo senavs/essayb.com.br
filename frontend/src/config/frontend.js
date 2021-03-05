@@ -6,7 +6,13 @@ const urls = {
     ygoliveira: 'https://github.com/ygoliveira',
   },
   auth: {
-    login: 'auth/login',
+    login: '/auth/login',
+    logout: '/auth/logout',
+    signup: '/auth/signup'
+  },
+  user: {
+    me: '/profile',
+    others: '/profile/:username'
   },
   common: {
     index: '/'

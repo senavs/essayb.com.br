@@ -44,7 +44,7 @@ export default function NavBar() {
               </>)
               : (<>
                 <Link to={urls.auth.login} className='btn btn-sm btn-outline-secondary ms-2'>Login</Link>
-                <Link to={urls.auth.logout} className='btn btn-sm btn-outline-secondary ms-2 text-nowrap'>Sign up</Link>
+                <Link to={urls.auth.signup} className='btn btn-sm btn-outline-secondary ms-2 text-nowrap'>Sign up</Link>
               </>)}
           </div>
 

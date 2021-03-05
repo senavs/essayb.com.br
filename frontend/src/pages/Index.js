@@ -11,13 +11,13 @@ export default function Index() {
       {/* main essays of the day */}
       <div className="row">
         <div className="col-12 mb-3">
-          <CompletedCard author="essayB" category="U.S" title="BitCoin and Elon Musk" backgroundImage="/static/default-completedcard-background.jpeg" url="/essay/bitcoin-and-elon-musk" />
+          <CompletedCard author="essayB" category="U.S" title="BitCoin and Elon Musk" url="/essay/bitcoin-and-elon-musk" />
         </div>
         <div className="col-12 col-md-6 mb-3 d-none d-md-block">
-          <CompletedCard author="essayB" category="U.S" title="BitCoin and Elon Musk" backgroundImage="/static/default-completedcard-background.jpeg" url="/essay/bitcoin-and-elon-musk" />
+          <CompletedCard author="essayB" category="U.S" title="BitCoin and Elon Musk" url="/essay/bitcoin-and-elon-musk" />
         </div>
         <div className="col-12 col-md-6 mb-3 d-none d-md-block">
-          <CompletedCard author="essayB" category="U.S" title="BitCoin and Elon Musk" backgroundImage="/static/default-completedcard-background.jpeg" url="/essay/bitcoin-and-elon-musk" />
+          <CompletedCard author="essayB" category="U.S" title="BitCoin and Elon Musk" url="/essay/bitcoin-and-elon-musk" />
         </div>
 
         {/* last essays */}
