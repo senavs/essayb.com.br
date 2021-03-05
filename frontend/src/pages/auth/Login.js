@@ -7,7 +7,7 @@ import { AuthContext } from '../../contexts/auth'
 
 export default function Login() {
   // contexts
-  const { auth, login } = useContext(AuthContext)
+  const { token, login } = useContext(AuthContext)
 
   // states
   const history = useHistory()
@@ -33,7 +33,7 @@ export default function Login() {
   }
 
   // render
-  if (auth.token) {
+  if (token) {
     return <Redirect to="/" />
   }
 

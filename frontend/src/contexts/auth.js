@@ -1,6 +1,7 @@
 import { createContext, useEffect } from 'react'
 
 import AuthService from '../services/auth'
+import UserService from '../services/user'
 import { useLocalStorage } from '../utils/hooks'
 
 
@@ -8,12 +9,19 @@ export const AuthContext = createContext({})
 
 export function AuthProvider({ children }) {
   // states
-  const [auth, setAuth, deleteAuth] = useLocalStorage('auth')
+  const [token, setToken, deleteToken] = useLocalStorage('token', '')
+  const [user, setUser, deleteUser] = useLocalStorage('user', {})
 
   // efects
   useEffect(() => {
-    if (auth.token) {
-      AuthService.validate(auth.token).then(setAuth).catch(deleteAuth)
+    if (token) {
+      AuthService.validate(token)
+        .then(res => {
+          setToken(res.token)
+          UserService.search(res.user.id_user)
+            .then(setUser)
+            .catch(deleteUser)
+        }).catch(deleteToken)
     }
   }, [])
 
@@ -21,25 +29,30 @@ export function AuthProvider({ children }) {
   function login(username, password, resolve, reject) {
     AuthService.login(username, password)
       .then(res => {
-        setAuth(res)
+        setToken(res.token)
+        UserService.search(res.user.id_user)
+          .then(setUser)
+          .catch(deleteUser)
         resolve(res)
       })
       .catch(reject)
   }
   function logout(resolve, reject) {
-    if (auth.token) {
-      AuthService.logout(auth.token)
+    if (token) {
+      AuthService.logout(token)
         .then(resolve)
         .catch(reject)
     }
-    deleteAuth()
+    deleteToken()
+    deleteUser()
   }
   function validate(resolve, reject) {
-    if (auth.token) {
-      AuthService.validate(auth.token)
+    if (token) {
+      AuthService.validate(token)
         .then(resolve)
         .catch(err => {
-          deleteAuth()
+          deleteToken()
+          deleteUser()
           reject(err)
         })
     }
@@ -47,7 +60,7 @@ export function AuthProvider({ children }) {
 
   // render
   return (
-    <AuthContext.Provider value={{ auth, login, logout, validate }}>
+    <AuthContext.Provider value={{ token, user, setUser, setToken, login, logout, validate }}>
       {children}
     </AuthContext.Provider>
   )

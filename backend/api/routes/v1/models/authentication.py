@@ -4,7 +4,6 @@ from pydantic import BaseSettings, Field
 class CustomUser(BaseSettings):
     id_user: int
     username: str = Field(max_length=32)
-    profile_image: str = None
     is_premium: bool
 
 

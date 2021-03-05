@@ -6,13 +6,13 @@ import { AuthContext } from '../contexts/auth'
 
 export default function PrivateRoute({ component: Component, ...rest }) {
   // contexts
-  const { auth } = useContext(AuthContext)
+  const { token, user } = useContext(AuthContext)
 
   // render
   return (
     <Route
       {...rest}
-      render={() => (auth.token && auth.user) ? <Component {...rest} /> : <Redirect to="/login" />}
+      render={() => (token && Object.keys(user).length > 0) ? <Component {...rest} /> : <Redirect to="/login" />}
     />
   )
 }

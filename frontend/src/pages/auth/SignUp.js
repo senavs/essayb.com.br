@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
 import Title from '../../components/common/Title'
+import { urls } from '../../config/frontend'
 
 import { AuthContext } from '../../contexts/auth'
 import UserService from '../../services/user'
@@ -9,7 +10,7 @@ import { validatePassword, validateUsername } from '../../utils/form'
 
 export default function SignUp() {
   // contexts
-  const { auth } = useContext(AuthContext)
+  const { token } = useContext(AuthContext)
 
   // states
   const history = useHistory()
@@ -36,13 +37,13 @@ export default function SignUp() {
     }
 
     UserService.create(formValue.username, formValue.password)
-      .then(() => history.push('/login'))
+      .then(() => history.push(urls.auth.login))
       .catch((err) => setErrorMessage(err.message))
   }
 
   // render
-  if (auth.token) {
-    return <Redirect to="/" />
+  if (token) {
+    return <Redirect to={urls.common.index} />
   }
 
   return (

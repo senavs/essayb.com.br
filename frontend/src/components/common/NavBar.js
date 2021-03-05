@@ -9,11 +9,11 @@ import Avatar from '../user/Avatar'
 
 export default function NavBar() {
   // contexts
-  const { auth, logout } = useContext(AuthContext)
+  const { user, logout } = useContext(AuthContext)
   
   // TODO: get categories from backend
-  const isAuthenticated = !!auth.token
-  const isPremium = auth.user && !auth.user.is_premium
+  const isAuthenticated = Object.keys(user).length > 0
+  const isPremium = user && !user.is_premium
   const categories = [
     'World', 'U.S', 'Technology', 'Design', 'Culture', 'Business',
     'Politics', 'Opinion', 'Science', 'Health', 'Styles', 'Travel'
@@ -39,7 +39,7 @@ export default function NavBar() {
           <div className='col-4 d-flex justify-content-end align-self-end'>
             {isAuthenticated
               ? (<>
-                <Avatar profileImage={auth.user.profile_image} />
+                <Avatar profileImage={user.profile_image} />
                 <Link to={urls.common.index} className='btn btn-sm btn-outline-secondary ms-2' onClick={logout}><i className='bi bi-box-arrow-right'></i></Link>
               </>)
               : (<>
