@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 
-export function useLocalStorage(key) {
-  const [state, setState] = useState(JSON.parse(localStorage.getItem(key)) || {})
+export function useLocalStorage(key, defaultValue = {}) {
+  const [state, setState] = useState(JSON.parse(localStorage.getItem(key)) || defaultValue)
 
   const setLocalStorage = (value) => {
     setState(value)
@@ -10,7 +10,7 @@ export function useLocalStorage(key) {
   }
 
   const deleteLocalStorage = () => {
-    setState({})
+    setState(defaultValue)
     localStorage.removeItem(key)
   }
 
