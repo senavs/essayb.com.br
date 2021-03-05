@@ -49,7 +49,7 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
             logger.error(f'wrong password for @{username} user')
             raise HTTPException(401, 'wrong password')
 
-        user = user.to_dict(exclude=['PASSWORD', 'CREATED_AT', 'UPDATED_AT'])
+        user = user.to_dict(exclude=['PASSWORD', 'PROFILE_IMAGE', 'CREATED_AT', 'UPDATED_AT'])
         if user.get('profile_image'):
             logger.info('profile image bytes to base64')
             user['profile_image'] = to_base64(user['profile_image'])
