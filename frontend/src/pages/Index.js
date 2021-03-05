@@ -1,4 +1,5 @@
 import CompletedCard from '../components/cards/CompletedCard'
+import Title from '../components/common/Title'
 
 
 export default function Index() {
@@ -22,7 +23,7 @@ export default function Index() {
 
         {/* last essays */}
         <div className="col-12 col-md-8">
-          <h1 className="pt-5 mb-4 fst-italic border-bottom">Last essays</h1>
+          <Title>Last essays</Title>
         </div>
 
       </div>

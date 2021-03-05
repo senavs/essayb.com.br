@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
+import Title from '../../components/common/Title'
 
 import { AuthContext } from '../../contexts/auth'
 
@@ -41,7 +42,7 @@ export default function Login() {
       <div className="row">
         <div className="offset-md-4 col-md-4 col-12">
           <div className="col">
-            <h1 className="mb-4 fst-italic border-bottom">Login</h1>
+            <Title>Login</Title>
           </div>
           <div className="container mb-3 border rounded p-3 shadow-sm">
             <form onSubmit={onSubmit}>

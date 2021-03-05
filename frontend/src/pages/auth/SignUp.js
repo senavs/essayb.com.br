@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
+import Title from '../../components/common/Title'
 
 import { AuthContext } from '../../contexts/auth'
 import UserService from '../../services/user'
@@ -50,7 +51,7 @@ export default function SignUp() {
         <div className="offset-md-4 col-md-4 col-12">
 
           <div className="col">
-            <h1 className="mb-4 fst-italic border-bottom">Sign up</h1>
+            <Title>Sign up</Title>
           </div>
 
           <div className="container mb-3 border rounded p-3 shadow-sm">
