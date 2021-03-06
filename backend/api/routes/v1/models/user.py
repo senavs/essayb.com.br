@@ -9,6 +9,10 @@ from ....modules.utils import from_base64, to_base64
 class User(BaseSettings):
     id_user: int
     username: str = Field(max_length=32)
+    bio: str = None
+    url_linkedin: str = None
+    url_instagram: str = None
+    url_website: str = None
     is_premium: bool
     profile_image: str = None
     created_at: datetime
