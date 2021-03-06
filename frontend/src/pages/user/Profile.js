@@ -6,6 +6,7 @@ import Avatar from '../../components/user/Avatar'
 import Title from '../../components/common/Title'
 import UserService from '../../services/user'
 import LinkIcon from '../../components/user/LinkIcon'
+import EditUserModal from '../../components/user/EditUserModal'
 
 
 export default function Profile() {
@@ -17,8 +18,6 @@ export default function Profile() {
   const { usernameParam } = useParams()
   const usernamePage = usernameParam ? usernameParam : user.username
   const isCurrentUserPage = usernamePage === user.username
-
-  console.log(usernamePage)
 
   // states
   useState(() => {
@@ -42,10 +41,14 @@ export default function Profile() {
         <div className="col-md-6">
           <div className="mb-3 p-2 border-bottom d-flex">
             <div className="h1 d-inline-block">
-              {userPageInfo.username} {userPageInfo.is_premium && <i class="fs-3 bi bi-gem"></i>}
+              {userPageInfo.username} {userPageInfo.is_premium && <i className="fs-3 bi bi-gem"></i>}
             </div>
             <div className="ms-auto my-auto">
-              {isCurrentUserPage && <button className="btn btn-outline-secondary"><i class="bi bi-pencil-fill"></i></button>}
+              {isCurrentUserPage && (
+                <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                  <i className="bi bi-pencil-fill"></i>
+                </button>
+              )}
             </div>
           </div>
           <div className="d-flex justify-content-evenly">
@@ -71,6 +74,13 @@ export default function Profile() {
 
         {/* posts */}
         <Title>Posts</Title>
+
+        {/* edit user modal */}
+        <EditUserModal
+          bio={userPageInfo.bio}
+          url_linkedin={userPageInfo.url_linkedin}
+          url_instagram={userPageInfo.url_instagram}
+          url_website={userPageInfo.url_website} />
       </div>
     </div>
   )

@@ -42,7 +42,14 @@ def create(username: str, password: str, profile_image: Union[str, bytes] = None
     return user
 
 
-def update(id_user: int, password: str = None, new_password: str = None, profile_image: Union[str, bytes] = None, *, connection: DatabaseClient = None) -> dict:
+def update(id_user: int, password: str = None,
+           new_password: str = None,
+           profile_image: Union[str, bytes] = None,
+           bio: str = None,
+           url_linkedin: str = None,
+           url_instagram: str = None,
+           url_website: str = None,
+           *, connection: DatabaseClient = None) -> dict:
     """Update user"""
 
     with DatabaseClient(connection=connection) as conn:
@@ -59,6 +66,7 @@ def update(id_user: int, password: str = None, new_password: str = None, profile
             raise HTTPException(401, 'wrong password')
 
         logger.info(f'updating user with id {id_user}')
-        user.update(conn, PASSWORD=new_password, PROFILE_IMAGE=profile_image)
+        user.update(conn, PASSWORD=new_password, PROFILE_IMAGE=profile_image,
+                    BIO=bio, URL_LINKEDIN=url_linkedin, URL_INSTAGRAM=url_instagram, URL_WEBSITE=url_website)
         user = user.to_dict()
     return user

@@ -52,6 +52,10 @@ class UpdateRequest(BaseSettings):
     password: str = None
     new_password: str = None
     profile_image: bytes = None
+    bio: str = None
+    url_linkedin: str = None
+    url_instagram: str = None
+    url_website: str = None
 
     @validator('profile_image', pre=True)
     def to_image(cls, value: str) -> Union[bytes, None]:
