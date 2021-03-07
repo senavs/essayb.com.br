@@ -7,7 +7,12 @@ from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateRe
 router = APIRouter(prefix='/users', tags=['User'])
 
 
-@router.get('/{username}/search', summary='Search user', status_code=200, response_model=SearchResponse)
+@router.get('/{id_user}/search/id', summary='Search user by ID', status_code=200, response_model=SearchResponse)
+def _search(id_user: int):
+    return search(id_user=id_user)
+
+
+@router.get('/{username}/search/username', summary='Search user by username', status_code=200, response_model=SearchResponse)
 def _search(username: str):
     return search(username=username)
 

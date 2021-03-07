@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Union
 
 import jwt
-from fastapi import HTTPException, Cookie
+from fastapi import HTTPException, Header
 
 from .. import config
 from ..database import TokenBlacklist, User
@@ -58,8 +58,15 @@ def logout(token: str):
         TokenBlacklist(TOKEN=token).insert(conn)
 
 
-def login_required(token: str = Cookie(...)) -> Union[AuthModel, tuple[str, dict]]:
+def login_required(authentication: str = Header(..., alias='JWT-Token')) -> Union[AuthModel, tuple[str, dict]]:
     """Function to use with fastapi.Depends in routes to verify user is logged in"""
+
+    # validates static authorization token
+    bearer_token = authentication.split(' ', maxsplit=2)
+    if len(bearer_token) != 2 or bearer_token[0].lower() != 'bearer':
+        raise HTTPException(401, 'invalid token')
+    else:
+        _, token = bearer_token
 
     # validates if its and expired token
     with DatabaseClient() as conn:
