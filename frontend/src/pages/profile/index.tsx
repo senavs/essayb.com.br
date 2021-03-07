@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: { authenticationDataProps },
       redirect: {
-        destination: urls.common.index
+        destination: urls.auth.login
       }
     }
   }

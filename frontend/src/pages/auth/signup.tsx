@@ -1,19 +1,19 @@
 import { urls } from 'config/frontend';
 import { GetServerSideProps } from 'next';
-import LoginForm from 'src/components/auth/LoginForm';
+import SignUpForm from 'src/components/auth/SignUpForm';
 
 import Layout from 'src/components/common/Layout';
 import { getAuthenticationData, AuthenticationDataInterface } from 'src/libs/serverSide/auth';
 
 
-interface LoginProps {
+interface SignUpProps {
   authenticationDataProps: AuthenticationDataInterface
 }
 
-export default function Login({ authenticationDataProps }: LoginProps) {
+export default function SignUp({ authenticationDataProps }: SignUpProps) {
   return (
     <Layout authenticationData={authenticationDataProps}>
-      <LoginForm />
+      <SignUpForm />
     </Layout>
   )
 }
