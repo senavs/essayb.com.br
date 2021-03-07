@@ -1,10 +1,11 @@
+import { urls } from 'config/frontend';
 import { GetServerSideProps } from 'next';
 import Router from 'next/router';
 import { useState } from 'react';
 
 import Layout from 'src/components/common/Layout';
 import Title from 'src/components/common/Title';
-import { loginDenied } from 'src/libs/serverSide/auth';
+import { getAuthenticationData, AuthenticationDataInterface } from 'src/libs/serverSide/auth';
 import AuthService from 'src/libs/services/auth';
 
 
@@ -13,7 +14,11 @@ interface FormValue {
   password: string
 }
 
-export default function Login() {
+interface LoginProps {
+  authenticationDataProps: AuthenticationDataInterface
+}
+
+export default function Login({ authenticationDataProps }: LoginProps) {
   const [formValue, setFormValue] = useState({ username: '', password: '' } as FormValue)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -34,7 +39,7 @@ export default function Login() {
   }
 
   return (
-    <Layout>
+    <Layout authenticationData={authenticationDataProps}>
       <div className='container'>
         <div className='row'>
           <div className='offset-md-4 col-md-4 col-12'>
@@ -85,9 +90,18 @@ export default function Login() {
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  await loginDenied(ctx)
+  const authenticationDataProps = await getAuthenticationData(ctx)
+
+  if (authenticationDataProps.isAuthenticated) {
+    return {
+      props: { authenticationDataProps },
+      redirect: {
+        destination: urls.common.index
+      }
+    }
+  }
 
   return {
-    props: {}
+    props: { authenticationDataProps }
   }
 }

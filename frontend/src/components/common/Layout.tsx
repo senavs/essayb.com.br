@@ -2,15 +2,18 @@ import Head from 'next/head';
 import { Fragment, ReactNode } from "react";
 
 import Navbar from 'src/components/common/Navbar'
+import { AuthProvider } from 'src/libs/contexts/auth';
+import { AuthenticationDataInterface } from 'src/libs/serverSide/auth';
 import Body from './Body';
 import Footer from './Footer';
 
 
 interface LayoutProps {
-  children: ReactNode
+  children: ReactNode,
+  authenticationData: AuthenticationDataInterface
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, authenticationData }: LayoutProps) {
   return (
     <Fragment>
       <Head>
@@ -23,11 +26,13 @@ export default function Layout({ children }: LayoutProps) {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css" />
       </Head>
 
-      <Navbar />
-      <Body>
-        {children}
-      </Body>
-      <Footer />
+      <AuthProvider authenticationData={authenticationData}>
+        <Navbar />
+        <Body>
+          {children}
+        </Body>
+        <Footer />
+      </AuthProvider>
 
     </Fragment>
   )

@@ -2,7 +2,7 @@ import { urls } from "config/backend";
 import { callAPI } from "./base";
 
 
-interface LoginResponse {
+export interface LoginResponse {
   body: {
     token: string,
     id_user: number
@@ -10,7 +10,7 @@ interface LoginResponse {
   status: number
 }
 
-interface ValidateResponse {
+export interface ValidateResponse {
   body: {
     token: string,
     id_user: number

@@ -1,7 +1,7 @@
 import { urls } from "config/backend";
 import { callAPI } from "./base";
 
-interface User {
+interface UserInterface {
   id_user: number,
   username: string,
   bio: string,
@@ -15,7 +15,7 @@ interface User {
 
 interface UserSearchResponse {
   body: {
-    [key: string]: User
+    [key: string]: UserInterface
   },
   status: number
 }

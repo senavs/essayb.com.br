@@ -8,7 +8,6 @@ type MethodType = 'GET' | 'POST' | 'PUT' | 'DELETE'
 export async function callAPI(url: string, method: MethodType, body = null, headers = {}): Promise<CallAPIResponse> {
   const response = await fetch(url, {
     body: body ? JSON.stringify(body) : null,
-    credentials: 'include',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

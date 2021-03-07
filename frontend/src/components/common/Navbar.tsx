@@ -1,10 +1,14 @@
-import Link from 'next/link'
+import { useContext } from 'react'
 
 import { urls } from 'config/frontend'
 import styles from 'src/styles/components/common/Navbar.module.css'
+import { AuthContext } from 'src/libs/contexts/auth'
+import Avatar from 'src/components/profile/Avatar'
 
 
 export default function Navbar() {
+  const { authenticationData, logout } = useContext(AuthContext)
+
   const categories = [
     'World', 'U.S', 'Technology', 'Design', 'Culture', 'Business',
     'Politics', 'Opinion', 'Science', 'Health', 'Styles', 'Travel'
@@ -17,7 +21,10 @@ export default function Navbar() {
       <div className='border-bottom border-lg-secondary py-2'>
         <div className='row'>
           <div className='col-4 d-flex justify-content-start align-self-end'>
-            <a className='link-secondary' href={urls.common.subscribe} >Subscribe</a>
+            {!authenticationData.user.is_premium
+              ? <a className='link-secondary' href={urls.common.subscribe} >Subscribe</a>
+              : null
+            }
           </div>
           <div className='col-4 d-flex justify-content-center align-self-end'>
             <a href={urls.common.index}>
@@ -25,8 +32,16 @@ export default function Navbar() {
             </a>
           </div>
           <div className='col-4 d-flex justify-content-end align-self-end'>
-            <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.auth.login} >Login</a>
-            <a className='btn btn-sm btn-outline-secondary ms-2 text-nowrap' href={urls.auth.signup} >Sign up</a>
+            {authenticationData.isAuthenticated
+              ? <>
+                <Avatar profileImage={authenticationData.user.profile_image} />
+                <a className='btn btn-sm btn-outline-secondary ms-2' onClick={() => logout()}><i className='bi bi-box-arrow-right'></i></a>
+              </>
+              : <>
+                <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.auth.login} >Login</a>
+                <a className='btn btn-sm btn-outline-secondary ms-2 text-nowrap' href={urls.auth.signup} >Sign up</a>
+              </>
+            }
           </div>
         </div>
       </div>
@@ -35,11 +50,10 @@ export default function Navbar() {
       <div className={`${styles.horizontalNavbar} nav border-bottom border-lg-secondary mb-3 d-flex flex-nowrap justify-content-between`}>
         {categories.map((element, index) => {
           return (
-            <Link key={index} href={`/categories/${element}`} >
-              <a className='p-2 mx-auto link-secondary'>
-                {element}
-              </a>
-            </Link>)
+            <a key={index} className='p-2 mx-auto link-secondary' href={`/categories/${element}`}>
+              {element}
+            </a>
+          )
         })}
       </div>
 
