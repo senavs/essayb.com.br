@@ -1,0 +1,7 @@
+.body {
+  display: flex;
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  min-height: calc(100vh - 200px);
+}
