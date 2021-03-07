@@ -19,4 +19,4 @@ def _create(body: CreateRequest):
 
 @router.put('/update', summary='Update user', status_code=200, response_model=UpdateResponse)
 def _update(body: UpdateRequest, auth: AuthModel = Depends(login_required)):
-    return update(auth.user['id_user'], **body.dict())
+    return update(auth.id_user, **body.dict())
