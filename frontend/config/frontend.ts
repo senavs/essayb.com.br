@@ -11,8 +11,7 @@ export const urls = {
     signup: '/auth/signup'
   },
   user: {
-    me: '/profile',
-    others: '/profile/{username}'
+    profile: '/profile/{username}'
   },
   common: {
     index: '/',

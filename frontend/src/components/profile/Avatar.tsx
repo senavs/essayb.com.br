@@ -1,13 +1,13 @@
 import { urls } from "config/frontend";
 
 interface AvatarProps {
+  username: string,
   profileImage?: string,
-  username?: string,
   width?: string
 }
 
-export default function Avatar({ profileImage, username, width }: AvatarProps) {
-  const profileUrl = username ? urls.user.others.replace(':usernameParam', username) : urls.user.me
+export default function Avatar({ username, profileImage, width }: AvatarProps) {
+  const profileUrl = urls.user.profile.replace('{username}', username)
   profileImage = profileImage ? `data:image/png;base64,${profileImage}` : '/static/default-avatar.jpg'
   width = width || '2rem'
 

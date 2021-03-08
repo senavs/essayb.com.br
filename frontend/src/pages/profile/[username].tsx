@@ -31,7 +31,7 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
           <div className="col-md-6">
             <div className="mb-3 p-2 border-bottom d-flex">
               <div className="h1 d-inline-block">
-                {profileUserData.username} {profileUserData.is_premium && <i className="fs-3 bi bi-gem"></i>}
+                {profileUserData.username} {profileUserData.is_premium && <i title="Premium" className="fs-3 bi bi-gem"></i>}
               </div>
               <div className="ms-auto my-auto">
                 {isLoggedUserProfile && (
