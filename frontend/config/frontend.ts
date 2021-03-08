@@ -12,7 +12,7 @@ export const urls = {
   },
   user: {
     me: '/profile',
-    others: '/profile/:usernameParam'
+    others: '/profile/{username}'
   },
   common: {
     index: '/',

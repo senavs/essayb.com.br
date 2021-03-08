@@ -6,26 +6,22 @@ import { getAuthenticationData, AuthenticationDataInterface } from "src/libs/ser
 
 
 interface IndexProps {
-  authenticationDataProps: AuthenticationDataInterface
+  authenticationData: AuthenticationDataInterface
 }
 
-export default function ProfileIndex({ authenticationDataProps }: IndexProps) {
+export default function ProfileIndex({ authenticationData }: IndexProps) {
   return (
-    <Layout authenticationData={authenticationDataProps}>
-      <div className="container">
-        <h1>Profile page</h1>
-        <h2>Username: {authenticationDataProps.user.username}</h2>
-      </div>
+    <Layout authenticationData={authenticationData} >
     </Layout>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const authenticationDataProps = await getAuthenticationData(ctx)
+  const authenticationData = await getAuthenticationData(ctx)
 
-  if (!authenticationDataProps.isAuthenticated) {
+  if (!authenticationData.isAuthenticated) {
     return {
-      props: { authenticationDataProps },
+      props: { authenticationData },
       redirect: {
         destination: urls.auth.login
       }
@@ -33,6 +29,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   return {
-    props: { authenticationDataProps }
+    props: { authenticationData },
+    redirect: {
+      destination: urls.user.others.replace('{username}', authenticationData.user.username)
+    }
   }
 }

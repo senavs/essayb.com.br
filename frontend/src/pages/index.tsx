@@ -4,12 +4,12 @@ import { AuthenticationDataInterface, getAuthenticationData } from "src/libs/ser
 
 
 interface IndexProps {
-  authenticationDataProps: AuthenticationDataInterface
+  authenticationData: AuthenticationDataInterface
 }
 
-export default function Index({ authenticationDataProps }: IndexProps) {
+export default function Index({ authenticationData }: IndexProps) {
   return (
-    <Layout authenticationData={authenticationDataProps}>
+    <Layout authenticationData={authenticationData}>
       <div className="container">
         <h1>Hello world!!</h1>
       </div>
@@ -18,9 +18,9 @@ export default function Index({ authenticationDataProps }: IndexProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const authenticationDataProps = await getAuthenticationData(ctx)
+  const authenticationData = await getAuthenticationData(ctx)
 
   return {
-    props: { authenticationDataProps }
+    props: { authenticationData }
   }
 }

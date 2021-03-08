@@ -1,7 +1,7 @@
 import { urls } from "config/backend";
 import { callAPI } from "./base";
 
-interface UserInterface {
+export interface UserInterface {
   id_user: number,
   username: string,
   bio: string,
