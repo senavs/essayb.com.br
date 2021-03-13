@@ -3,7 +3,7 @@ from typing import Union
 
 from pydantic import BaseSettings, Field, validator
 
-from ....modules.utils import from_base64, to_base64
+from ....modules.utils import from_base64
 
 
 class User(BaseSettings):
@@ -14,18 +14,11 @@ class User(BaseSettings):
     url_instagram: str = None
     url_website: str = None
     is_premium: bool
-    profile_image: str = None
     created_at: datetime
     updated_at: datetime
 
     class Config:
         extra: str = 'ignore'
-
-    @validator('profile_image', pre=True)
-    def from_image(cls, value: bytes) -> Union[str, None]:
-        if not value:
-            return None
-        return to_base64(value)
 
 
 class SearchResponse(User):

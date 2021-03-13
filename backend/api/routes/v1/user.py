@@ -1,20 +1,26 @@
+from io import BytesIO
+
 from fastapi import APIRouter, Depends
+from starlette.responses import StreamingResponse
 
 from ...modules.authentication import AuthModel, login_required
-from ...modules.user import create, search, update
+from ...modules.user import create, search, update, profile_image
 from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateRequest, UpdateResponse
 
 router = APIRouter(prefix='/users', tags=['User'])
 
 
-@router.get('/{id_user}/search/id', summary='Search user by ID', status_code=200, response_model=SearchResponse)
-def _search(id_user: int):
-    return search(id_user=id_user)
+@router.get('/{id_user_or_username}/search', summary='Search user by ID or username', status_code=200, response_model=SearchResponse)
+def _search(id_user_or_username: str):
+    if id_user_or_username.isdigit():
+        return search(id_user=int(id_user_or_username))
+    return search(username=id_user_or_username)
 
 
-@router.get('/{username}/search/username', summary='Search user by username', status_code=200, response_model=SearchResponse)
-def _search(username: str):
-    return search(username=username)
+@router.get('/{username}/profile_image', summary='Get user profile image', status_code=200, response_model=SearchResponse)
+def _profile_image(username: str):
+    image = BytesIO(profile_image(username))
+    return StreamingResponse(image, media_type='image/png')
 
 
 @router.post('/create', summary='Create user', status_code=201, response_model=CreateResponse)

@@ -48,6 +48,7 @@ class DatabaseClient:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type and issubclass(exc_type, Exception):
+        if exc_type and issubclass(exc_type, Exception) and self._connection is None:
             self.rollback()
-        self.session.close()
+        if self._connection is None:
+            self.session.close()
