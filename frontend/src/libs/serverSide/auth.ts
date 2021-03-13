@@ -33,7 +33,7 @@ export async function getAuthenticationData({ req, res }): Promise<Authenticatio
         const authResponse = await AuthService.validate(token)
         Object.assign(authenticationData, { ...authResponse.body, isAuthenticated: true })
 
-        const userResponse = await UserService.searchById(authenticationData.id_user)
+        const userResponse = await UserService.search(authenticationData.id_user)
         Object.assign(authenticationData, { user: { ...userResponse.body } })
       } catch (err) {
         return authenticationData

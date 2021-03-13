@@ -34,7 +34,7 @@ export default function Navbar() {
           <div className='col-4 d-flex justify-content-end align-self-end'>
             {authenticationData.isAuthenticated
               ? <>
-                <Avatar username={authenticationData.user.username} profileImage={authenticationData.user.profile_image} />
+                <Avatar username={authenticationData.user.username} />
                 <a className='btn btn-sm btn-outline-secondary ms-2' onClick={() => logout()}><i className='bi bi-box-arrow-right'></i></a>
               </>
               : <>

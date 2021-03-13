@@ -28,12 +28,8 @@ interface UserCreateResponse {
 }
 
 export default class UserService {
-  static async searchById(id_user: number): Promise<UserSearchResponse> {
-    return await callAPI(urls.user.search.id_user.replace('{id_user}', id_user.toString()), 'GET')
-  }
-
-  static async searchByUsername(username: string): Promise<UserSearchResponse> {
-    return await callAPI(urls.user.search.username.replace('{username}', username), 'GET')
+  static async search(id_user_or_username: string): Promise<UserSearchResponse> {
+    return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username), 'GET')
   }
 
   static async create(username: string, password: string): Promise<UserCreateResponse> {

@@ -15,7 +15,7 @@ export interface ProfileUserData {
 export async function getProfileUserData(username: string): Promise<ProfileUserData> {
   if (typeof window === 'undefined') {
     try {
-      const userResponse = await UserService.searchByUsername(username)
+      const userResponse = await UserService.search(username)
       return userResponse.body
     } catch {
     }

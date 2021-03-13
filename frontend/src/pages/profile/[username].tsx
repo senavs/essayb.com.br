@@ -24,7 +24,7 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
 
           {/* profile image */}
           <div className="col-md-6 d-flex justify-content-center my-auto">
-            <Avatar username={profileUserData.username} profileImage={profileUserData.profile_image} width="6rem" />
+            <Avatar username={profileUserData.username} width="6rem" />
           </div>
 
           {/* profile infos */}
