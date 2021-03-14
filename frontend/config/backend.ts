@@ -1,4 +1,5 @@
-const backendDomain = process.env.BACKEND_DOMAIN || '172.17.0.1:8888'
+// TODO: fix to work in server and client side
+const backendDomain = process.env.BACKEND_DOMAIN || '172.17.0.1:8080'
 
 export const urls = {
   auth: {

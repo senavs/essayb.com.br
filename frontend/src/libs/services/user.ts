@@ -47,11 +47,11 @@ export default class UserService {
     bio?: string, url_linkedin?: string, url_instagram?: string, url_website?: string
   ): Promise<UserUpdateResponse> {
     let body = {
-      new_password: null || new_password,
-      bio: null || bio,
-      url_linkedin: null || url_linkedin,
-      url_instagram: null || url_instagram,
-      url_website: null || url_website,
+      new_password: new_password || null,
+      bio: bio || null,
+      url_linkedin: url_linkedin || null,
+      url_instagram: url_instagram || null,
+      url_website: url_website || null,
     }
 
     return await callAPI(urls.user.update, 'PUT', body, { 'JWT-Token': `Bearer ${token}` })
