@@ -6,11 +6,16 @@ from typing import Union
 from fastapi import HTTPException
 
 RE_USERNAME = re.compile(r'^[^0-9\s][a-zA-Z0-9_.]{3,}')
+RE_WHITE_SPACES = re.compile(r'\n+')
 
 
 def validate_username(username: str) -> bool:
     match = RE_USERNAME.findall(username)
     return match and match[0] == username
+
+
+def remove_white_spaces(text: str) -> str:
+    return RE_WHITE_SPACES.sub('\n', text)
 
 
 def make_query(*, ignore_none: bool = True, **kwargs):

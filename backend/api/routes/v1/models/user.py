@@ -27,7 +27,7 @@ class SearchResponse(User):
 
 class CreateRequest(BaseSettings):
     username: str = Field(max_length=32)
-    password: str
+    password: str = Field(..., min_length=3)
     profile_image: bytes = None
 
     @validator('profile_image', pre=True)
@@ -42,13 +42,12 @@ class CreateResponse(User):
 
 
 class UpdateRequest(BaseSettings):
-    password: str = None
-    new_password: str = None
+    new_password: str = Field(None, min_length=3)
     profile_image: bytes = None
-    bio: str = None
-    url_linkedin: str = None
-    url_instagram: str = None
-    url_website: str = None
+    bio: str = Field(None, max_length=256)
+    url_linkedin: str = Field(None, max_length=128)
+    url_instagram: str = Field(None, max_length=128)
+    url_website: str = Field(None, max_length=128)
 
     @validator('profile_image', pre=True)
     def to_image(cls, value: str) -> Union[bytes, None]:

@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next"
+import { useState } from "react"
 
 import Layout from "src/components/common/Layout"
 import Title from "src/components/common/Title"
@@ -13,10 +14,10 @@ interface UsernameProps {
   authenticationData: AuthenticationDataInterface,
   profileUserData: ProfileUserData
   isLoggedUserProfile: boolean,
-
 }
 
 export default function ProfileIndex({ authenticationData, profileUserData, isLoggedUserProfile }: UsernameProps) {
+
   return (
     <Layout authenticationData={authenticationData}>
       <div className="container">
@@ -57,20 +58,16 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
           </div>
 
           <div className="col-md-6 mt-md-4">
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify', whiteSpace: 'pre' }}>
               {profileUserData.bio}
-            </p>
+            </div>
           </div>
 
           {/* posts */}
           <Title>Posts</Title>
 
           {/* update user profile modal */}
-          <UpdateUserProfileModal
-            bio={profileUserData.bio}
-            url_linkedin={profileUserData.url_linkedin}
-            url_instagram={profileUserData.url_instagram}
-            url_website={profileUserData.url_website} />
+          <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
         </div>
       </div>
     </Layout>
@@ -87,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     profileUserData = await getProfileUserData(username.toString())
   }
 
-  if (profileUserData === null) {
+  if (Object.keys(profileUserData).length === 0) {
     return {
       notFound: true
     }

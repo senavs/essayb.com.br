@@ -27,6 +27,13 @@ interface UserCreateResponse {
   status: number
 }
 
+interface UserUpdateResponse {
+  body: {
+    [key: string]: UserInterface
+  },
+  status: number
+}
+
 export default class UserService {
   static async search(id_user_or_username: string): Promise<UserSearchResponse> {
     return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username), 'GET')
@@ -34,5 +41,19 @@ export default class UserService {
 
   static async create(username: string, password: string): Promise<UserCreateResponse> {
     return await callAPI(urls.user.create, 'POST', { username, password })
+  }
+
+  static async update(token: string, new_password?: string,
+    bio?: string, url_linkedin?: string, url_instagram?: string, url_website?: string
+  ): Promise<UserUpdateResponse> {
+    let body = {
+      new_password: null || new_password,
+      bio: null || bio,
+      url_linkedin: null || url_linkedin,
+      url_instagram: null || url_instagram,
+      url_website: null || url_website,
+    }
+
+    return await callAPI(urls.user.update, 'PUT', body, { 'JWT-Token': `Bearer ${token}` })
   }
 }

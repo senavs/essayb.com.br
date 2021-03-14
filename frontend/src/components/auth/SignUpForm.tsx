@@ -2,6 +2,7 @@ import { urls } from 'config/frontend'
 import Router from 'next/router'
 import { useState } from "react"
 import UserService from "src/libs/services/user"
+import { validatePasswords } from 'src/libs/utils/form'
 
 
 interface FormValue {
@@ -24,6 +25,10 @@ export default function SignUpForm() {
   function onSubmit(event) {
     event.preventDefault()
     setErrorMessage('')
+
+    if (!validatePasswords(formValue.password, formValue.confirmPassword)) {
+      return setErrorMessage('Passwords didn\'t match')
+    }
 
     UserService.create(formValue.username, formValue.password)
       .then(() => { Router.push(urls.auth.login) })
@@ -55,6 +60,7 @@ export default function SignUpForm() {
           type="password"
           className="form-control"
           placeholder="Your password"
+          minLength={3}
           value={formValue.password}
           onChange={onChange}
           required />
@@ -67,6 +73,7 @@ export default function SignUpForm() {
           type="password"
           className="form-control"
           placeholder="Confirm your password"
+          minLength={3}
           value={formValue.confirmPassword}
           onChange={onChange}
           required

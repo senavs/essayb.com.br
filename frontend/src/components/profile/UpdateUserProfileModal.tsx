@@ -1,17 +1,79 @@
-export default function UpdateUserProfileModal({ bio, url_linkedin, url_instagram, url_website }) {
-  // function
+import Router from "next/router"
+import { useState } from "react"
+
+import { AuthenticationDataInterface } from "src/libs/serverSide/auth"
+import { ProfileUserData } from "src/libs/serverSide/profile"
+import UserService from "src/libs/services/user"
+import { validatePasswords } from "src/libs/utils/form"
+
+
+interface UpdateUserProfileModalProps {
+  authenticationData: AuthenticationDataInterface
+  profileUserData: ProfileUserData
+}
+
+interface FormValue {
+  new_password: string
+  confirm_new_password: string
+  bio: string
+  url_linkedin: string
+  url_instagram: string
+  url_website: string
+}
+
+function initialFormValue(profileUserData: ProfileUserData): FormValue {
+  return {
+    new_password: '',
+    confirm_new_password: '',
+    bio: profileUserData.bio || '',
+    url_linkedin: profileUserData.url_linkedin || '',
+    url_instagram: profileUserData.url_instagram || '',
+    url_website: profileUserData.url_website || ''
+  }
+}
+
+export default function UpdateUserProfileModal({ authenticationData, profileUserData }: UpdateUserProfileModalProps) {
+  const [formValue, setFormValue] = useState(initialFormValue(profileUserData))
+  const [errorMessage, setErrorMessage] = useState('')
+
+  function onChange(event) {
+    const { name, value } = event.target
+    setFormValue({
+      ...formValue,
+      [name]: value
+    })
+  }
   function onSubmit(event) {
     document.getElementById('hidden-submit-button').click()
+    setErrorMessage('')
+
+    if (formValue.new_password && formValue.new_password.length < 3) {
+      return
+    }
+
+    if (!validatePasswords(formValue.new_password, formValue.confirm_new_password)) {
+      return setErrorMessage('Passwords didn\'t match')
+    }
+
+    UserService.update(authenticationData.token, formValue.new_password,
+      formValue.bio, formValue.url_linkedin, formValue.url_instagram, formValue.url_website)
+      .then(res => {
+        setErrorMessage('')
+        document.getElementById('btn-close').click()
+        Router.reload()
+      })
+      .catch(() => setErrorMessage(''))
+  }
+  function onCancel() {
+    setFormValue(initialFormValue(profileUserData))
   }
 
-  // return
   return (
-    <div className="modal fade" id="editUserModal" tabIndex={-1} aria-labelledby="editUserModalHeader" aria-hidden="true">
+    <div className="modal fade" id="editUserModal" tabIndex={-1} aria-labelledby="editUserModalHeader" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
       <div className="modal-dialog modal-dialog-scrollable">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="editUserModalHeader">Edit profile</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div className="modal-body">
 
@@ -19,7 +81,14 @@ export default function UpdateUserProfileModal({ bio, url_linkedin, url_instagra
               {/* bio */}
               <div className="mb-3">
                 <label className="col-form-label">Bio:</label>
-                <textarea name="bio" maxLength={256} rows={4} className="form-control" />
+                <textarea
+                  name="bio"
+                  maxLength={256}
+                  rows={4}
+                  className="form-control"
+                  value={formValue.bio}
+                  onChange={onChange}
+                />
               </div>
 
               {/* links */}
@@ -27,32 +96,70 @@ export default function UpdateUserProfileModal({ bio, url_linkedin, url_instagra
                 <label className="col-form-label">Links:</label>
                 <div className="input-group mb-2">
                   <span className="input-group-text"><i className="bi bi-linkedin"></i></span>
-                  <input className="form-control" name="url_linkedin" type="text" maxLength={128} placeholder="linkedin.com/in/essayB" />
+                  <input
+                    className="form-control"
+                    name="url_linkedin"
+                    type="text"
+                    maxLength={128}
+                    placeholder="linkedin.com/in/essayB"
+                    value={formValue.url_linkedin}
+                    onChange={onChange}
+                  />
                 </div>
                 <div className="input-group mb-2">
                   <span className="input-group-text"><i className="bi bi-instagram"></i></span>
-                  <input className="form-control" name="url_instagram" type="text" maxLength={128} placeholder="instagram.com/essayB" />
+                  <input
+                    className="form-control"
+                    name="url_instagram"
+                    type="text"
+                    maxLength={128}
+                    placeholder="instagram.com/essayB"
+                    value={formValue.url_instagram}
+                    onChange={onChange}
+                  />
                 </div>
                 <div className="input-group">
                   <span className="input-group-text"><i className="bi bi-link-45deg"></i></span>
-                  <input className="form-control" name="url_website" type="text" maxLength={128} placeholder="youtube.com/user/essayB" />
+                  <input
+                    className="form-control"
+                    name="url_website"
+                    type="text"
+                    maxLength={128}
+                    placeholder="youtube.com/user/essayB"
+                    defaultValue={formValue.url_website}
+                    onChange={onChange}
+                  />
                 </div>
               </div>
 
               {/* passwords */}
               <label className="col-form-label">Change password:</label>
-              <input type="password" maxLength={256} className="form-control mb-2" placeholder="New password" />
-              <input type="password" maxLength={256} className="form-control mb-2" placeholder="Confirm new password" />
-
-              {/* apply changes with password */}
-              <label className="col-form-label mt-5">Enter your password to apply changes:</label>
-              <input type="password" maxLength={256} className="form-control mb-2" placeholder="User password" required />
-
-              <button id="hidden-submit-button" type="submit" className="d-none" ></button>
+              <input
+                type="password"
+                name="new_password"
+                maxLength={256}
+                className="form-control mb-2"
+                placeholder="New password"
+                minLength={3}
+                value={formValue.new_password}
+                onChange={onChange}
+              />
+              <input
+                type="password"
+                name="confirm_new_password"
+                maxLength={256}
+                className="form-control mb-2"
+                placeholder="Confirm new password"
+                minLength={3}
+                value={formValue.confirm_new_password}
+                onChange={onChange}
+              />
+              <button type="submit" id="hidden-submit-button" className="d-none"></button>
             </form>
+            <small className="d-block mb-3 text-danger">{errorMessage}</small>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            <button id="btn-close" type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={onCancel}>Cancel</button>
             <button type="button" className="btn btn-secondary" onClick={onSubmit}>Save changes</button>
           </div>
         </div>

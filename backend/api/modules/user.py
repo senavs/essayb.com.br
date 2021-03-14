@@ -4,7 +4,7 @@ from fastapi import HTTPException
 
 from ..database import User
 from ..database.client import DatabaseClient
-from .utils import make_query, validate_username
+from .utils import make_query, validate_username, remove_white_spaces
 
 
 def search(id_user: int = None, username: str = None, *, connection: DatabaseClient = None) -> dict:
@@ -47,7 +47,7 @@ def create(username: str, password: str, profile_image: Union[str, bytes] = None
     return user
 
 
-def update(id_user: int, password: str = None,
+def update(id_user: int,
            new_password: str = None,
            profile_image: Union[str, bytes] = None,
            bio: str = None,
@@ -61,13 +61,7 @@ def update(id_user: int, password: str = None,
         if not (user := conn.query(User).filter_by(ID_USER=id_user).first()):
             raise HTTPException(400, 'user not registered')
 
-        # to change password, it's necessary to send the old one
-        if new_password and password is None:
-            raise HTTPException(403, 'user password not sent')
-        if password and not user.check_password(password):
-            raise HTTPException(401, 'wrong password')
-
         user.update(conn, PASSWORD=new_password, PROFILE_IMAGE=profile_image,
-                    BIO=bio, URL_LINKEDIN=url_linkedin, URL_INSTAGRAM=url_instagram, URL_WEBSITE=url_website)
+                    BIO=remove_white_spaces(bio), URL_LINKEDIN=url_linkedin, URL_INSTAGRAM=url_instagram, URL_WEBSITE=url_website)
         user = user.to_dict()
     return user
