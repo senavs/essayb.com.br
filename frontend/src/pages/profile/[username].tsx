@@ -57,7 +57,7 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
             {profileUserData.url_website && <LinkIcon iconName="link-45deg" href={profileUserData.url_website} />}
           </div>
 
-          <div className="col-md-6 mt-md-4">
+          <div className="col-md-6 mt-md-4 mb-2">
             <div style={{ textAlign: 'justify', whiteSpace: 'pre' }}>
               {profileUserData.bio}
             </div>

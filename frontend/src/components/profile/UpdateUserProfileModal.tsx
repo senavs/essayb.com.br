@@ -44,17 +44,12 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
     })
   }
   function onSubmit(event) {
-    document.getElementById('hidden-submit-button').click()
     setErrorMessage('')
-
-    if (formValue.new_password && formValue.new_password.length < 3) {
-      return
-    }
-
+    
     if (!validatePasswords(formValue.new_password, formValue.confirm_new_password)) {
       return setErrorMessage('Passwords didn\'t match')
     }
-
+    
     UserService.update(authenticationData.token, formValue.new_password,
       formValue.bio, formValue.url_linkedin, formValue.url_instagram, formValue.url_website)
       .then(res => {
@@ -62,7 +57,7 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
         document.getElementById('btn-close').click()
         Router.reload()
       })
-      .catch(() => setErrorMessage(''))
+      .catch(err => setErrorMessage(err.body.message))
   }
   function onCancel() {
     setFormValue(initialFormValue(profileUserData))
@@ -154,7 +149,6 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
                 value={formValue.confirm_new_password}
                 onChange={onChange}
               />
-              <button type="submit" id="hidden-submit-button" className="d-none"></button>
             </form>
             <small className="d-block mb-3 text-danger">{errorMessage}</small>
           </div>

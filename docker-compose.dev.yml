@@ -38,6 +38,7 @@ services:
     volumes:
       - ./frontend/src:/code/src/
       - ./frontend/public:/code/public/
+      - ./frontend/config:/code/config/
       - ./frontend/package.json:/code/package.json
       - ./frontend/package-lock.json:/code/package-lock.json
     ports:
