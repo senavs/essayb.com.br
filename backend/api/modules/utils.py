@@ -3,6 +3,7 @@ from base64 import b64decode, b64encode
 from binascii import Error as Base64Error
 from typing import Union
 
+import magic
 from fastapi import HTTPException
 
 RE_USERNAME = re.compile(r'^[^0-9\s][a-zA-Z0-9_.]{3,}')
@@ -12,6 +13,10 @@ RE_WHITE_SPACES = re.compile(r'\n+')
 def validate_username(username: str) -> bool:
     match = RE_USERNAME.findall(username)
     return match and match[0] == username
+
+
+def validate_profile_image(image_bytes: bytes) -> bool:
+    return str(magic.from_buffer(image_bytes, mime=True)).startswith('image/')
 
 
 def remove_white_spaces(text: str) -> str:

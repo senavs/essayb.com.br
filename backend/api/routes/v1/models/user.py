@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Union, Optional
+from typing import Optional, Union
 
 from fastapi import HTTPException
 from pydantic import BaseSettings, Field, validator

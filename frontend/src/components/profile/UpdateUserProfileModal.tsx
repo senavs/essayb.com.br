@@ -108,6 +108,7 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
                     className="d-none"
                     name="profile_image"
                     type="file"
+                    accept="image/*"
                     onChange={onChangeUpdateProfileImageInput}
                   />
                 </div>

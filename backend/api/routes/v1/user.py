@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from starlette.responses import StreamingResponse
 
 from ...modules.authentication import AuthModel, login_required
-from ...modules.user import create, search, update, profile_image
+from ...modules.user import create, profile_image, search, update
 from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateRequest, UpdateResponse
 
 router = APIRouter(prefix='/users', tags=['User'])

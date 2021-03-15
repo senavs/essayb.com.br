@@ -7,7 +7,7 @@ from loguru import logger
 
 from . import config
 from .database.loader import Bootloader
-from .modules.errorhandler import exception_handlers
+from .error.errorhandler import exception_handlers
 from .modules.middlewares import LoggingMiddleware, ProcessTimeMiddleware
 from .routes import v1
 

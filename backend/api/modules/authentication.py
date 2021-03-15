@@ -3,11 +3,13 @@ from datetime import datetime
 from typing import Union
 
 import jwt
-from fastapi import HTTPException, Header
+from fastapi import Header
 
 from .. import config
 from ..database import TokenBlacklist, User
 from ..database.client import DatabaseClient
+from ..error.http import unauthorized
+from .user import search
 
 AuthModel = namedtuple('AuthModel', 'token id_user')
 
@@ -24,13 +26,13 @@ def to_token(id_user: int) -> str:
     return token
 
 
-def from_token(token: str) -> dict:
+def from_token(token: str) -> int:
     """Token to user dict representation"""
 
     try:
         user = jwt.decode(token, config.auth.SECRET_KEY, algorithms=["HS256"])['id_user']
     except (jwt.InvalidTokenError, KeyError):
-        raise HTTPException(401, 'invalid token')
+        raise unauthorized.InvalidTokenException()
 
     return user
 
@@ -40,9 +42,9 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
 
     with DatabaseClient() as conn:
         if not (user := conn.query(User).filter_by(USERNAME=username).first()):
-            raise HTTPException(401, 'username or password did not match')
+            raise unauthorized.InvalidUsernameOrPasswordException()
         if not user.check_password(password):
-            raise HTTPException(401, 'username or password did not match')
+            raise unauthorized.InvalidUsernameOrPasswordException()
 
         token = to_token(user.ID_USER)
 
@@ -54,7 +56,7 @@ def logout(token: str):
 
     with DatabaseClient() as conn:
         if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
-            raise HTTPException(401, 'expired token')
+            raise unauthorized.ExpiredTokenException()
         TokenBlacklist(TOKEN=token).insert(conn)
 
 
@@ -64,15 +66,18 @@ def login_required(authentication: str = Header(..., alias='JWT-Token')) -> Unio
     # validates static authorization token
     bearer_token = authentication.split(' ', maxsplit=2)
     if len(bearer_token) != 2 or bearer_token[0].lower() != 'bearer':
-        raise HTTPException(401, 'invalid token')
+        raise unauthorized.InvalidTokenException()
     else:
         _, token = bearer_token
 
     # validates if its and expired token
     with DatabaseClient() as conn:
         if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
-            raise HTTPException(401, 'expired token')
+            raise unauthorized.ExpiredTokenException()
 
-    # validates if is a valid token
-    id_user = from_token(token)
+        # validates if is a valid token
+        id_user = from_token(token)
+
+        # verify if user exists
+        search(id_user=id_user, connection=conn)
     return AuthModel(token, id_user)
