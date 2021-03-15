@@ -16,7 +16,6 @@ export interface AuthenticationDataInterface {
     url_instagram?: string,
     url_website?: string,
     is_premium?: boolean,
-    profile_image?: string,
   }
 }
 

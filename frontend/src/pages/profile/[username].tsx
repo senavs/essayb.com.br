@@ -25,7 +25,7 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
 
           {/* profile image */}
           <div className="col-md-6 d-flex justify-content-center my-auto">
-            <Avatar username={profileUserData.username} width="6rem" />
+            <Avatar username={profileUserData.username} useProfileUrl={false} width="6rem" />
           </div>
 
           {/* profile infos */}
@@ -58,7 +58,7 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
           </div>
 
           <div className="col-md-6 mt-md-4 mb-2">
-            <div style={{ textAlign: 'justify', whiteSpace: 'pre' }}>
+            <div style={{ textAlign: 'justify', whiteSpace: 'pre-wrap' }}>
               {profileUserData.bio}
             </div>
           </div>

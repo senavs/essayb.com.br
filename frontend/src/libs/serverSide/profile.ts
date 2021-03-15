@@ -9,7 +9,6 @@ export interface ProfileUserData {
   url_instagram?: string,
   url_website?: string,
   is_premium?: boolean,
-  profile_image?: string,
 }
 
 export async function getProfileUserData(username: string): Promise<ProfileUserData> {

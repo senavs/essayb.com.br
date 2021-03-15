@@ -4,7 +4,9 @@ import { useState } from "react"
 import { AuthenticationDataInterface } from "src/libs/serverSide/auth"
 import { ProfileUserData } from "src/libs/serverSide/profile"
 import UserService from "src/libs/services/user"
-import { validatePasswords } from "src/libs/utils/form"
+import { fileToBase64, validatePasswords } from "src/libs/utils/form"
+import styles from 'src/styles/components/profile/UpdateUserProfileModal.module.css'
+import Avatar from "./Avatar"
 
 
 interface UpdateUserProfileModalProps {
@@ -15,6 +17,7 @@ interface UpdateUserProfileModalProps {
 interface FormValue {
   new_password: string
   confirm_new_password: string
+  profile_image: string
   bio: string
   url_linkedin: string
   url_instagram: string
@@ -25,6 +28,7 @@ function initialFormValue(profileUserData: ProfileUserData): FormValue {
   return {
     new_password: '',
     confirm_new_password: '',
+    profile_image: '',
     bio: profileUserData.bio || '',
     url_linkedin: profileUserData.url_linkedin || '',
     url_instagram: profileUserData.url_instagram || '',
@@ -45,12 +49,12 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
   }
   function onSubmit(event) {
     setErrorMessage('')
-    
+
     if (!validatePasswords(formValue.new_password, formValue.confirm_new_password)) {
       return setErrorMessage('Passwords didn\'t match')
     }
-    
-    UserService.update(authenticationData.token, formValue.new_password,
+
+    UserService.update(authenticationData.token, formValue.new_password, formValue.profile_image,
       formValue.bio, formValue.url_linkedin, formValue.url_instagram, formValue.url_website)
       .then(res => {
         setErrorMessage('')
@@ -61,6 +65,19 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
   }
   function onCancel() {
     setFormValue(initialFormValue(profileUserData))
+  }
+  function onClickUpdateProfileImage(event) {
+    document.getElementById('hidden-profile-image-input').click()
+  }
+  function onChangeUpdateProfileImageInput(event) {
+    fileToBase64(event.target.files[0], base64 => {
+      setFormValue({
+        ...formValue,
+        profile_image: base64
+      })
+      let avatarImg = document.getElementById('profile-image-avatar').getElementsByTagName('img')[0]
+      avatarImg.src = `data:image/png;base64,${base64}`
+    })
   }
 
   return (
@@ -73,6 +90,29 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
           <div className="modal-body">
 
             <form>
+              {/* profile image */}
+              <div className="row mb-3 d-flex justify-content-center">
+                <label className="col-form-label">Profile image:</label>
+                <div className="col-5 d-flex justify-content-center">
+                  <Avatar username={profileUserData.username} useProfileUrl={false} width="6rem" />
+                </div>
+                <div className="col-1 d-flex align-items-center">
+                  <i className="bi bi-arrow-left-right"></i>
+                </div>
+                <div className="col-5 d-flex justify-content-center">
+                  <div id="profile-image-avatar" className={styles.updateProfileImage} onClick={onClickUpdateProfileImage}>
+                    <Avatar username={profileUserData.username} useProfileUrl={false} width="6rem" />
+                  </div>
+                  <input
+                    id="hidden-profile-image-input"
+                    className="d-none"
+                    name="profile_image"
+                    type="file"
+                    onChange={onChangeUpdateProfileImageInput}
+                  />
+                </div>
+              </div>
+
               {/* bio */}
               <div className="mb-3">
                 <label className="col-form-label">Bio:</label>
