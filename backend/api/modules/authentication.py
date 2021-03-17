@@ -4,12 +4,13 @@ from typing import Union
 
 import jwt
 from fastapi import Header
+from loguru import logger
 
 from .. import config
 from ..database import TokenBlacklist, User
 from ..database.client import DatabaseClient
 from ..error.http import unauthorized
-from .user import search
+from .user import search_by_id
 
 AuthModel = namedtuple('AuthModel', 'token id_user')
 
@@ -40,6 +41,7 @@ def from_token(token: str) -> int:
 def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
     """Login user and get token"""
 
+    logger.info(f'Logging in user @{username}')
     with DatabaseClient() as conn:
         if not (user := conn.query(User).filter_by(USERNAME=username).first()):
             raise unauthorized.InvalidUsernameOrPasswordException()
@@ -48,36 +50,40 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
 
         token = to_token(user.ID_USER)
 
+    logger.info(f'User @{username} logged in successfully')
     return AuthModel(token, user.ID_USER)
 
 
 def logout(token: str):
     """Logout user and set token to blacklist"""
 
+    logger.info(f'Logging out user with token {token[:7]}')
     with DatabaseClient() as conn:
         if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
             raise unauthorized.ExpiredTokenException()
         TokenBlacklist(TOKEN=token).insert(conn)
 
+    logger.info(f'User with token {token[:7]} logged out successfully')
+
 
 def login_required(authentication: str = Header(..., alias='JWT-Token')) -> Union[AuthModel, tuple[str, dict]]:
     """Function to use with fastapi.Depends in routes to verify user is logged in"""
 
-    # validates static authorization token
+    logger.info(f'Validating user static authorization token')
     bearer_token = authentication.split(' ', maxsplit=2)
     if len(bearer_token) != 2 or bearer_token[0].lower() != 'bearer':
         raise unauthorized.InvalidTokenException()
     else:
         _, token = bearer_token
 
-    # validates if its and expired token
+    logger.info(f'Validating if {token[:7]} token is an expired one')
     with DatabaseClient() as conn:
         if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
             raise unauthorized.ExpiredTokenException()
 
-        # validates if is a valid token
         id_user = from_token(token)
 
-        # verify if user exists
-        search(id_user=id_user, connection=conn)
+        search_by_id(id_user, connection=conn)
+
+    logger.info(f'User token {token[:7]} validated successfully')
     return AuthModel(token, id_user)

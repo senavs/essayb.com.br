@@ -23,11 +23,11 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         ip, method, path = request.client.host, request.method, request.url.path
 
-        if path in config.logging.LOGGING_IGNORED_PATHS:
+        if path in config.logging.LOGGING_IGNORED_PATHS or method in config.logging.LOGGING_IGNORED_METHODS:
             return await call_next(request)
 
-        logger.info(f'{"connection received":<20} | {ip:<16} | {method: <7} | {path}')
+        logger.log('REQUEST RECEIVED', f'{ip:<16} | {method: <7} | --- | {path}')
         response = await call_next(request)
-        logger.info(f'{"connection finished":<20} | {ip:<16} | {method: <7} | {path}')
+        logger.log('REQUEST FINISHED', f'{ip:<16} | {method: <7} | {response.status_code} | {path}')
 
         return response

@@ -22,3 +22,7 @@ class InvalidPasswordException(BadRequestException):
 
 class InvalidProfileImageException(BadRequestException):
     detail: str = 'Invalid user profile image'
+
+
+class InvalidBase64Exception(BadRequestException):
+    detail: str = 'Invalid base64'

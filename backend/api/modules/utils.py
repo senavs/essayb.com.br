@@ -4,7 +4,8 @@ from binascii import Error as Base64Error
 from typing import Union
 
 import magic
-from fastapi import HTTPException
+
+from ..error.http import bad_request
 
 RE_USERNAME = re.compile(r'^[^0-9\s][a-zA-Z0-9_.]{3,}')
 RE_WHITE_SPACES = re.compile(r'\n+')
@@ -23,12 +24,6 @@ def remove_white_spaces(text: str) -> str:
     return RE_WHITE_SPACES.sub('\n', text)
 
 
-def make_query(*, ignore_none: bool = True, **kwargs):
-    """Create filter_by query that exclude None args"""
-
-    return {key.upper(): value for key, value in kwargs.items() if (value is None and not ignore_none) or value is not None}
-
-
 def to_base64(value: Union[bytes, str]) -> str:
     """String or bytes to base64 bytes"""
 
@@ -43,4 +38,4 @@ def from_base64(value: Union[bytes, str]) -> bytes:
     try:
         return b64decode(value)
     except Base64Error:
-        raise HTTPException(400, 'invalid base64')
+        raise bad_request.InvalidBase64Exception()
