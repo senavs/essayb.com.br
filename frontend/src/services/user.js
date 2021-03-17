@@ -4,9 +4,9 @@ import { urls } from '../config/backend'
 
 export default class UserService {
 
-  static async search(id_user) {
+  static async search(username) {
     try {
-      const response = await axios.get(urls.user.search.replace('{id_user}', id_user), {})
+      const response = await axios.get(urls.user.search.replace('{username}', username), {})
       return response.data
     } catch (error) {
       throw error.response.data

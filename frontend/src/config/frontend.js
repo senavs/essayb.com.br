@@ -12,7 +12,7 @@ const urls = {
   },
   user: {
     me: '/profile',
-    others: '/profile/:username'
+    others: '/profile/:usernameParam'
   },
   common: {
     index: '/'

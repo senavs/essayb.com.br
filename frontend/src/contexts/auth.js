@@ -18,10 +18,16 @@ export function AuthProvider({ children }) {
       AuthService.validate(token)
         .then(res => {
           setToken(res.token)
-          UserService.search(res.user.id_user)
+          UserService.search(res.user.username)
             .then(setUser)
-            .catch(deleteUser)
-        }).catch(deleteToken)
+            .catch(() => {
+              deleteToken()
+              deleteUser()
+            })
+        }).catch(() => {
+          deleteToken()
+          deleteUser()
+        })
     }
   }, [])
 
@@ -30,9 +36,12 @@ export function AuthProvider({ children }) {
     AuthService.login(username, password)
       .then(res => {
         setToken(res.token)
-        UserService.search(res.user.id_user)
+        UserService.search(res.user.username)
           .then(setUser)
-          .catch(deleteUser)
+          .catch(() => {
+            deleteToken()
+            deleteUser()
+          })
         resolve(res)
       })
       .catch(reject)
