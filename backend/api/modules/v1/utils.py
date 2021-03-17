@@ -5,7 +5,7 @@ from typing import Union
 
 import magic
 
-from ..error.http import bad_request
+from ...error.http import bad_request
 
 RE_USERNAME = re.compile(r'^[^0-9\s][a-zA-Z0-9_.]{3,}')
 RE_WHITE_SPACES = re.compile(r'\n+')

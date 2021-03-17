@@ -1,5 +1,4 @@
 import { GetServerSideProps } from "next"
-import { useState } from "react"
 
 import Layout from "src/components/common/Layout"
 import Title from "src/components/common/Title"

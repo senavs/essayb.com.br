@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from ...modules.authentication import AuthModel, login, login_required, logout
+from ...modules.v1.authentication import AuthModel, login, login_required, logout
 from .models.authentication import LoginRequest, LoginResponse, LogoutResponse, ValidateResponse
 
 router = APIRouter(prefix='/auth', tags=['Authentication'])

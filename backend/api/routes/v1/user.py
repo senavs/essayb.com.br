@@ -3,8 +3,8 @@ from io import BytesIO
 from fastapi import APIRouter, Depends
 from starlette.responses import StreamingResponse
 
-from ...modules.authentication import AuthModel, login_required
-from ...modules.user import create, profile_image, search_by_id, search_by_username, update
+from ...modules.v1.authentication import AuthModel, login_required
+from ...modules.v1.user import create, profile_image, search_by_id, search_by_username, update
 from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateRequest, UpdateResponse
 
 router = APIRouter(prefix='/users', tags=['User'])

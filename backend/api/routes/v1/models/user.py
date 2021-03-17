@@ -4,7 +4,7 @@ from typing import Optional, Union
 from fastapi import HTTPException
 from pydantic import BaseSettings, Field, validator
 
-from ....modules.utils import from_base64
+from ....modules.v1.utils import from_base64
 
 
 class User(BaseSettings):

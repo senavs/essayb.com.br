@@ -2,10 +2,10 @@ from typing import Union
 
 from loguru import logger
 
-from ..database import User
-from ..database.client import DatabaseClient
-from ..error.http import bad_request, not_found
-from .utils import remove_white_spaces, validate_username, validate_profile_image
+from ...database import User
+from ...database.client import DatabaseClient
+from ...error.http import bad_request, not_found
+from .utils import remove_white_spaces, validate_profile_image, validate_username
 
 
 def search_by_id(id_user: int, *, connection: DatabaseClient = None) -> dict:
@@ -92,8 +92,13 @@ def update(id_user: int,
         if profile_image is not None and not validate_profile_image(profile_image):
             raise bad_request.InvalidProfileImageException()
 
+        if bio is not None:
+            bio = remove_white_spaces(bio)
+        if bio is None:
+            bio = ''
+
         user.update(conn, PASSWORD=new_password, PROFILE_IMAGE=profile_image,
-                    BIO=remove_white_spaces(bio), URL_LINKEDIN=url_linkedin, URL_INSTAGRAM=url_instagram, URL_WEBSITE=url_website)
+                    BIO=bio, URL_LINKEDIN=url_linkedin, URL_INSTAGRAM=url_instagram, URL_WEBSITE=url_website)
         user = user.to_dict()
 
     logger.info(f'User information with id number {id_user} updated successfully')

@@ -6,10 +6,10 @@ import jwt
 from fastapi import Header
 from loguru import logger
 
-from .. import config
-from ..database import TokenBlacklist, User
-from ..database.client import DatabaseClient
-from ..error.http import unauthorized
+from ... import config
+from ...database import TokenBlacklist, User
+from ...database.client import DatabaseClient
+from ...error.http import unauthorized
 from .user import search_by_id
 
 AuthModel = namedtuple('AuthModel', 'token id_user')
@@ -69,7 +69,7 @@ def logout(token: str):
 def login_required(authentication: str = Header(..., alias='JWT-Token')) -> Union[AuthModel, tuple[str, dict]]:
     """Function to use with fastapi.Depends in routes to verify user is logged in"""
 
-    logger.info(f'Validating user static authorization token')
+    logger.info('Validating user static authorization token')
     bearer_token = authentication.split(' ', maxsplit=2)
     if len(bearer_token) != 2 or bearer_token[0].lower() != 'bearer':
         raise unauthorized.InvalidTokenException()
