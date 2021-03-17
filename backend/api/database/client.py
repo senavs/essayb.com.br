@@ -39,15 +39,22 @@ class DatabaseClient:
     def rollback(self):
         self.session.rollback()
 
+    def connect(self):
+        self._session = Session()
+        self._query = self.session.query
+
+    def close(self):
+        if self._connection is None:
+            self.session.close()
+
     def __enter__(self) -> 'DatabaseClient':
         if self._connection:
             return self._connection
 
-        self._session = Session()
-        self._query = self.session.query
+        self.connect()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type and issubclass(exc_type, Exception):
+        if exc_type and issubclass(exc_type, Exception) and self._connection is None:
             self.rollback()
-        self.session.close()
+        self.close()

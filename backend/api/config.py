@@ -19,8 +19,9 @@ class DeploySettings(BaseSettings):
 
 
 class LoggingSetting(BaseSettings):
-    LOGURU_FORMAT: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <bold>{message}</bold>'
+    LOGURU_FORMAT: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <16}</level> | <bold>{message}</bold>'
     LOGGING_IGNORED_PATHS: str = '/metrics /health /docs /redoc /openapi.json /favicon.ico'
+    LOGGING_IGNORED_METHODS: str = 'OPTIONS HEADER'
     LOGGING_FILE: bool = True
 
 

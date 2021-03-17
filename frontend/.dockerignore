@@ -1,3 +1,5 @@
 .dockerignore
-Dockerfile
+.next/
 node_modules/
+Dockerfile
+Dockerfile.dev
