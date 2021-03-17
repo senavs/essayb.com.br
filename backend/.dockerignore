@@ -1,5 +1,6 @@
 .dockerignore
 Dockerfile
+Dockerfile.dev
 requirements.txt
 pep8.sh
 .flake8

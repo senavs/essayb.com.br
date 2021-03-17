@@ -7,7 +7,7 @@ from loguru import logger
 
 from . import config
 from .database.loader import Bootloader
-from .modules.errorhandler import exception_handlers
+from .error.errorhandler import exception_handlers
 from .modules.middlewares import LoggingMiddleware, ProcessTimeMiddleware
 from .routes import v1
 
@@ -23,6 +23,8 @@ app.include_router(v1.router)
 
 # logging
 logger.configure(handlers=[{'sink': stdout, 'format': config.logging.LOGURU_FORMAT}])
+logger.level('REQUEST RECEIVED', 38)
+logger.level('REQUEST FINISHED', 39)
 if config.logging.LOGGING_FILE:
     logger.add(f'logs/{datetime.now().strftime("%Y-%m-%d")}.log', level=0, rotation='500 MB', format=config.logging.LOGURU_FORMAT)
 
