@@ -12,20 +12,28 @@ class BaseModel:
     def search(cls, connection: DatabaseClient, id: int) -> 'BaseModel':
         return connection.query(cls).get(id)
 
-    def insert(self, connection: DatabaseClient, *, commit: bool = True):
+    def insert(self, connection: DatabaseClient, *, flush: bool = False, commit: bool = True):
         connection.add(self)
+        if flush:
+            connection.flush()
         if commit:
             connection.commit()
 
-    def update(self, connection: DatabaseClient, *, commit: bool = True, **data: Any):
+    def update(self, connection: DatabaseClient, *, flush: bool = False, commit: bool = True, **data: Any):
         for attr, new_value in data.items():
+            if not hasattr(self, attr):
+                raise ValueError(f'{self.__class__.__name__} as no attribute {attr} to update')
             if new_value is not None:
                 setattr(self, attr, new_value)
+        if flush:
+            connection.flush()
         if commit:
             connection.commit()
 
-    def delete(self, connection: DatabaseClient, *, commit: bool = True):
+    def delete(self, connection: DatabaseClient, *, flush: bool = False, commit: bool = True):
         connection.session.delete(self)
+        if flush:
+            connection.flush()
         if commit:
             connection.commit()
 
