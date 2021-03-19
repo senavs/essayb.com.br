@@ -1,3 +1,5 @@
+import os
+
 from pydantic import BaseSettings
 
 
@@ -25,7 +27,15 @@ class LoggingSetting(BaseSettings):
     LOGGING_FILE: bool = True
 
 
+class PathSetting(BaseSettings):
+    PROJECT_PATH: str = os.path.abspath(os.path.dirname(os.path.abspath(__file__)))
+
+    def join(self, *args) -> str:
+        return os.path.join(self.PROJECT_PATH, *args)
+
+
 auth = AuthSetting()
 database = DatabaseSettings()
 deploy = DeploySettings()
 logging = LoggingSetting()
+path = PathSetting()

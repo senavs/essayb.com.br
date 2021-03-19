@@ -48,7 +48,7 @@ class DatabaseClient:
             self.session.close()
 
     def __enter__(self) -> 'DatabaseClient':
-        if self._connection:
+        if self._connection is not None:
             return self._connection
 
         self.connect()
