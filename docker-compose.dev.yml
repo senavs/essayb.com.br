@@ -5,6 +5,7 @@ services:
   database:
     image: postgres
     container_name: essayb-database-dev
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ESSAYB_DEV
       POSTGRES_USER: root
@@ -18,6 +19,7 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile.dev
+    restart: unless-stopped
     environment:
       DEPLOY_DEBUG: "true"
       DEPLOY_RELOAD: "true"
@@ -35,6 +37,7 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile.dev
+    restart: unless-stopped
     environment:
       BACKEND_DOMAIN: 0.0.0.0:8080
       USE_HTTPS: 0
@@ -51,6 +54,7 @@ services:
   gateway:
     image: essayb:gateway-dev
     container_name: essayb-gateway-dev
+    restart: unless-stopped
     build:
       context: gateway
       dockerfile: Dockerfile.dev
