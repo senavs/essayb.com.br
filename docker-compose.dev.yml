@@ -26,6 +26,8 @@ services:
       - ./backend/api:/code/api
       - ./backend/logs:/code/logs
       - ./backend/setup.py:/code/setup.py
+    depends_on:
+      - database
 
   frontend:
     image: essayb:frontend-dev
@@ -42,6 +44,8 @@ services:
       - ./frontend/config:/code/config/
       - ./frontend/package.json:/code/package.json
       - ./frontend/package-lock.json:/code/package-lock.json
+    depends_on:
+      - database
 
   gateway:
     image: essayb:gateway-dev
