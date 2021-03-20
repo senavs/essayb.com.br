@@ -16,7 +16,7 @@ class User(DeclarativeBase, BaseModel):
     __tablename__ = 'USER'
 
     ID_USER = Column(Integer, autoincrement=True, nullable=False, primary_key=True, unique=True)
-    USERNAME = Column(String(32), nullable=False, unique=True)
+    USERNAME = Column(String(32), nullable=False, unique=True, index=True)
     PASSWORD = Column(String(72), nullable=False, unique=False)
     BIO = Column(String(256), nullable=True, unique=False)
     URL_LINKEDIN = Column(String(128), nullable=True, unique=False)
