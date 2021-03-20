@@ -26,6 +26,8 @@ services:
       - ./backend/api:/code/api
       - ./backend/logs:/code/logs
       - ./backend/setup.py:/code/setup.py
+    depends_on:
+      - database
 
   frontend:
     image: essayb:frontend-dev
@@ -34,7 +36,8 @@ services:
       context: frontend
       dockerfile: Dockerfile.dev
     environment:
-      BACKEND_DOMAIN: 172.17.0.1:8080
+      BACKEND_DOMAIN: 0.0.0.0:8080
+      USE_HTTPS: 0
     volumes:
       - ./frontend/next.config.js:/code/next.config.js
       - ./frontend/src:/code/src/
@@ -42,6 +45,8 @@ services:
       - ./frontend/config:/code/config/
       - ./frontend/package.json:/code/package.json
       - ./frontend/package-lock.json:/code/package-lock.json
+    depends_on:
+      - database
 
   gateway:
     image: essayb:gateway-dev
