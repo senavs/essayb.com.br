@@ -36,7 +36,8 @@ services:
       context: frontend
       dockerfile: Dockerfile.dev
     environment:
-      BACKEND_DOMAIN: 172.17.0.1:8080
+      BACKEND_DOMAIN: 0.0.0.0:8080
+      USE_HTTPS: 0
     volumes:
       - ./frontend/next.config.js:/code/next.config.js
       - ./frontend/src:/code/src/
