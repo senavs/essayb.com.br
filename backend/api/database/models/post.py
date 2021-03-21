@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, LargeBinary, DateTime, func
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, LargeBinary, String, Text, func
+from sqlalchemy.orm import backref, relationship
 
 from .. import DeclarativeBase
 from .base import BaseModel
