@@ -2,9 +2,9 @@ from sqlalchemy import Column, ForeignKey, Integer, LargeBinary, Text, event
 from sqlalchemy.engine.base import Connection
 from sqlalchemy.orm import backref, relationship
 
+from ...error.http import bad_request
 from .. import DeclarativeBase
 from .base import BaseModel
-from ...error.http import bad_request
 
 
 class PostContent(DeclarativeBase, BaseModel):

@@ -34,3 +34,7 @@ class InvalidBase64Exception(BadRequestException):
 
 class InvalidPostContentException(BadRequestException):
     detail: str = 'Invalid post content. Cannot set text and image to the same content. Create another one separately'
+
+
+class UserFollowItselfException(BadRequestException):
+    detail: str = 'User cannot follow itself'
