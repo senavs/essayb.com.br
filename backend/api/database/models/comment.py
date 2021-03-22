@@ -17,5 +17,5 @@ class Comment(DeclarativeBase, BaseModel):
         UniqueConstraint('ID_USER', 'ID_POST'),
     )
 
-    post = relationship('Post', backref=backref('likes', cascade='all,delete', lazy='dynamic'))
-    user = relationship('User', backref=backref('likes', cascade='all,delete', lazy='dynamic'))
+    post = relationship('Post', backref=backref('comments', cascade='all,delete', lazy='dynamic'))
+    user = relationship('User', backref=backref('comments', cascade='all,delete', lazy='dynamic'))

@@ -39,8 +39,10 @@ services:
       dockerfile: Dockerfile.dev
     restart: unless-stopped
     environment:
-      BACKEND_DOMAIN: 0.0.0.0:8080
-      USE_HTTPS: 0
+      # Use your IPv4 address to BACKEND_DOMAIN and FRONTEND_DOMAIN envs
+      # Use port 8080 if gateway is activated, otherwise use 8080 to FRONTEND_DOMAIN and 8888 to BACKEND_DOMAIN
+      BACKEND_DOMAIN: 172.17.0.1:8080
+      FRONTEND_DOMAIN: 172.17.0.1:8080
     volumes:
       - ./frontend/next.config.js:/code/next.config.js
       - ./frontend/src:/code/src/
