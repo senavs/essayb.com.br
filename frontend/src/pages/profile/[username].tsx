@@ -33,6 +33,7 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
               <div className="h1 d-inline-block">
                 {profileUserData.username} {profileUserData.is_premium && <i title="Premium" className="fs-3 bi bi-gem"></i>}
               </div>
+
               <div className="ms-auto my-auto">
                 {isLoggedUserProfile && (
                   <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
@@ -40,6 +41,8 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
                   </button>
                 )}
               </div>
+
+
             </div>
             <div className="d-flex justify-content-evenly">
               <span><span className="fw-bold">{32}</span> posts</span>
@@ -48,6 +51,17 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
               <span><span className="fw-bold">{123}</span> following</span>
             </div>
           </div>
+
+    {/* teste 
+    
+    condition ? exem1 : exem2
+
+
+    
+    
+    
+    */}
+
 
           {/* user info */}
           <div className="col-md-6 mt-md-4 my-4 d-flex justify-content-evenly">

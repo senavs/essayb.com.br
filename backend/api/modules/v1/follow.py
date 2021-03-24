@@ -1,0 +1,1 @@
+def check_follow (user_follower: str) -> bool:
