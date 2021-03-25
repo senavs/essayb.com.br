@@ -21,10 +21,16 @@ export default function Navbar() {
       <div className='border-bottom border-lg-secondary py-2'>
         <div className='row'>
           <div className='col-4 d-flex justify-content-start align-self-end'>
-            {!authenticationData.user.is_premium
-              ? <a className='link-secondary' href={urls.common.subscribe} >Subscribe</a>
-              : null
-            }
+            {!authenticationData.user.is_premium && (
+              <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.common.subscribe} >
+                <i className="bi bi-gem"></i>
+              </a>
+            )}
+            {authenticationData.isAuthenticated && (
+              <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.post.create} >
+                <i className="bi bi-journal-text"></i>
+              </a>
+            )}
           </div>
           <div className='col-4 d-flex justify-content-center align-self-end'>
             <a href={urls.common.index}>
