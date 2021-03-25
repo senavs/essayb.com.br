@@ -1,0 +1,16 @@
+.buttons {
+  
+}
+
+.inputs {
+  border-left: 1px solid #bdbdbd;
+}
+
+.inputs textarea {
+  border: none;
+}
+
+.inputs textarea:focus {
+  outline: none;
+  border-bottom: 1px solid #bdbdbd;
+}
