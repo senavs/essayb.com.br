@@ -1,18 +1,26 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown"
 import { PostContext } from "src/libs/contexts/post";
 import styles from "src/styles/components/post/Section.module.css"
 
 
 interface SectionProps {
-  id: number
+  id: number,
+  image?: string,
+  isBase64?: boolean
 }
 
-export default function Section({ id }: SectionProps) {
+export default function Section({ id, image, isBase64 }: SectionProps) {
   const { currentId, addContent, addSection, removeSection } = useContext(PostContext)
   const [rows, setRows] = useState(2)
   const [content, setContent] = useState('')
-  const [isInputActivated, setIsInputActivated] = useState(true)
+  const [isInputActivated, setIsInputActivated] = useState(image ? false : true)
+
+  useEffect(() => {
+    if (image) {
+      addContent(id, image)
+    }
+  }, [])
 
   function onKeyPress(event) {
     if (!event.shiftKey && event.key === 'Enter') {
@@ -45,14 +53,14 @@ export default function Section({ id }: SectionProps) {
     <div className="container mb-3">
       <div className="row">
         <div className="col-2 text-end">
-          {isInputActivated
+          {!image && (isInputActivated
             ? < a className='btn btn-sm btn-outline-success ms-2' onClick={onClickCheck}>
               <i className="bi bi-check2"></i>
             </a>
             : < a className='btn btn-sm btn-outline-secondary ms-2' onClick={onClickCheck}>
               <i className="bi bi-pencil"></i>
             </a>
-          }
+          )}
           <a className='btn btn-sm btn-outline-danger ms-2' onClick={onClickRemove}>
             <i className="bi bi-x"></i>
           </a>
@@ -71,9 +79,11 @@ export default function Section({ id }: SectionProps) {
               placeholder={"Text ..."}
               onBlur={onBlur}
             />
-            : <span onDoubleClick={onDoubleClick}>
-              <ReactMarkdown children={content} />
-            </span>
+            : (image
+              ? <img className="mx-auto mw-100" src={isBase64 ? `data:image/png;base64,${image}` : image} alt="uploaded image"/>
+              : <span onDoubleClick={onDoubleClick}>
+                <ReactMarkdown children={content} />
+              </span>)
           }
         </div>
       </div>
