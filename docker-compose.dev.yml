@@ -5,6 +5,7 @@ services:
   database:
     image: postgres
     container_name: essayb-database-dev
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ESSAYB_DEV
       POSTGRES_USER: root
@@ -18,6 +19,7 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile.dev
+    restart: unless-stopped
     environment:
       DEPLOY_DEBUG: "true"
       DEPLOY_RELOAD: "true"
@@ -26,6 +28,8 @@ services:
       - ./backend/api:/code/api
       - ./backend/logs:/code/logs
       - ./backend/setup.py:/code/setup.py
+    depends_on:
+      - database
 
   frontend:
     image: essayb:frontend-dev
@@ -33,8 +37,12 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile.dev
+    restart: unless-stopped
     environment:
+      # Use your IPv4 address to BACKEND_DOMAIN and FRONTEND_DOMAIN envs
+      # Use port 8080 if gateway is activated, otherwise use 8080 to FRONTEND_DOMAIN and 8888 to BACKEND_DOMAIN
       BACKEND_DOMAIN: 172.17.0.1:8080
+      FRONTEND_DOMAIN: 172.17.0.1:8080
     volumes:
       - ./frontend/next.config.js:/code/next.config.js
       - ./frontend/src:/code/src/
@@ -42,10 +50,13 @@ services:
       - ./frontend/config:/code/config/
       - ./frontend/package.json:/code/package.json
       - ./frontend/package-lock.json:/code/package-lock.json
+    depends_on:
+      - database
 
   gateway:
     image: essayb:gateway-dev
     container_name: essayb-gateway-dev
+    restart: unless-stopped
     build:
       context: gateway
       dockerfile: Dockerfile.dev

@@ -38,12 +38,12 @@ def from_token(token: str) -> int:
     return user
 
 
-def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
+def login(username: str, password: str, *, connection: DatabaseClient = None) -> Union[AuthModel, tuple[str, dict]]:
     """Login user and get token"""
 
     logger.info(f'Logging in user @{username}')
-    with DatabaseClient() as conn:
-        if not (user := conn.query(User).filter_by(USERNAME=username).first()):
+    with DatabaseClient(connection=connection) as connection:
+        if not (user := connection.query(User).filter_by(USERNAME=username).first()):
             raise unauthorized.InvalidUsernameOrPasswordException()
         if not user.check_password(password):
             raise unauthorized.InvalidUsernameOrPasswordException()
@@ -54,14 +54,14 @@ def login(username: str, password: str) -> Union[AuthModel, tuple[str, dict]]:
     return AuthModel(token, user.ID_USER)
 
 
-def logout(token: str):
+def logout(token: str, *, connection: DatabaseClient = None):
     """Logout user and set token to blacklist"""
 
     logger.info(f'Logging out user with token {token[:7]}')
-    with DatabaseClient() as conn:
-        if conn.query(TokenBlacklist).filter_by(TOKEN=token).first():
+    with DatabaseClient(connection=connection) as connection:
+        if connection.query(TokenBlacklist).filter_by(TOKEN=token).first():
             raise unauthorized.ExpiredTokenException()
-        TokenBlacklist(TOKEN=token).insert(conn)
+        TokenBlacklist(TOKEN=token).insert(connection)
 
     logger.info(f'User with token {token[:7]} logged out successfully')
 

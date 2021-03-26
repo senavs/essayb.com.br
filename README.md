@@ -89,7 +89,7 @@ You can also run the application without docker installed. To do that, it's nece
   
   To run the frontend, get into essayb.com.br/frontend folder and run the follow command:
   ```shell
-  npm start
+  npm run dev
   ```
   
   To run the backend, open a new terminal and get into essayb.com.br/backend folder and run the follow command:

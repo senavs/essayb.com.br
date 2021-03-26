@@ -35,7 +35,12 @@ export async function getAuthenticationData({ req, res }): Promise<Authenticatio
         const userResponse = await UserService.search(authenticationData.id_user)
         Object.assign(authenticationData, { user: { ...userResponse.body } })
       } catch (err) {
-        cookies.set('token', '')
+        console.log(err)
+        cookies.set('token', '', {
+          path: '/',
+          domain: process.env.FRONTEND_DOMAIN,
+          secure: Boolean(process.env.USE_HTTPS)
+        })
         return authenticationData
       }
     }
