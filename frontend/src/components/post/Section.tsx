@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown"
 import { PostContext } from "src/libs/contexts/post";
 import styles from "src/styles/components/post/Section.module.css"
@@ -9,20 +9,30 @@ interface SectionProps {
 }
 
 export default function Section({ id }: SectionProps) {
-  const { addContent } = useContext(PostContext)
+  const { currentId, addContent, addSection, removeSection } = useContext(PostContext)
   const [rows, setRows] = useState(2)
   const [content, setContent] = useState('')
-  const [isActivated, setIsActivated] = useState(true)
+  const [isInputActivated, setIsInputActivated] = useState(true)
 
   function onKeyPress(event) {
     if (!event.shiftKey && event.key === 'Enter') {
-      setIsActivated(false)
+      setIsInputActivated(false)
       event.target.blur()
-      setIsActivated(false)
+
+      addSection(<Section key={currentId} id={currentId} />)
     }
   }
-  function onClick(event) {
-    setIsActivated(!isActivated)
+  function onClickCheck() {
+    setIsInputActivated(!isInputActivated)
+  }
+  function onClickRemove() {
+    removeSection(id)
+  }
+  function onDoubleClick() {
+    setIsInputActivated(true)
+  }
+  function onBlur() {
+    setIsInputActivated(false)
   }
   function onChange(event) {
     setContent(event.target.value)
@@ -31,23 +41,41 @@ export default function Section({ id }: SectionProps) {
   }
 
   return (
-    <div className="container">
+    <div className="container mb-3">
       <div className="row">
-        <div className={`${styles.buttons} col-2 text-end`}>
-          <a className='btn btn-sm btn-outline-secondary' onClick={onClick}>
-            {isActivated
-              ? <i className="bi bi-check2"></i>
-              : <i className="bi bi-pencil"></i>
-            }
+        <div className="col-2 text-end">
+          {isInputActivated
+            ? < a className='btn btn-sm btn-outline-success ms-2' onClick={onClickCheck}>
+              <i className="bi bi-check2"></i>
+            </a>
+            : < a className='btn btn-sm btn-outline-secondary ms-2' onClick={onClickCheck}>
+              <i className="bi bi-pencil"></i>
+            </a>
+          }
+          <a className='btn btn-sm btn-outline-danger ms-2' onClick={onClickRemove}>
+            <i className="bi bi-x"></i>
           </a>
         </div>
+
         <div className={`${styles.inputs} col-10 d-flex`}>
-          {isActivated
-            ? <textarea className="w-100" maxLength={128} rows={rows} onKeyPress={onKeyPress} onChange={onChange} value={content} disabled={!isActivated} />
-            : <ReactMarkdown children={content} ></ReactMarkdown>
+          {isInputActivated
+            ? <textarea
+              className="w-100"
+              maxLength={128}
+              rows={rows}
+              onKeyPress={onKeyPress}
+              onChange={onChange}
+              value={content}
+              disabled={!isInputActivated}
+              placeholder={"Text ..."}
+              onBlur={onBlur}
+            />
+            : <span onDoubleClick={onDoubleClick}>
+              <ReactMarkdown children={content} />
+            </span>
           }
         </div>
       </div>
-    </div>
+    </div >
   )
 }

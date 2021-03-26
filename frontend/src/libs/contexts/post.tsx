@@ -41,7 +41,9 @@ export default function PostProvider({ children }: PostContextProps) {
     setContents(contents.filter((content, index) => index !== id ? content : null))
   }
   function addContent(id: number, content: string) {
-    setContents(contents.filter((previousContent, index) => index === id ? content : previousContent))
+    let copy = [...contents]
+    copy[id] = content || null
+    setContents(copy)
   }
 
   return (

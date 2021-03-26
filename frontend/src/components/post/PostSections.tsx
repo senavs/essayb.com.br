@@ -22,18 +22,12 @@ export default function PostSections() {
         </div>
       </div>
       <div className="row">
-        <div className="col d-flex justify-content-evenly">
-          <button className="btn btn-sm btn-outline-secondary" onClick={onClick}>
+        <div className="col d-flex justify-content-center ">
+          <button className="btn btn-sm btn-outline-secondary ms-2" onClick={onClick}>
             <i className="bi bi-plus"></i>
           </button>
-          <button className="btn btn-sm btn-outline-secondary" onClick={onClick}>
+          <button className="btn btn-sm btn-outline-secondary ms-2" onClick={onClick}>
             <i className="bi bi-camera"></i>
-          </button>
-          <button className="btn btn-sm btn-outline-secondary" onClick={onClick}>
-            <i className="bi bi-three-dots"></i>
-          </button>
-          <button className="btn btn-sm btn-outline-secondary" onClick={onClick}>
-            <i className="bi bi-code"></i>
           </button>
         </div>
       </div>
