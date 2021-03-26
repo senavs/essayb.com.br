@@ -26,6 +26,7 @@ export default function Section({ id }: SectionProps) {
     setIsInputActivated(!isInputActivated)
   }
   function onClickRemove() {
+    console.log(id)
     removeSection(id)
   }
   function onDoubleClick() {

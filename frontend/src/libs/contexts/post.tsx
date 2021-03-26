@@ -37,8 +37,8 @@ export default function PostProvider({ children }: PostContextProps) {
     setCurruntId(currentId + 1)
   }
   function removeSection(id: number) {
-    setSections(sections.filter((section, index) => index !== id ? section : null))
-    setContents(contents.filter((content, index) => index !== id ? content : null))
+    setSections(sections.map((section, index) => index !== id ? section : null))
+    setContents(contents.map((content, index) => index !== id ? content : null))
   }
   function addContent(id: number, content: string) {
     let copy = [...contents]
