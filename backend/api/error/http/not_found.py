@@ -10,3 +10,7 @@ class NotFoundException(HTTPException):
 
 class UserNotFoundException(NotFoundException):
     detail: str = 'User not found'
+
+
+class CategoryNotFoundException(NotFoundException):
+    detail: str = 'Category not found'
