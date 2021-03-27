@@ -17,6 +17,7 @@ export const urls = {
     list: `${protocol}://${backendDomain}/v1/categories/list`
   },
   post: {
+    count: `${protocol}://${backendDomain}/v1/posts/{id_user_or_username}/count`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
   }
 }

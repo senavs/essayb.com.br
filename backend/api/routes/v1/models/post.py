@@ -32,3 +32,7 @@ class CreateRequest(BaseSettings):
 
 class CreateResponse(Post):
     pass
+
+
+class CountResponse(BaseSettings):
+    count: int

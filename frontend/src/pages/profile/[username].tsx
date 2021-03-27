@@ -7,15 +7,17 @@ import LinkIcon from "src/components/profile/LinkIcon"
 import UpdateUserProfileModal from "src/components/profile/UpdateUserProfileModal"
 import { getAuthenticationData, AuthenticationDataInterface } from "src/libs/serverSide/auth"
 import { getProfileUserData, ProfileUserData } from "src/libs/serverSide/profile"
+import PostService, { PostCountInterface } from "src/libs/services/post"
 
 
 interface UsernameProps {
   authenticationData: AuthenticationDataInterface,
   profileUserData: ProfileUserData
   isLoggedUserProfile: boolean,
+  postCount: PostCountInterface
 }
 
-export default function ProfileIndex({ authenticationData, profileUserData, isLoggedUserProfile }: UsernameProps) {
+export default function ProfileIndex({ authenticationData, profileUserData, isLoggedUserProfile, postCount }: UsernameProps) {
 
   return (
     <Layout authenticationData={authenticationData}>
@@ -42,10 +44,10 @@ export default function ProfileIndex({ authenticationData, profileUserData, isLo
               </div>
             </div>
             <div className="d-flex justify-content-evenly">
-              <span><span className="fw-bold">{32}</span> posts</span>
-              <span><span className="fw-bold">{12398}</span> likes</span>
-              <span><span className="fw-bold">{100}</span> followers</span>
-              <span><span className="fw-bold">{123}</span> following</span>
+              <span><span className="fw-bold">{postCount.count}</span> posts</span>
+              <span><span className="fw-bold">{0}</span> likes</span>
+              <span><span className="fw-bold">{0}</span> followers</span>
+              <span><span className="fw-bold">{0}</span> following</span>
             </div>
           </div>
 
@@ -89,7 +91,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
+  const postCount = await PostService.count(profileUserData.username)
+
   return {
-    props: { authenticationData, profileUserData, isLoggedUserProfile },
+    props: { authenticationData, profileUserData, isLoggedUserProfile, postCount },
   }
 }
