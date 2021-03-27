@@ -15,5 +15,8 @@ export const urls = {
   },
   category: {
     list: `${protocol}://${backendDomain}/v1/categories/list`
+  },
+  post: {
+    create: `${protocol}://${backendDomain}/v1/posts/create`,
   }
 }

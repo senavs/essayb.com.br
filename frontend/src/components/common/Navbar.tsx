@@ -5,6 +5,7 @@ import styles from 'src/styles/components/common/Navbar.module.css'
 import { AuthContext } from 'src/libs/contexts/auth'
 import Avatar from 'src/components/profile/Avatar'
 import CategoryService from 'src/libs/services/category'
+import CreateNewPostModal from '../post/CreateNewPostModal'
 
 
 export default function Navbar() {
@@ -31,7 +32,7 @@ export default function Navbar() {
               </a>
             )}
             {authenticationData.isAuthenticated && (
-              <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.post.create} >
+              <a className="btn btn-sm btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#createPostModal" >
                 <i className="bi bi-journal-text"></i>
               </a>
             )}
@@ -67,6 +68,7 @@ export default function Navbar() {
         })}
       </div>
 
+      <CreateNewPostModal token={authenticationData.token} />
     </div >
   )
 }
