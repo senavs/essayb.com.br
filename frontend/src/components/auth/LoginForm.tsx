@@ -22,7 +22,7 @@ export default function LoginForm() {
     event.preventDefault()
     setErrorMessage('')
 
-    login(formValue.username, formValue.password, () => { }, err => setErrorMessage(err.body.message))
+    login(formValue.username, formValue.password, () => { }, err => setErrorMessage(err.message))
   }
 
   return (

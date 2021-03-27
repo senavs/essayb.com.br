@@ -30,10 +30,10 @@ export async function getAuthenticationData({ req, res }): Promise<Authenticatio
     } else {
       try {
         const authResponse = await AuthService.validate(token)
-        Object.assign(authenticationData, { ...authResponse.body, isAuthenticated: true })
+        Object.assign(authenticationData, { ...authResponse, isAuthenticated: true })
 
         const userResponse = await UserService.search(authenticationData.id_user)
-        Object.assign(authenticationData, { user: { ...userResponse.body } })
+        Object.assign(authenticationData, { user: { ...userResponse } })
       } catch (err) {
         console.log(err)
         cookies.set('token', '', {

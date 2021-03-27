@@ -33,7 +33,7 @@ export function AuthProvider({ children, authenticationData }: AuthProviderProps
   function login(username: '', password: string, resolve = (res: LoginResponse) => { }, reject = (res: LoginResponse) => { }) {
     AuthService.login(username, password)
       .then(res => {
-        CookieClient.set('token', res.body.token)
+        CookieClient.set('token', res.token)
         Router.push(urls.common.index)
         resolve(res)
       })

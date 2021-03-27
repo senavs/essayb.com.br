@@ -12,5 +12,8 @@ export const urls = {
     profile_image: `${protocol}://${backendDomain}/v1/users/{username}/profile_image`,
     create: `${protocol}://${backendDomain}/v1/users/create`,
     update: `${protocol}://${backendDomain}/v1/users/update`,
+  },
+  category: {
+    list: `${protocol}://${backendDomain}/v1/categories/list`
   }
 }

@@ -34,7 +34,7 @@ export default function SignUpForm() {
 
     UserService.create(formValue.username, formValue.password)
       .then(() => { login(formValue.username, formValue.password) })
-      .catch(err => setErrorMessage(err.body.message))
+      .catch(err => setErrorMessage(err.message))
   }
 
   return (

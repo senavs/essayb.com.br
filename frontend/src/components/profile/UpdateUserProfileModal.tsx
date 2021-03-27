@@ -61,7 +61,7 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
         document.getElementById('btn-close').click()
         Router.reload()
       })
-      .catch(err => setErrorMessage(err.body.message))
+      .catch(err => setErrorMessage(err.message))
   }
   function onCancel() {
     setFormValue(initialFormValue(profileUserData))

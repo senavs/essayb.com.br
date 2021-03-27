@@ -2,24 +2,13 @@ import { urls } from "config/backend";
 import { callAPI } from "./base";
 
 
-export interface LoginResponse {
-  body: {
-    token: string,
-    id_user: number
-  },
-  status: number
-}
-
-export interface ValidateResponse {
-  body: {
-    token: string,
-    id_user: number
-  },
-  status: number
+export interface AuthInterface {
+  token: string,
+  id_user: number
 }
 
 export default class AuthService {
-  static async login(username: string, password: string): Promise<LoginResponse> {
+  static async login(username: string, password: string): Promise<AuthInterface> {
     return await callAPI(urls.auth.login, 'POST', { username, password })
   }
 
@@ -27,7 +16,7 @@ export default class AuthService {
     return await callAPI(urls.auth.logout, 'POST', null, { 'JWT-Token': `Bearer ${token}` })
   }
 
-  static async validate(token: string): Promise<ValidateResponse> {
+  static async validate(token: string): Promise<AuthInterface> {
     return await callAPI(urls.auth.validate, 'POST', null, { 'JWT-Token': `Bearer ${token}` })
   }
 }

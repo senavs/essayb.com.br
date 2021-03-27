@@ -36,5 +36,5 @@ def list_(*, connection: DatabaseClient = None, use_dict: bool = True) -> list[d
         elif use_dict:
             categories = []
 
-    logger.info('List all post categories successfully')
+    logger.info('Listed all post categories successfully')
     return categories
