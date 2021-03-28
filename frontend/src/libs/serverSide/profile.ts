@@ -20,7 +20,3 @@ export async function getProfileUserData(username: string): Promise<ProfileUserD
   }
   return {}
 }
-
-export async function getProfilePostData(username: string) {
-
-}

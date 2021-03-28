@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react"
-import CategoryService from "src/libs/services/category"
-import { fileToBase64 } from "src/libs/utils/form"
-import PostService from "src/libs/services/post"
 import Router from "next/router"
-import { urls } from "config/frontend"
+import { useContext, useState } from "react"
 
+import PostService from "../../libs/services/post"
+import { fileToBase64 } from "../../libs/utils/form"
+import { AuthContext } from "../../libs/contexts/auth"
+import { CategoryContext } from "../../libs/contexts/category"
+import { urls } from "../../../config/frontend"
 
-interface CreateNewPostModalProps {
-  token: string
-}
 
 interface FormValue {
   title: string
@@ -26,14 +24,12 @@ function initialFormValue(): FormValue {
   }
 }
 
-export default function CreateNewPostModal({ token }: CreateNewPostModalProps) {
-  const [categories, setCategories] = useState([])
+export default function CreateNewPostModal() {
+  const { authenticationData } = useContext(AuthContext)
+  const { categoryData } = useContext(CategoryContext)
+  
   const [formValue, setFormValue] = useState(initialFormValue())
   const [errorMessage, setErrorMessage] = useState('')
-
-  useEffect(() => {
-    CategoryService.list().then(setCategories)
-  }, [])
 
   function onChange(event) {
     const { name, value } = event.target
@@ -60,7 +56,7 @@ export default function CreateNewPostModal({ token }: CreateNewPostModalProps) {
       return setErrorMessage('Files must be less then 500Kbs')
     }
 
-    PostService.create(formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, token)
+    PostService.create(formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, authenticationData.token)
       .then(() => {
         document.getElementById('btn-close').click()
         Router.push(urls.post.create)
@@ -129,7 +125,7 @@ export default function CreateNewPostModal({ token }: CreateNewPostModalProps) {
                   value={formValue.id_category}
                   required
                 >
-                  {categories.map(e => <option key={e.id_category} value={e.id_category}>{e.category}</option>)}
+                  {categoryData.map(e => <option key={e.id_category} value={e.id_category}>{e.category}</option>)}
                 </select>
               </div>
 

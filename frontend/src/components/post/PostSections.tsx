@@ -1,7 +1,8 @@
 import { useContext, useEffect } from "react";
-import { PostContext } from "src/libs/contexts/post";
-import Section from "src/components/post/Section"
-import { fileToBase64 } from "src/libs/utils/form";
+
+import Section from "../../components/post/Section"
+import { PostContext } from "../../libs/contexts/post";
+import { fileToBase64 } from "../../libs/utils/form";
 
 
 export default function PostSections() {

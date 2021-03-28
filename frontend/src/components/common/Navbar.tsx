@@ -1,23 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 
-import { urls } from 'config/frontend'
-import styles from 'src/styles/components/common/Navbar.module.css'
-import { AuthContext } from 'src/libs/contexts/auth'
-import Avatar from 'src/components/profile/Avatar'
-import CategoryService from 'src/libs/services/category'
+import styles from '../../styles/components/common/Navbar.module.css'
+import Avatar from '../../components/profile/Avatar'
 import CreateNewPostModal from '../post/CreateNewPostModal'
+import { AuthContext } from '../../libs/contexts/auth'
+import { urls } from 'config/frontend'
+import { CategoryContext } from 'src/libs/contexts/category'
 
 
 export default function Navbar() {
   const { authenticationData, logout } = useContext(AuthContext)
-  const [categories, setCategories] = useState([])
-
-  useEffect(() => {
-    CategoryService.list()
-      .then(res => {
-        setCategories(res.map(e => e.category))
-      })
-  }, [])
+  const { categoryData } = useContext(CategoryContext)
 
   return (
     <div className={`${styles.navbar} container`}>
@@ -59,16 +52,16 @@ export default function Navbar() {
 
       {/* scroller navbar */}
       <div className={`${styles.horizontalNavbar} nav border-bottom border-lg-secondary mb-3 d-flex flex-nowrap justify-content-between`}>
-        {categories.map((element, index) => {
+        {categoryData.map(element => {
           return (
-            <a key={index} className='p-2 mx-auto link-secondary' href={`/categories/${element.toLowerCase()}`}>
-              {element}
+            <a key={element.id_category} className='p-2 mx-auto link-secondary' href={`/categories/${element.category.toLowerCase()}`}>
+              {element.category}
             </a>
           )
         })}
       </div>
 
-      <CreateNewPostModal token={authenticationData.token} />
+      <CreateNewPostModal />
     </div >
   )
 }

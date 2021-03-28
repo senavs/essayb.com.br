@@ -1,16 +1,16 @@
 import Router from "next/router"
 import { useState } from "react"
 
-import { AuthenticationDataInterface } from "src/libs/serverSide/auth"
-import { ProfileUserData } from "src/libs/serverSide/profile"
-import UserService from "src/libs/services/user"
-import { fileToBase64, validatePasswords } from "src/libs/utils/form"
-import styles from 'src/styles/components/profile/UpdateUserProfileModal.module.css'
 import Avatar from "./Avatar"
+import UserService from "../../libs/services/user"
+import styles from '../../styles/components/profile/UpdateUserProfileModal.module.css'
+import { AuthenticationData } from "../../libs/serverSide/auth"
+import { ProfileUserData } from "../../libs/serverSide/profile"
+import { fileToBase64, validatePasswords } from "../../libs/utils/form"
 
 
 interface UpdateUserProfileModalProps {
-  authenticationData: AuthenticationDataInterface
+  authenticationData: AuthenticationData
   profileUserData: ProfileUserData
 }
 

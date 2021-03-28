@@ -1,4 +1,4 @@
-import { urls } from "config/backend";
+import { urls } from "../../../config/backend";
 import { callAPI } from "./base";
 
 

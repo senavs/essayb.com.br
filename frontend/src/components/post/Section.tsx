@@ -1,7 +1,8 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown"
-import { PostContext } from "src/libs/contexts/post";
-import styles from "src/styles/components/post/Section.module.css"
+
+import styles from "../../styles/components/post/Section.module.css"
+import { PostContext } from "../../libs/contexts/post";
 
 
 interface SectionProps {

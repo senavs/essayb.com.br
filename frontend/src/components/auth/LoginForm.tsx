@@ -1,5 +1,7 @@
 import { useContext, useState } from "react"
-import { AuthContext } from "src/libs/contexts/auth"
+
+import { AuthContext } from "../../libs/contexts/auth"
+
 
 interface FormValue {
   username: string,

@@ -1,5 +1,5 @@
-import { urls } from "config/backend";
 import { callAPI } from "./base";
+import { urls } from "../../../config/backend";
 
 
 export interface UserInterface {

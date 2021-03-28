@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
-import styles from 'src/styles/components/common/Body.module.css'
+
+import styles from '../../styles/components/common/Body.module.css'
 
 
 interface BodyProps {

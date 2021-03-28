@@ -4,7 +4,7 @@ import AuthService from '../services/auth'
 import UserService from '../services/user'
 
 
-export interface AuthenticationDataInterface {
+export interface AuthenticationData {
   token?: string,
   id_user?: number,
   isAuthenticated?: boolean
@@ -19,7 +19,7 @@ export interface AuthenticationDataInterface {
   }
 }
 
-export async function getAuthenticationData({ req, res }): Promise<AuthenticationDataInterface> {
+export async function getAuthenticationData({ req, res }): Promise<AuthenticationData> {
   const cookies = CookiesServer(req, res)
   const token = cookies.get('token')
   let authenticationData = { token: '', id_user: null, isAuthenticated: false, user: {} }
