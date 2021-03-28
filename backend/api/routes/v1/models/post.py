@@ -30,6 +30,10 @@ class CreateRequest(BaseSettings):
         return from_base64(value)
 
 
+class SearchResponse(Post):
+    pass
+
+
 class CreateResponse(Post):
     pass
 

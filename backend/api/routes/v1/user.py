@@ -17,7 +17,7 @@ def _search(id_user_or_username: str):
     return search_by_username(id_user_or_username)
 
 
-@router.get('/{username}/profile_image', summary='Get user profile image', status_code=200, response_model=SearchResponse)
+@router.get('/{username}/profile_image', summary='Get user profile image', status_code=200)
 def _profile_image(username: str):
     image = BytesIO(profile_image(username))
     return StreamingResponse(image, media_type='image/png')

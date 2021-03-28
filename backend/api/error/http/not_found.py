@@ -12,5 +12,9 @@ class UserNotFoundException(NotFoundException):
     detail: str = 'User not found'
 
 
+class PostNotFoundException(NotFoundException):
+    detail: str = 'Post not found'
+
+
 class CategoryNotFoundException(NotFoundException):
     detail: str = 'Category not found'

@@ -12,7 +12,7 @@ def search_by_id(id_user: int, *, connection: DatabaseClient = None, raise_404: 
 
     logger.info(f'Searching user by id number {id_user}')
     with DatabaseClient(connection=connection) as connection:
-        if not (user := connection.query(User).filter_by(ID_USER=id_user).first()) and raise_404:
+        if not (user := User.search(connection, id_user)) and raise_404:
             raise not_found.UserNotFoundException()
 
         if use_dict and user:

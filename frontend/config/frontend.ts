@@ -18,6 +18,7 @@ export const urls = {
     subscribe: '/subscribe'
   },
   post: {
+    search: '/post/{id_post}',
     create: '/post/create'
   }
 }

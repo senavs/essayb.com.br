@@ -1,0 +1,40 @@
+.body {
+  height: 200px;
+  position: relative;
+}
+
+.category {
+  text-decoration: none;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.title a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.thumbnail img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.createdAt {
+  position: absolute;
+  bottom: 0;
+}

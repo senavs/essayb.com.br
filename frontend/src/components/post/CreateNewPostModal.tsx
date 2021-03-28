@@ -2,7 +2,7 @@ import Router from "next/router"
 import { useContext, useState } from "react"
 
 import PostService from "../../libs/services/post"
-import { fileToBase64 } from "../../libs/utils/form"
+import { fileToBase64, validateImage } from "../../libs/utils/form"
 import { AuthContext } from "../../libs/contexts/auth"
 import { CategoryContext } from "../../libs/contexts/category"
 import { urls } from "../../../config/frontend"
@@ -52,8 +52,8 @@ export default function CreateNewPostModal() {
   function onSubmit(event) {
     event.preventDefault()
 
-    if (formValue.thumbnail.length > 500_000) {
-      return setErrorMessage('Files must be less then 500Kbs')
+    if (!validateImage(formValue.thumbnail)) {
+      return setErrorMessage('Images must be less then 500Kbs')
     }
 
     PostService.create(formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, authenticationData.token)

@@ -5,10 +5,11 @@ import Title from "../../components/common/Title"
 import Avatar from "../../components/profile/Avatar"
 import LinkIcon from "../../components/profile/LinkIcon"
 import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
-import PostService, { PostCountInterface } from "../../libs/services/post"
+import PostService, { PostCountInterface, PostListInterface } from "../../libs/services/post"
 import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
 import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
+import PostIcon from "src/components/post/PostIcon"
 
 
 interface UsernameProps {
@@ -17,9 +18,17 @@ interface UsernameProps {
   profileUserData: ProfileUserData
   isLoggedUserProfile: boolean
   postCount: PostCountInterface
+  postList: PostListInterface
 }
 
-export default function ProfileIndex({ authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount }: UsernameProps) {
+export default function ProfileIndex({
+  authenticationData,
+  categoryData,
+  profileUserData,
+  isLoggedUserProfile,
+  postCount,
+  postList
+}: UsernameProps) {
 
   return (
     <Layout authenticationData={authenticationData} categoryData={categoryData}>
@@ -65,13 +74,28 @@ export default function ProfileIndex({ authenticationData, categoryData, profile
               {profileUserData.bio}
             </div>
           </div>
+        </div>
 
+        <div className="row">
           {/* posts */}
           <Title>Posts</Title>
 
-          {/* update user profile modal */}
-          <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
+          {postList.map((e, i) => {
+            return (<div className="col-12 col-md-6 mb-2" key={i}>
+              <PostIcon
+                id_post={e.id_post}
+                title={e.title}
+                descriprion={e.description}
+                category={e.category.category}
+                created_at={e.created_at}
+              />
+            </div>)
+          })}
         </div>
+
+
+        {/* update user profile modal */}
+        <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
       </div>
     </Layout>
   )
@@ -101,8 +125,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get base page data
   const postCount = await PostService.count(profileUserData.username)
+  const postList = await PostService.list(profileUserData.username)
 
   return {
-    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount },
+    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, postList },
   }
 }
