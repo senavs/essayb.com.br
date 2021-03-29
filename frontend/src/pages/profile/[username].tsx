@@ -81,7 +81,7 @@ export default function ProfileIndex({
           <Title>Posts</Title>
 
           {postList.map((e, i) => {
-            return (<div className="col-12 col-md-6 mb-2" key={i}>
+            return (<div className="col-12 col-md-4 mb-4" key={i}>
               <PostIcon
                 id_post={e.id_post}
                 title={e.title}
