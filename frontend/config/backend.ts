@@ -1,4 +1,8 @@
-const backendDomain = process.env.BACKEND_DOMAIN
+import getConfig from "next/config"
+
+const { publicRuntimeConfig } = getConfig()
+
+const backendDomain = publicRuntimeConfig.BACKEND_DOMAIN
 const protocol = process.env.USE_HTTPS ? 'https' : 'http'
 
 export const urls = {
@@ -9,6 +13,7 @@ export const urls = {
   },
   user: {
     search: `${protocol}://${backendDomain}/v1/users/{id_user_or_username}/search`,
+    list: `${protocol}://${backendDomain}/v1/users/list`,
     profile_image: `${protocol}://${backendDomain}/v1/users/{username}/profile_image`,
     create: `${protocol}://${backendDomain}/v1/users/create`,
     update: `${protocol}://${backendDomain}/v1/users/update`,

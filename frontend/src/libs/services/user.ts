@@ -18,6 +18,10 @@ export default class UserService {
     return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username), 'GET')
   }
 
+  static async list(): Promise<Array<UserInterface>> {
+    return await callAPI(urls.user.list, 'GET')
+  }
+
   static async create(username: string, password: string): Promise<UserInterface> {
     return await callAPI(urls.user.create, 'POST', { username, password })
   }

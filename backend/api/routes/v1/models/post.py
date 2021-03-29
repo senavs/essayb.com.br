@@ -34,6 +34,9 @@ class SearchResponse(Post):
     pass
 
 
+ListResponse = list[Post]
+
+
 class CreateResponse(Post):
     pass
 

@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 from starlette.responses import StreamingResponse
 
 from ...modules.v1.authentication import AuthModel, login_required
-from ...modules.v1.user import create, profile_image, search_by_id, search_by_username, update
-from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateRequest, UpdateResponse
+from ...modules.v1.user import create, profile_image, search_by_id, search_by_username, update, list_
+from .models.user import CreateRequest, CreateResponse, SearchResponse, UpdateRequest, UpdateResponse, ListResponse
 
 router = APIRouter(prefix='/users', tags=['User'])
 
@@ -15,6 +15,11 @@ def _search(id_user_or_username: str):
     if id_user_or_username.isdigit():
         return search_by_id(int(id_user_or_username))
     return search_by_username(id_user_or_username)
+
+
+@router.get('/list', summary='List all users', status_code=200, response_model=ListResponse)
+def _list():
+    return list_()
 
 
 @router.get('/{username}/profile_image', summary='Get user profile image', status_code=200)
