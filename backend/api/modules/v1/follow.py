@@ -1,7 +1,7 @@
 from loguru import logger
 
 from .user import search_by_username, search_by_id
-from ...database import Follow
+from ...database import Follow, follow
 from ...database.client import DatabaseClient
 
 
@@ -55,7 +55,60 @@ def check_following_by_id(id_user_following: int, id_user_follower: int, *, conn
         follower = search_by_id(id_user_follower, connection=connection, raise_404=True, use_dict=False)
         following = search_by_id(id_user_following, connection=connection, raise_404=True, use_dict=False)
 
-        query = connection.query(Follow).filter_by(ID_FOLLOWING = following.ID_USER, ID_USER_FOLLOWER=follower.ID_USER.first())
+        query = connection.query(Follow).filter_by(ID_FOLLOWING=following.ID_USER, ID_USER_FOLLOWER=follower.ID_USER.first())
 
     logger.info(f'Checking if username with id number {id_user_following} is follower {id_user_follower} id')
     return bool(query)
+
+
+def create(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> dict:
+    """Create new follows by username"""
+
+    with DatabaseClient(connection=connection) as connection:
+        follower = search_by_username(username_follower, connection=connection, raise_404=False, use_dict=False)
+        following = search_by_username(username_following, connection=connection, raise_404=False, use_dict=False)
+
+        id_follower = follower['id_user_follower']
+        id_following = following['id_user_following']
+
+        follow = Follow(ID_USER_FOLLOWER=id_follower, ID_USER_FOLLOWING=id_following)
+        follow.insert(connection)
+        follow = follow.to_dict()
+
+    return follow
+
+
+def delete(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> dict:
+    """Delete follow between users"""
+    with DatabaseClient(connection=connection) as connection:
+        follower = search_by_username(username_follower, connection=connection, raise_404=False, use_dict=False)
+        following = search_by_username(username_following, connection=connection, raise_404=False, use_dict=False)
+
+        id_follower = follower['id_user_follower']
+        id_following = following['id_user_following']
+
+        follow = Follow(ID_USER_FOLLOWER=id_follower, ID_USER_FOLLOWING=id_following)
+        follow.delete(connection)
+        follow = follow.to_dict()
+
+    return follow
+
+
+def list_follow(username: str, *, connection: DatabaseClient = None) -> list:
+    with DatabaseClient(connection=connection) as connection:
+        follow = search_by_username(username, connection=connection, raise_404=False, use_dict=False)
+        id_follow = follow['id_user_follower']
+
+        query = connection.query(Follow).filter_by(ID_USER_FOLLOWER=follow.ID_USER.all_())
+
+        return list(query)
+
+
+def list_following(username: str, *, connection: DatabaseClient = None) -> list:
+    with DatabaseClient(connection=connection) as connection:
+        follow = search_by_username(username, connection=connection, raise_404=False, use_dict=False)
+        id_following = follow['id_user_following']
+
+        query = connection.query(Follow).filter_by(ID_USER_FOLLOWING=follow.ID_USER.all_())
+
+        return list(query)

@@ -1,7 +1,9 @@
+from venv import create
+
 from fastapi import APIRouter
 
-from .models.follow import CheckFollowerResponse
-from ...modules.v1.follow import check_follower_by_username, check_follower_by_id, check_following_by_id, check_following_by_username
+from .models.follow import CheckFollowerResponse, CreateRequest, CreateResponse
+from ...modules.v1.follow import check_follower_by_username, check_follower_by_id, check_following_by_id, check_following_by_username, create, delete
 
 router = APIRouter(prefix='/follows', tags=['Follow'])
 
@@ -24,4 +26,14 @@ def _check_following_username(username_or_id_user_following: str, username_or_id
     else:
         is_follower = check_following_by_username(username_or_id_user_following, username_or_id_user_follower)
     return {'is_following': is_follower}
+
+
+@router.post('/create', summary='Create follow', status_code=201, response_model=CreateResponse)
+def _create(body: CreateRequest):
+    return create(**body.dict())
+
+
+@router.post('/delete', summary='Delete follow', status_code=201, response_model=CreateResponse)
+def _create(body: CreateRequest):
+    return delete(**body.dict())
 
