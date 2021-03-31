@@ -9,9 +9,6 @@ class Follow(BaseSettings):
     id_user_follower: int
     id_user_following: int
 
-    class Config:
-        extra: str = 'ignore'
-
 
 class CheckFollowerResponse(BaseSettings):
     is_following: bool
@@ -27,4 +24,13 @@ class CreateRequest(BaseSettings):
 
 
 class CreateResponse(Follow):
+    pass
+
+
+class DeleteRequest(BaseSettings):
+    username_follower: str
+    username_following: str
+
+
+class DeleteResponse(Follow):
     pass

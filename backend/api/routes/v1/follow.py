@@ -2,7 +2,7 @@ from venv import create
 
 from fastapi import APIRouter
 
-from .models.follow import CheckFollowerResponse, CreateRequest, CreateResponse
+from .models.follow import CheckFollowerResponse, CheckFollowingResponse, CreateResponse, DeleteResponse, CreateRequest, DeleteRequest
 from ...modules.v1.follow import check_follower_by_username, check_follower_by_id, check_following_by_id, check_following_by_username, create, delete
 
 router = APIRouter(prefix='/follows', tags=['Follow'])
@@ -19,7 +19,7 @@ def _check_follower_username(username_or_id_user_follower: str, username_or_id_u
 
 
 @router.get('/following/{username_or_id_user_following}/{username_or_id_user_follower}/check', summary='Check following by ID or username', status_code=200,
-            response_model=CheckFollowerResponse)
+            response_model=CheckFollowingResponse)
 def _check_following_username(username_or_id_user_following: str, username_or_id_user_follower: str):
     if username_or_id_user_following.isdigit() and username_or_id_user_follower.isdigit():
         is_follower = check_following_by_id(int(username_or_id_user_following), int(username_or_id_user_follower))
@@ -33,7 +33,12 @@ def _create(body: CreateRequest):
     return create(**body.dict())
 
 
-@router.post('/delete', summary='Delete follow', status_code=201, response_model=CreateResponse)
-def _create(body: CreateRequest):
+@router.post('/delete', summary='Delete follow', status_code=201, response_model=DeleteResponse)
+def _delete(body: DeleteRequest):
     return delete(**body.dict())
 
+
+"""@router.post('/list_follow', summary='List follow', status_code=201, response_model=CreateResponse)
+def _list_follow(body: CreateRequest):
+    return delete(**body.dict())
+"""

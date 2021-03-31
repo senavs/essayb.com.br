@@ -71,11 +71,12 @@ def create(username_follower: str, username_following: str, *, connection: Datab
         id_follower = follower['id_user_follower']
         id_following = following['id_user_following']
 
-        follow = Follow(ID_USER_FOLLOWER=id_follower, ID_USER_FOLLOWING=id_following)
-        follow.insert(connection)
-        follow = follow.to_dict()
+        new_follow = Follow(ID_USER_FOLLOWER=id_follower, ID_USER_FOLLOWING=id_following)
+        new_follow.insert(connection)
+        new_follow = follow.to_dict()
 
-    return follow
+    logger.info(f'Create follow between @{username_follower} and @{username_following}')
+    return new_follow
 
 
 def delete(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> dict:
@@ -96,12 +97,12 @@ def delete(username_follower: str, username_following: str, *, connection: Datab
 
 def list_follow(username: str, *, connection: DatabaseClient = None) -> list:
     with DatabaseClient(connection=connection) as connection:
-        follow = search_by_username(username, connection=connection, raise_404=False, use_dict=False)
-        id_follow = follow['id_user_follower']
+        user = search_by_username(username, connection=connection, raise_404=False, use_dict=False)
+    id_follow = user['id_user_follower']
 
-        query = connection.query(Follow).filter_by(ID_USER_FOLLOWER=follow.ID_USER.all_())
+    query = connection.query(Follow).filter_by(ID_USER_FOLLOWER=id_follow.ID_USER.all_())
 
-        return list(query)
+    return list(query)
 
 
 def list_following(username: str, *, connection: DatabaseClient = None) -> list:
