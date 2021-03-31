@@ -1,6 +1,3 @@
-from dataclasses import Field
-from pyclbr import Class
-
 from pydantic import BaseSettings
 
 
@@ -8,6 +5,9 @@ class Follow(BaseSettings):
     id_follow: int
     id_user_follower: int
     id_user_following: int
+
+
+ListResponse = list[Follow]
 
 
 class CheckFollowerResponse(BaseSettings):
@@ -32,5 +32,5 @@ class DeleteRequest(BaseSettings):
     username_following: str
 
 
-class DeleteResponse(Follow):
-    pass
+class DeleteResponse(BaseSettings):
+    deleted: bool

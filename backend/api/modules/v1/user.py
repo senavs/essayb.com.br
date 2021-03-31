@@ -39,7 +39,7 @@ def search_by_username(username: str, *, connection: DatabaseClient = None, rais
 
     logger.info(f'User found by username @{username} successfully')
     return user
-    
+
 
 def profile_image(username: str, *, connection: DatabaseClient = None) -> bytes:
     """Get user profile image"""
@@ -51,7 +51,6 @@ def profile_image(username: str, *, connection: DatabaseClient = None) -> bytes:
 
     logger.info(f'Profile image for username @{username} found successfully')
     return image
-
 
 
 def create(username: str, password: str, profile_image: bytes = None, *, connection: DatabaseClient = None) -> dict:
