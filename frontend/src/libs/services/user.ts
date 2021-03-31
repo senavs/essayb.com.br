@@ -14,8 +14,8 @@ export interface UserInterface {
 }
 
 export default class UserService {
-  static async search(id_user_or_username: string): Promise<UserInterface> {
-    return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username), 'GET')
+  static async search(id_user_or_username: string | number): Promise<UserInterface> {
+    return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username.toString()), 'GET')
   }
 
   static async list(): Promise<Array<UserInterface>> {

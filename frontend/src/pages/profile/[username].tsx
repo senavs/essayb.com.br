@@ -12,7 +12,7 @@ import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profi
 import PostIcon from "src/components/post/PostIcon"
 
 
-interface UsernameProps {
+interface ProfileIndexProps {
   authenticationData: AuthenticationData
   categoryData: CategoryData
   profileUserData: ProfileUserData
@@ -28,7 +28,7 @@ export default function ProfileIndex({
   isLoggedUserProfile,
   postCount,
   postList
-}: UsernameProps) {
+}: ProfileIndexProps) {
 
   return (
     <Layout authenticationData={authenticationData} categoryData={categoryData}>

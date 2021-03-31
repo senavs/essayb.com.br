@@ -26,6 +26,10 @@ export default class PostService {
     return await callAPI(urls.post.list.replace('{username}', username), 'GET')
   }
 
+  static async search(id_post: string): Promise<PostInterface> {
+    return await callAPI(urls.post.search.replace('{id_post}', id_post), 'GET')
+  }
+
   static async count(username: string): Promise<PostCountInterface> {
     return await callAPI(urls.post.count.replace('{id_user_or_username}', username), 'GET')
   }
