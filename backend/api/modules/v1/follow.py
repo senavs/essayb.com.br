@@ -2,10 +2,10 @@ from typing import Union
 
 from loguru import logger
 
-from . import user
 from ...database import Follow
 from ...database.client import DatabaseClient
-from ...error.http import not_found, bad_request
+from ...error.http import bad_request, not_found
+from . import user
 
 
 def search_by_id(id_user_follower: str,
