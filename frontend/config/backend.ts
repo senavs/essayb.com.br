@@ -27,5 +27,9 @@ export const urls = {
     create: `${protocol}://${backendDomain}/v1/posts/create`,
     list: `${protocol}://${backendDomain}/v1/posts/user/{username}/list`,
     search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
+  },
+  follow: {
+    count_follower: `${protocol}://${backendDomain}/v1/follows/{username}/count/follower`,
+    count_following: `${protocol}://${backendDomain}/v1/follows/{username}/count/following`
   }
 }
