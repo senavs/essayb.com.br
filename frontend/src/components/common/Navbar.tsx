@@ -1,16 +1,18 @@
 import { useContext } from 'react'
 
-import styles from '../../styles/components/common/Navbar.module.css'
-import Avatar from '../../components/profile/Avatar'
-import CreateNewPostModal from '../post/CreateNewPostModal'
-import { AuthContext } from '../../libs/contexts/auth'
 import { urls } from 'config/frontend'
-import { CategoryContext } from 'src/libs/contexts/category'
+import styles from 'src/styles/components/common/Navbar.module.css'
+import { AuthContext } from 'src/libs/contexts/auth'
+import Avatar from 'src/components/profile/Avatar'
 
 
 export default function Navbar() {
   const { authenticationData, logout } = useContext(AuthContext)
-  const { categoryData } = useContext(CategoryContext)
+
+  const categories = [
+    'World', 'U.S', 'Technology', 'Design', 'Culture', 'Business',
+    'Politics', 'Opinion', 'Science', 'Health', 'Styles', 'Travel'
+  ]
 
   return (
     <div className={`${styles.navbar} container`}>
@@ -19,16 +21,10 @@ export default function Navbar() {
       <div className='border-bottom border-lg-secondary py-2'>
         <div className='row'>
           <div className='col-4 d-flex justify-content-start align-self-end'>
-            {!authenticationData.user.is_premium && (
-              <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.common.subscribe} >
-                <i className="bi bi-gem"></i>
-              </a>
-            )}
-            {authenticationData.isAuthenticated && (
-              <a className="btn btn-sm btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#createPostModal" >
-                <i className="bi bi-journal-text"></i>
-              </a>
-            )}
+            {!authenticationData.user.is_premium
+              ? <a className='link-secondary' href={urls.common.subscribe} >Subscribe</a>
+              : null
+            }
           </div>
           <div className='col-4 d-flex justify-content-center align-self-end'>
             <a href={urls.common.index}>
@@ -52,16 +48,15 @@ export default function Navbar() {
 
       {/* scroller navbar */}
       <div className={`${styles.horizontalNavbar} nav border-bottom border-lg-secondary mb-3 d-flex flex-nowrap justify-content-between`}>
-        {categoryData.map(element => {
+        {categories.map((element, index) => {
           return (
-            <a key={element.id_category} className='p-2 mx-auto link-secondary' href={`/categories/${element.category.toLowerCase()}`}>
-              {element.category}
+            <a key={index} className='p-2 mx-auto link-secondary' href={`/categories/${element}`}>
+              {element}
             </a>
           )
         })}
       </div>
 
-      <CreateNewPostModal />
     </div >
   )
 }

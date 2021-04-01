@@ -16,9 +16,5 @@ export const urls = {
   common: {
     index: '/',
     subscribe: '/subscribe'
-  },
-  post: {
-    search: '/post/{id_post}',
-    create: '/post/create'
   }
 }

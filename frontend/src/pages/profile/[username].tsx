@@ -1,37 +1,24 @@
 import { GetServerSideProps } from "next"
 
-import Layout from "../../components/common/Layout"
-import Title from "../../components/common/Title"
-import Avatar from "../../components/profile/Avatar"
-import LinkIcon from "../../components/profile/LinkIcon"
-import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
-import PostService, { PostCountInterface, PostListInterface } from "../../libs/services/post"
-import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
-import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
-import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
-import PostIcon from "src/components/post/PostIcon"
+import Layout from "src/components/common/Layout"
+import Title from "src/components/common/Title"
+import Avatar from "src/components/profile/Avatar"
+import LinkIcon from "src/components/profile/LinkIcon"
+import UpdateUserProfileModal from "src/components/profile/UpdateUserProfileModal"
+import { getAuthenticationData, AuthenticationDataInterface } from "src/libs/serverSide/auth"
+import { getProfileUserData, ProfileUserData } from "src/libs/serverSide/profile"
 
 
-interface ProfileIndexProps {
-  authenticationData: AuthenticationData
-  categoryData: CategoryData
+interface UsernameProps {
+  authenticationData: AuthenticationDataInterface,
   profileUserData: ProfileUserData
-  isLoggedUserProfile: boolean
-  postCount: PostCountInterface
-  postList: PostListInterface
+  isLoggedUserProfile: boolean,
 }
 
-export default function ProfileIndex({
-  authenticationData,
-  categoryData,
-  profileUserData,
-  isLoggedUserProfile,
-  postCount,
-  postList
-}: ProfileIndexProps) {
+export default function ProfileIndex({ authenticationData, profileUserData, isLoggedUserProfile }: UsernameProps) {
 
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData}>
       <div className="container">
         <div className="row">
 
@@ -58,10 +45,10 @@ export default function ProfileIndex({
 
             </div>
             <div className="d-flex justify-content-evenly">
-              <span><span className="fw-bold">{postCount.count}</span> posts</span>
-              <span><span className="fw-bold">{0}</span> likes</span>
-              <span><span className="fw-bold">{0}</span> followers</span>
-              <span><span className="fw-bold">{0}</span> following</span>
+              <span><span className="fw-bold">{32}</span> posts</span>
+              <span><span className="fw-bold">{12398}</span> likes</span>
+              <span><span className="fw-bold">{100}</span> followers</span>
+              <span><span className="fw-bold">{123}</span> following</span>
             </div>
           </div>
 
@@ -88,60 +75,35 @@ export default function ProfileIndex({
               {profileUserData.bio}
             </div>
           </div>
-        </div>
 
-        <div className="row">
           {/* posts */}
           <Title>Posts</Title>
 
-          {postList.map((e, i) => {
-            return (<div className="col-12 col-md-4 mb-4" key={i}>
-              <PostIcon
-                id_post={e.id_post}
-                title={e.title}
-                descriprion={e.description}
-                category={e.category.category}
-                created_at={e.created_at}
-              />
-            </div>)
-          })}
+          {/* update user profile modal */}
+          <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
         </div>
-
-
-        {/* update user profile modal */}
-        <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
       </div>
     </Layout>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // get base page data
   const authenticationData = await getAuthenticationData(ctx)
-  const categoryData = await getCategoryData()
-
-  // get user username of the page
   const { username } = ctx.query
   const isLoggedUserProfile = authenticationData.user.username === username.toString()
 
-  // get user information (user page or user loged in)
   let profileUserData = authenticationData.user
   if (!isLoggedUserProfile) {
     profileUserData = await getProfileUserData(username.toString())
   }
 
-  // no user was found
   if (Object.keys(profileUserData).length === 0) {
     return {
       notFound: true
     }
   }
 
-  // get base page data
-  const postCount = await PostService.count(profileUserData.username)
-  const postList = await PostService.list(profileUserData.username)
-
   return {
-    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, postList },
+    props: { authenticationData, profileUserData, isLoggedUserProfile },
   }
 }
