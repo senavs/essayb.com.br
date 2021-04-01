@@ -120,3 +120,27 @@ def list_following(username: str, *, connection: DatabaseClient = None) -> list[
 
     logger.info(f'Listed all users that @{username} is followings successfully')
     return result
+
+
+def count_following_by_username(username: str, *, connection: DatabaseClient = None) -> int:
+    """Following counter"""
+
+    logger.info(f'Counting the followers of the user @{username}')
+    with DatabaseClient(connection=connection) as connection:
+        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
+        count = connection.query(Follow).filter_by(ID_USER_FOLLOWER=searched_user.ID_USER).count()
+
+        logger.info(f'Listed the users @{username} follows')
+        return count
+
+
+def count_follower_by_username(username: str, *, connection: DatabaseClient = None) -> int:
+    """Following counter"""
+
+    logger.info(f'counter of how many users follow @{username}')
+    with DatabaseClient(connection=connection) as connection:
+        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
+        count = connection.query(Follow).filter_by(ID_USER_FOLLOWING=searched_user.ID_USER).count()
+
+        logger.info(f'Listing the users @ {username} that follows me')
+    return count

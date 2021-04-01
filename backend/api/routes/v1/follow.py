@@ -1,7 +1,9 @@
 from fastapi import APIRouter
 
-from ...modules.v1.follow import check_follower_by_id, check_follower_by_username, create, delete, list_follower, list_following
-from .models.follow import CheckFollowerResponse, CheckFollowingResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse
+from ...modules.v1.follow import check_follower_by_id, check_follower_by_username, create, delete, list_follower, list_following, count_following_by_username, \
+    count_follower_by_username
+from .models.follow import CheckFollowerResponse, CheckFollowingResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse, \
+    CountResponse
 
 router = APIRouter(prefix='/follows', tags=['Follow'])
 
@@ -48,3 +50,15 @@ def _create(body: CreateRequest):
 @router.delete('/delete', summary='Delete follow', status_code=200, response_model=DeleteResponse)
 def _delete(body: DeleteRequest):
     return {'deleted': delete(**body.dict())}
+
+
+@router.get('/{username}/count/following', summary="Following counter", status_code=200, response_model=CountResponse)
+def _count(username: str):
+    n_following = count_following_by_username(username)
+    return {'count': n_following}
+
+
+@router.get('/{username}/count/follower', summary="Following counter", status_code=200, response_model=CountResponse)
+def _count(username: str):
+    n_follower = count_follower_by_username(username)
+    return {'count': n_follower}

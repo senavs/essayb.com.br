@@ -34,3 +34,7 @@ class DeleteRequest(BaseSettings):
 
 class DeleteResponse(BaseSettings):
     deleted: bool
+
+
+class CountResponse(BaseSettings):
+    count: int
