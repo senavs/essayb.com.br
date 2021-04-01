@@ -38,3 +38,7 @@ class InvalidPostContentException(BadRequestException):
 
 class UserFollowItselfException(BadRequestException):
     detail: str = 'User cannot follow itself'
+
+
+class FollowAlreadyExistsException(BadRequestException):
+    detail: str = 'Follow already exists'

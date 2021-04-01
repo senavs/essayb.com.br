@@ -1,19 +1,21 @@
-import { urls } from 'config/frontend';
 import { GetServerSideProps } from 'next';
-import SignUpForm from 'src/components/auth/SignUpForm';
 
-import Layout from 'src/components/common/Layout';
-import Title from 'src/components/common/Title';
-import { getAuthenticationData, AuthenticationDataInterface } from 'src/libs/serverSide/auth';
+import SignUpForm from '../../components/auth/SignUpForm';
+import Layout from '../../components/common/Layout';
+import Title from '../../components/common/Title';
+import { getAuthenticationData, AuthenticationData } from '../../libs/serverSide/auth';
+import { CategoryData, getCategoryData } from '../../libs/serverSide/category';
+import { urls } from '../../../config/frontend';
 
 
 interface SignUpProps {
-  authenticationData: AuthenticationDataInterface
+  authenticationData: AuthenticationData
+  categoryData: CategoryData
 }
 
-export default function SignUp({ authenticationData }: SignUpProps) {
+export default function SignUp({ authenticationData, categoryData }: SignUpProps) {
   return (
-    <Layout authenticationData={authenticationData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData}>
       <div className="container">
         <div className="row">
           <div className="offset-md-4 col-md-4 col-12">
@@ -33,10 +35,11 @@ export default function SignUp({ authenticationData }: SignUpProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const authenticationData = await getAuthenticationData(ctx)
+  const categoryData = await getCategoryData()
 
   if (authenticationData.isAuthenticated) {
     return {
-      props: { authenticationData },
+      props: { authenticationData, categoryData },
       redirect: {
         destination: urls.common.index
       }
@@ -44,6 +47,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   return {
-    props: { authenticationData }
+    props: { authenticationData, categoryData}
   }
 }
