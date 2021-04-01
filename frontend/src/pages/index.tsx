@@ -1,15 +1,18 @@
 import { GetServerSideProps } from "next";
-import Layout from "src/components/common/Layout";
-import { AuthenticationDataInterface, getAuthenticationData } from "src/libs/serverSide/auth";
+
+import Layout from "../components/common/Layout";
+import { AuthenticationData, getAuthenticationData } from "../libs/serverSide/auth";
+import { CategoryData, getCategoryData } from "../libs/serverSide/category";
 
 
 interface IndexProps {
-  authenticationData: AuthenticationDataInterface
+  authenticationData: AuthenticationData
+  categoryData: CategoryData
 }
 
-export default function Index({ authenticationData }: IndexProps) {
+export default function Index({ authenticationData, categoryData }: IndexProps) {
   return (
-    <Layout authenticationData={authenticationData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData}>
       <div className="container">
         <h1>Hello world!!</h1>
       </div>
@@ -19,8 +22,9 @@ export default function Index({ authenticationData }: IndexProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const authenticationData = await getAuthenticationData(ctx)
+  const categoryData = await getCategoryData()
 
   return {
-    props: { authenticationData }
+    props: { authenticationData, categoryData }
   }
 }

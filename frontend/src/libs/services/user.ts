@@ -1,5 +1,6 @@
-import { urls } from "config/backend";
 import { callAPI } from "./base";
+import { urls } from "../../../config/backend";
+
 
 export interface UserInterface {
   id_user: number,
@@ -12,39 +13,22 @@ export interface UserInterface {
   message?: string
 }
 
-interface UserSearchResponse {
-  body: {
-    [key: string]: UserInterface
-  },
-  status: number
-}
-
-interface UserCreateResponse {
-  body: {
-    [key: string]: UserInterface
-  },
-  status: number
-}
-
-interface UserUpdateResponse {
-  body: {
-    [key: string]: UserInterface
-  },
-  status: number
-}
-
 export default class UserService {
-  static async search(id_user_or_username: string): Promise<UserSearchResponse> {
-    return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username), 'GET')
+  static async search(id_user_or_username: string | number): Promise<UserInterface> {
+    return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username.toString()), 'GET')
   }
 
-  static async create(username: string, password: string): Promise<UserCreateResponse> {
+  static async list(): Promise<Array<UserInterface>> {
+    return await callAPI(urls.user.list, 'GET')
+  }
+
+  static async create(username: string, password: string): Promise<UserInterface> {
     return await callAPI(urls.user.create, 'POST', { username, password })
   }
 
   static async update(token: string, new_password?: string, profile_image?: string,
     bio?: string, url_linkedin?: string, url_instagram?: string, url_website?: string
-  ): Promise<UserUpdateResponse> {
+  ): Promise<UserInterface> {
     let body = {
       new_password: new_password || null,
       profile_image: profile_image || null,
