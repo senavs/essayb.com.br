@@ -1,16 +1,16 @@
 import { GetServerSideProps } from "next"
-
-import Layout from "../../components/common/Layout"
-import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
-import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
-import { getPostData, PostData } from "src/libs/serverSide/post"
-import PostTitle from "src/components/post/PostTitle"
-import PostDescription from "src/components/post/PostDescrption"
-import PostThumbnail from "src/components/post/PostThumbnail"
-import Avatar from "src/components/profile/Avatar"
-import { getProfileUserData, ProfileUserData } from "src/libs/serverSide/profile"
-import Title from "src/components/common/Title"
 import ReactMarkdown from "react-markdown"
+
+import Layout from "../../../components/common/Layout"
+import { getAuthenticationData, AuthenticationData } from "../../../libs/serverSide/auth"
+import { CategoryData, getCategoryData } from "../../../libs/serverSide/category"
+import { getPostData, PostData } from "../../../libs/serverSide/post"
+import PostTitle from "../../../components/post/PostTitle"
+import PostDescription from "../../../components/post/PostDescrption"
+import PostThumbnail from "../../../components/post/PostThumbnail"
+import Avatar from "../../../components/profile/Avatar"
+import { ProfileUserData } from "../../../libs/serverSide/profile"
+import Title from "../../../components/common/Title"
 
 
 interface ProfileIndexProps {
@@ -30,7 +30,7 @@ export default function ProfileIndex({
 }: ProfileIndexProps) {
 
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title={postData.title}>
 
       <div className="container">
         <div className="row d-flex justify-content-center">

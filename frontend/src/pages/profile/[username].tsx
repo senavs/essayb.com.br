@@ -31,7 +31,7 @@ export default function ProfileIndex({
 }: ProfileIndexProps) {
 
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title={`${authenticationData.user.username} profile`}>
       <div className="container">
         <div className="row">
 
