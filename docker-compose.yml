@@ -2,22 +2,48 @@ version: '3'
 
 services:
 
+  database:
+    image: postgres
+    container_name: essayb-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ESSAYB
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: toor
+
   backend:
     image: essayb:backend
     container_name: essayb-backend
     build:
       context: backend
       dockerfile: Dockerfile
+    environment:
+      DATABASE_URI: 'postgres://root:toor@database/ESSAYB'
     volumes:
       - ./backend/logs:/code/logs
-    ports:
-      - 8888:8888
 
   frontend:
     image: essayb:frontend
     container_name: essayb-frontend
+    environment:
+      BACKEND_DOMAIN: 172.17.0.1:8080
+      FRONTEND_DOMAIN: 172.17.0.1:8080
     build:
       context: frontend
       dockerfile: Dockerfile
+
+  gateway:
+    image: essayb:gateway
+    container_name: essayb-gateway
+    restart: unless-stopped
+    build:
+      context: gateway
+      dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - 8080:80
+    depends_on:
+      - backend
+      - frontend
+      - database
+    logging:
+      driver: none

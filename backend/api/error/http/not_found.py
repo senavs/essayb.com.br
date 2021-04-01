@@ -14,3 +14,11 @@ class UserNotFoundException(NotFoundException):
 
 class FollowNotFoundException(NotFoundException):
     detail: str = 'Follow not found'
+
+
+class PostNotFoundException(NotFoundException):
+    detail: str = 'Post not found'
+
+
+class CategoryNotFoundException(NotFoundException):
+    detail: str = 'Category not found'
