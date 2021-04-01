@@ -1,7 +1,5 @@
 import { useContext, useState } from "react"
-
-import { AuthContext } from "../../libs/contexts/auth"
-
+import { AuthContext } from "src/libs/contexts/auth"
 
 interface FormValue {
   username: string,
@@ -24,7 +22,7 @@ export default function LoginForm() {
     event.preventDefault()
     setErrorMessage('')
 
-    login(formValue.username, formValue.password, () => { }, err => setErrorMessage(err.message))
+    login(formValue.username, formValue.password, () => { }, err => setErrorMessage(err.body.message))
   }
 
   return (

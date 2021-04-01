@@ -1,22 +1,19 @@
 import Head from 'next/head';
 import { Fragment, ReactNode } from "react";
 
-import Navbar from './Navbar'
+import Navbar from 'src/components/common/Navbar'
+import { AuthProvider } from 'src/libs/contexts/auth';
+import { AuthenticationDataInterface } from 'src/libs/serverSide/auth';
 import Body from './Body';
 import Footer from './Footer';
-import { AuthProvider } from '../../libs/contexts/auth';
-import { AuthenticationData } from '../../libs/serverSide/auth';
-import { CategoryData } from '../../libs/serverSide/category';
-import { CategoryProvider } from 'src/libs/contexts/category';
 
 
 interface LayoutProps {
   children: ReactNode,
-  authenticationData: AuthenticationData,
-  categoryData: CategoryData
+  authenticationData: AuthenticationDataInterface
 }
 
-export default function Layout({ children, authenticationData, categoryData }: LayoutProps) {
+export default function Layout({ children, authenticationData }: LayoutProps) {
   return (
     <Fragment>
       <Head>
@@ -30,13 +27,11 @@ export default function Layout({ children, authenticationData, categoryData }: L
       </Head>
 
       <AuthProvider authenticationData={authenticationData}>
-        <CategoryProvider categoryData={categoryData}>
-          <Navbar />
-          <Body>
-            {children}
-          </Body>
-          <Footer />
-        </CategoryProvider>
+        <Navbar />
+        <Body>
+          {children}
+        </Body>
+        <Footer />
       </AuthProvider>
 
     </Fragment>

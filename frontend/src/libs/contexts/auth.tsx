@@ -3,17 +3,17 @@ import CookieClient from 'js-cookie'
 import Router from 'next/router';
 import { createContext, ReactNode } from "react";
 
-import { AuthenticationData } from "../../libs/serverSide/auth"
-import AuthService, { AuthInterface } from "../services/auth";
+import { AuthenticationDataInterface } from "src/libs/serverSide/auth"
+import AuthService, { LoginResponse } from "../services/auth";
 
 
 interface AuthProviderProps {
   children: ReactNode,
-  authenticationData: AuthenticationData
+  authenticationData: AuthenticationDataInterface
 }
 
 interface AuthProviderValue {
-  authenticationData: AuthenticationData
+  authenticationData: AuthenticationDataInterface
   login: (...rest: any) => void,
   logout: (...rest: any) => void,
   validate: (...rest: any) => void
@@ -30,17 +30,17 @@ export const AuthContext = createContext({
 
 export function AuthProvider({ children, authenticationData }: AuthProviderProps) {
 
-  function login(username: '', password: string, resolve = (res: AuthInterface) => { }, reject = (res: AuthInterface) => { }) {
+  function login(username: '', password: string, resolve = (res: LoginResponse) => { }, reject = (res: LoginResponse) => { }) {
     AuthService.login(username, password)
       .then(res => {
-        CookieClient.set('token', res.token)
+        CookieClient.set('token', res.body.token)
         Router.push(urls.common.index)
         resolve(res)
       })
       .catch(reject)
   }
 
-  function logout(resolve = (res: AuthInterface) => { }, reject = (res: AuthInterface) => { }) {
+  function logout(resolve = (res: LoginResponse) => { }, reject = (res: LoginResponse) => { }) {
     AuthService.logout(authenticationData.token)
       .then(res => {
         CookieClient.remove('token')
@@ -54,7 +54,7 @@ export function AuthProvider({ children, authenticationData }: AuthProviderProps
       })
   }
 
-  function validate(resolve = (res: AuthInterface) => { }, reject = (res: AuthInterface) => { }) {
+  function validate(resolve = (res: LoginResponse) => { }, reject = (res: LoginResponse) => { }) {
     AuthService.logout(authenticationData.token)
       .then(resolve)
       .catch(err => {

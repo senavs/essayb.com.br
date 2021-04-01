@@ -4,7 +4,7 @@ import AuthService from '../services/auth'
 import UserService from '../services/user'
 
 
-export interface AuthenticationData {
+export interface AuthenticationDataInterface {
   token?: string,
   id_user?: number,
   isAuthenticated?: boolean
@@ -19,7 +19,7 @@ export interface AuthenticationData {
   }
 }
 
-export async function getAuthenticationData({ req, res }): Promise<AuthenticationData> {
+export async function getAuthenticationData({ req, res }): Promise<AuthenticationDataInterface> {
   const cookies = CookiesServer(req, res)
   const token = cookies.get('token')
   let authenticationData = { token: '', id_user: null, isAuthenticated: false, user: {} }
@@ -30,10 +30,10 @@ export async function getAuthenticationData({ req, res }): Promise<Authenticatio
     } else {
       try {
         const authResponse = await AuthService.validate(token)
-        Object.assign(authenticationData, { ...authResponse, isAuthenticated: true })
+        Object.assign(authenticationData, { ...authResponse.body, isAuthenticated: true })
 
         const userResponse = await UserService.search(authenticationData.id_user)
-        Object.assign(authenticationData, { user: { ...userResponse } })
+        Object.assign(authenticationData, { user: { ...userResponse.body } })
       } catch (err) {
         console.log(err)
         cookies.set('token', '', {
