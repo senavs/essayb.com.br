@@ -26,6 +26,9 @@ class SearchResponse(User):
     pass
 
 
+ListResponse = list[User]
+
+
 class CreateRequest(BaseSettings):
     username: str = Field(max_length=32)
     password: str = Field(min_length=3)

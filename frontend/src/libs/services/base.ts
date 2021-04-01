@@ -1,11 +1,6 @@
-interface CallAPIResponse {
-  body: any
-  status: number
-}
-
 type MethodType = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
-export async function callAPI(url: string, method: MethodType, body = null, headers = {}): Promise<CallAPIResponse> {
+export async function callAPI(url: string, method: MethodType, body = null, headers = {}): Promise<any> {
   const response = await fetch(url, {
     body: body ? JSON.stringify(body) : null,
     headers: {
@@ -17,10 +12,9 @@ export async function callAPI(url: string, method: MethodType, body = null, head
     mode: 'cors',
   })
   const json = await response.json()
-  const callAPIResponse = { body: json, status: response.status }
 
-  if (!callAPIResponse.status.toString().startsWith('2')) {
-    throw callAPIResponse
+  if (!response.status.toString().startsWith('2')) {
+    throw json
   }
-  return callAPIResponse
+  return json
 }

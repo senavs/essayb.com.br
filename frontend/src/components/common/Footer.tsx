@@ -1,5 +1,6 @@
 import { urls } from 'config/frontend'
-import styles from 'src/styles/components/common/Footer.module.css'
+
+import styles from '../../styles/components/common/Footer.module.css'
 
 
 export default function Footer() {
