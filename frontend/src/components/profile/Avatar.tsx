@@ -1,5 +1,5 @@
-import { urls as frontendUrls } from "../../../config/frontend";
-import { urls as backendUrls } from "../../../config/backend";
+import { urls as frontendUrls } from "config/frontend";
+import { urls as backendUrls } from "config/backend";
 
 interface AvatarProps {
   username: string,

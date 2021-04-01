@@ -11,12 +11,17 @@ export interface ProfileUserData {
   is_premium?: boolean,
 }
 
-export async function getProfileUserData(id_user_or_username: string | number): Promise<ProfileUserData> {
+export async function getProfileUserData(username: string): Promise<ProfileUserData> {
   if (typeof window === 'undefined') {
     try {
-      return await UserService.search(id_user_or_username)
+      const userResponse = await UserService.search(username)
+      return userResponse.body
     } catch {
     }
   }
   return {}
+}
+
+export async function getProfilePostData(username: string) {
+
 }

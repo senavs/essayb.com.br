@@ -1,8 +1,9 @@
+import { urls } from 'config/frontend'
+import Router from 'next/router'
 import { useContext, useState } from "react"
-
-import UserService from "../../libs/services/user"
-import { AuthContext } from '../../libs/contexts/auth'
-import { validatePasswords } from '../../libs/utils/form'
+import { AuthContext } from 'src/libs/contexts/auth'
+import UserService from "src/libs/services/user"
+import { validatePasswords } from 'src/libs/utils/form'
 
 
 interface FormValue {
@@ -33,7 +34,7 @@ export default function SignUpForm() {
 
     UserService.create(formValue.username, formValue.password)
       .then(() => { login(formValue.username, formValue.password) })
-      .catch(err => setErrorMessage(err.message))
+      .catch(err => setErrorMessage(err.body.message))
   }
 
   return (

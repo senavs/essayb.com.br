@@ -1,16 +1,16 @@
 import Router from "next/router"
 import { useState } from "react"
 
+import { AuthenticationDataInterface } from "src/libs/serverSide/auth"
+import { ProfileUserData } from "src/libs/serverSide/profile"
+import UserService from "src/libs/services/user"
+import { fileToBase64, validatePasswords } from "src/libs/utils/form"
+import styles from 'src/styles/components/profile/UpdateUserProfileModal.module.css'
 import Avatar from "./Avatar"
-import UserService from "../../libs/services/user"
-import styles from '../../styles/components/profile/UpdateUserProfileModal.module.css'
-import { AuthenticationData } from "../../libs/serverSide/auth"
-import { ProfileUserData } from "../../libs/serverSide/profile"
-import { fileToBase64, validateImage, validatePasswords } from "../../libs/utils/form"
 
 
 interface UpdateUserProfileModalProps {
-  authenticationData: AuthenticationData
+  authenticationData: AuthenticationDataInterface
   profileUserData: ProfileUserData
 }
 
@@ -50,10 +50,6 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
   function onSubmit(event) {
     setErrorMessage('')
 
-    if (!validateImage(formValue.profile_image)) {
-      return setErrorMessage('Images must be less then 500Kbs')
-    }
-
     if (!validatePasswords(formValue.new_password, formValue.confirm_new_password)) {
       return setErrorMessage('Passwords didn\'t match')
     }
@@ -65,7 +61,7 @@ export default function UpdateUserProfileModal({ authenticationData, profileUser
         document.getElementById('btn-close').click()
         Router.reload()
       })
-      .catch(err => setErrorMessage(err.message))
+      .catch(err => setErrorMessage(err.body.message))
   }
   function onCancel() {
     setFormValue(initialFormValue(profileUserData))
