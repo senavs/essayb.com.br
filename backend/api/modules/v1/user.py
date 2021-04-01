@@ -44,12 +44,12 @@ def search_by_username(username: str, *, connection: DatabaseClient = None, rais
 def list_(*, connection: DatabaseClient = None) -> list[dict]:
     """List all users"""
 
-    logger.info(f'Listing all users')
+    logger.info('Listing all users')
     with DatabaseClient(connection=connection) as connection:
         users = connection.query(User).all()
         users = [user.to_dict(exclude=['PROFILE_IMAGE']) for user in users]
 
-    logger.info(f'Listed all users successfully')
+    logger.info('Listed all users successfully')
     return users
 
 

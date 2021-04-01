@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 from starlette.responses import StreamingResponse
 
 from ...modules.v1.authentication import AuthModel, login_required
-from ...modules.v1.post import create, count_by_id, count_by_username, list_, search, thumbnail
-from .models.post import CreateRequest, CreateResponse, CountResponse, SearchResponse, ListResponse
+from ...modules.v1.post import count_by_id, count_by_username, create, list_, search, thumbnail
+from .models.post import CountResponse, CreateRequest, CreateResponse, ListResponse, SearchResponse
 
 router = APIRouter(prefix='/posts', tags=['Post'])
 

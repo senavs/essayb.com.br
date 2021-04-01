@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from ...modules.v1.category import search, list_
+from ...modules.v1.category import list_, search
 from .models.category import SearchResponse
 
 router = APIRouter(prefix='/categories', tags=['Category'])

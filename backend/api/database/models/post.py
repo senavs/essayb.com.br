@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, LargeBinary, String, func, Boolean
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String, func
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql import expression
 

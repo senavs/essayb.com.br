@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from . import authentication, user, post, category
+from . import authentication, category, post, user
 
 router = APIRouter(prefix='/v1')
 

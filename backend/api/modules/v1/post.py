@@ -4,8 +4,8 @@ from loguru import logger
 
 from ...database import Post
 from ...database.client import DatabaseClient
-from ...modules.v1 import user, category
-from ...error.http import bad_request, not_found
+from ...error.http import not_found
+from ...modules.v1 import category, user
 
 
 def count_by_id(id_user: int, *, connection: DatabaseClient = None) -> int:
