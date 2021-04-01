@@ -9,7 +9,7 @@ import PostService, { PostCountInterface, PostListInterface } from "../../libs/s
 import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
 import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
-import PostIcon from "src/components/post/PostIcon"
+import PostCard from "src/components/post/PostCard"
 
 
 interface ProfileIndexProps {
@@ -85,7 +85,7 @@ export default function ProfileIndex({
 
           {postList.map((e, i) => {
             return (<div className="col-12 col-md-4 mb-4" key={i}>
-              <PostIcon
+              <PostCard
                 id_post={e.id_post}
                 title={e.title}
                 descriprion={e.description}
