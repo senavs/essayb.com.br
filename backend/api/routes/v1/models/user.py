@@ -10,10 +10,10 @@ from ....modules.v1.utils import from_base64
 class User(BaseSettings):
     id_user: int
     username: str = Field(max_length=32)
-    bio: str = None
-    url_linkedin: str = None
-    url_instagram: str = None
-    url_website: str = None
+    bio: Optional[str] = Field(max_length=256)
+    url_linkedin: Optional[str] = Field(max_length=128)
+    url_instagram: Optional[str] = Field(max_length=128)
+    url_website: Optional[str] = Field(max_length=128)
     is_premium: bool
     created_at: datetime
     updated_at: datetime

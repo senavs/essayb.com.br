@@ -1,10 +1,11 @@
 import { CategoryInterface } from "../services/category";
 import PostService from "../services/post";
+import { UserInterface } from "../services/user";
 
 
 export interface PostData {
   id_post?: number
-  id_user?: number
+  user?: UserInterface
   category?: CategoryInterface
   title?: string
   description?: string

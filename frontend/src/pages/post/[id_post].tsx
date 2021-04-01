@@ -50,7 +50,7 @@ export default function ProfileIndex({
                 <span className="h5 ms-2">{userPostData.username}</span>
               </div>
               <div className="ms-auto">
-              <span className="ms-2">1127</span>
+                <span className="ms-2">1127</span>
                 <button className="btn btn-sm btn-outline-secondary ms-2">
                   <i className="bi bi-heart"></i>
                 </button>
@@ -73,7 +73,7 @@ export default function ProfileIndex({
               <span className="h6 ms-2">.</span>
               <span className="h6 ms-2">.</span>
             </div>
-            
+
 
             <div>
               <Title>Comments</Title>
@@ -92,16 +92,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const authenticationData = await getAuthenticationData(ctx)
   const categoryData = await getCategoryData()
 
+  // get post data
   const { id_post } = ctx.query
   const postData = await getPostData(id_post[0])
-  const userPostData = await getProfileUserData(postData.id_user)
-  const isLoggedUserPost = userPostData.username === authenticationData.user.username
 
   if (Object.keys(postData).length === 0) {
     return {
       notFound: true
     }
   }
+
+  // get post's user data
+  const { user: userPostData } = postData
+  const isLoggedUserPost = userPostData.username === authenticationData.user.username
 
   return {
     props: { authenticationData, categoryData, postData, userPostData, isLoggedUserPost },

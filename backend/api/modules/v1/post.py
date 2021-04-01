@@ -75,7 +75,7 @@ def thumbnail(id_post: int, *, connection: DatabaseClient = None) -> bytes:
     return image
 
 
-def create(id_user: int, id_category: int, title: str, description: str, thumbnail: bytes, *, connection: DatabaseClient = None) -> dict:
+def create(id_user: int, id_category: int, title: str, description: str, content: str, thumbnail: bytes, *, connection: DatabaseClient = None) -> dict:
     """Create new user post"""
 
     logger.info(f'Creating new user post with title {title!r}')
@@ -83,7 +83,7 @@ def create(id_user: int, id_category: int, title: str, description: str, thumbna
         category.search(id_category, raise_404=True)
         user.search_by_id(id_user, raise_404=True)
 
-        post = Post(ID_USER=id_user, ID_CATEGORY=id_category, TITLE=title, DESCRIPTION=description, THUMBNAIL=thumbnail)
+        post = Post(ID_USER=id_user, ID_CATEGORY=id_category, TITLE=title, DESCRIPTION=description, CONTENT=content, THUMBNAIL=thumbnail)
         post.insert(connection)
 
         post = post.to_dict()
