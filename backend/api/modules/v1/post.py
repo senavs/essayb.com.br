@@ -132,5 +132,5 @@ def delete(id_user: int, id_post: int, *, connection: DatabaseClient = None) -> 
 
         post.delete(connection)
 
-    logger.info(f'Delited user post with id number {id_post} successfully')
+    logger.info(f'Deleted user post with id number {id_post} successfully')
     return True

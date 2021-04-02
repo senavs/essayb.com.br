@@ -54,10 +54,16 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
       })
     })
   }
+  function onDeletePost(event) {
+    event.preventDefault()
+    PostService.delete(postData.id_post, authenticationData.token)
+      .then(() => Router.push(urls.user.profile.replace('{username}', authenticationData.user.username)))
+      .catch(console.log)
+  }
   function onSubmit(event) {
     event.preventDefault()
 
-    if (!validateImage(formValue.thumbnail)) {
+    if (formValue.thumbnail && !validateImage(formValue.thumbnail)) {
       return setErrorMessage('Images must be less then 500Kbs')
     }
 
@@ -155,8 +161,9 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
 
                     <small className="d-block my-3 text-danger">{errorMessage}</small>
 
-                    <div className="d-flex justify-content-center mt-3">
+                    <div className="d-flex justify-content-evenly mt-3">
                       <button className="btn btn btn-outline-secondary" type="submit">Save changes</button>
+                      <button className="btn btn btn-outline-danger" onClick={onDeletePost}>Delete post</button>
                     </div>
                   </form>
                 </div>

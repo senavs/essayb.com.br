@@ -27,6 +27,7 @@ export const urls = {
     thumbnail: `${protocol}://${backendDomain}/v1/posts/{id_post}/thumbnail`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
     update: `${protocol}://${backendDomain}/v1/posts/update`,
+    delete: `${protocol}://${backendDomain}/v1/posts/delete`,
     list: `${protocol}://${backendDomain}/v1/posts/user/{username}/list`,
   },
   like: {

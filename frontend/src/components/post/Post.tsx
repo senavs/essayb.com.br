@@ -19,8 +19,8 @@ interface PostProps {
   thumbnailBase64?: string,
   usePostActions?: boolean
   useEditButton?: boolean
-  hasLiked: boolean
-  likesCount: number
+  hasLiked?: boolean
+  likesCount?: number
 }
 
 export default function Post({

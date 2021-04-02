@@ -50,4 +50,8 @@ export default class PostService {
     return await callAPI(urls.post.update, 'PUT', body, { 'JWT-Token': `Bearer ${token}` })
   }
 
+  static async delete(id_post: number, token: string): Promise<PostInterface> {
+    return await callAPI(urls.post.delete, 'DELETE', { id_post }, { 'JWT-Token': `Bearer ${token}` })
+  }
+
 }
