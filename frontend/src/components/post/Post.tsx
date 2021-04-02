@@ -1,6 +1,9 @@
 import { urls } from "config/frontend";
 import Router from "next/router";
+import { useContext, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { AuthContext } from "src/libs/contexts/auth";
+import LikeService from "src/libs/services/like";
 
 import Avatar from "../profile/Avatar";
 import PostDescription from "./PostDescrption";
@@ -32,7 +35,26 @@ export default function Post({
   hasLiked,
   likesCount
 }: PostProps) {
+  const { authenticationData } = useContext(AuthContext)
+  const [likes, setLikes] = useState(likesCount)
+  const [isLiked, setIsLiked] = useState(hasLiked)
 
+  function onClickLike() {
+    LikeService.create(id_post, authenticationData.token)
+      .then(() => {
+        setLikes(likes + 1)
+        setIsLiked(true)
+      })
+      .catch(console.log)
+  }
+  function onClickDeslike() {
+    LikeService.delete(id_post, authenticationData.token)
+      .then(() => {
+        setLikes(likes - 1)
+        setIsLiked(false)
+      })
+      .catch(console.log)
+  }
   function onClickEdit() {
     Router.push(urls.post.edit.replace('{id_post}', id_post.toString()))
   }
@@ -56,10 +78,15 @@ export default function Post({
           <span className="h5 ms-2">{username}</span>
         </div>
         {usePostActions && <div className="ms-auto">
-          <span className="ms-2">{likesCount}</span>
-          <button className="btn btn-sm btn-outline-secondary ms-2">
-            <i className={`bi bi-heart${hasLiked ? "-fill" : ""}`}></i>
-          </button>
+          <span className="ms-2">{likes}</span>
+          {!isLiked
+            ? <button className="btn btn-sm btn-outline-secondary ms-2" onClick={onClickLike}>
+              <i className="bi bi-heart"></i>
+            </button>
+            : <button className="btn btn-sm btn-outline-secondary ms-2" onClick={onClickDeslike}>
+              <i className="bi bi-heart-fill"></i>
+            </button>
+          }
           {useEditButton && <button className="btn btn-sm btn-outline-secondary ms-2" onClick={onClickEdit}>
             <i className="bi bi-pencil"></i>
           </button>}

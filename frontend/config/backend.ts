@@ -33,5 +33,7 @@ export const urls = {
     check: `${protocol}://${backendDomain}/v1/likes/{username}/{id_post}/check`,
     countPostLikes: `${protocol}://${backendDomain}/v1/likes/post/{id_post}/count`,
     countUserLikes: `${protocol}://${backendDomain}/v1/likes/user/{username}/count`,
+    create: `${protocol}://${backendDomain}/v1/likes/create`,
+    delete: `${protocol}://${backendDomain}/v1/likes/delete`,
   }
 }
