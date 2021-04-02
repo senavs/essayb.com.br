@@ -13,11 +13,12 @@ interface PostProps {
   title: string,
   description: string,
   content: string,
+  thumbnailBase64?: string,
   usePostActions?: boolean
   useEditButton?: boolean
 }
 
-export default function Post({ id_post, username, title, description, content, usePostActions = true, useEditButton }: PostProps) {
+export default function Post({ id_post, username, title, description, content, thumbnailBase64, usePostActions = true, useEditButton }: PostProps) {
 
   function onClickEdit() {
     Router.push(urls.post.edit.replace('{id_post}', id_post.toString()))
@@ -54,7 +55,7 @@ export default function Post({ id_post, username, title, description, content, u
 
       {/* thumbnail */}
       <div className="mb-5">
-        <PostThumbnail id_post={id_post} />
+        <PostThumbnail id_post={id_post} base64={thumbnailBase64}/>
       </div>
 
       {/* post content */}

@@ -10,6 +10,7 @@ import { AuthenticationData, getAuthenticationData } from "../../../libs/serverS
 import { CategoryData, getCategoryData } from "../../../libs/serverSide/category";
 import { getPostData, PostData } from "../../../libs/serverSide/post";
 import { urls } from "config/frontend";
+import { fileToBase64, validateImage } from "src/libs/utils/form";
 
 
 interface EditProps {
@@ -23,6 +24,7 @@ interface FormValue {
   title: string,
   description: string,
   content: string,
+  thumbnail: string,
   id_category: number
 }
 
@@ -31,6 +33,7 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
     title: postData.title,
     description: postData.description,
     content: postData.content,
+    thumbnail: null,
     id_category: postData.category.id_category
   } as FormValue)
   const [errorMessage, setErrorMessage] = useState('')
@@ -43,13 +46,22 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
       [name]: value
     })
   }
-
+  function onFileUpload(event) {
+    fileToBase64(event.target.files[0], base64 => {
+      setFormValue({
+        ...formValue,
+        thumbnail: base64
+      })
+    })
+  }
   function onSubmit(event) {
     event.preventDefault()
 
-    // TODO: validate image size
+    if (!validateImage(formValue.thumbnail)) {
+      return setErrorMessage('Images must be less then 500Kbs')
+    }
 
-    PostService.update(postData.id_post, formValue.title, formValue.description, null, formValue.id_category, formValue.content, authenticationData.token)
+    PostService.update(postData.id_post, formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, formValue.content, authenticationData.token)
       .then(() => Router.push(urls.post.search.replace('{id_post}', postData.id_post.toString())))
       .catch(err => setErrorMessage(err.message))
   }
@@ -106,7 +118,7 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
                         type="file"
                         className="form-control"
                         accept="image/*"
-                      // onChange={onFileUpload}
+                        onChange={onFileUpload}
                       />
                     </div>
 
@@ -160,6 +172,7 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
                     username={userPostData.username}
                     title={formValue.title}
                     description={formValue.description}
+                    thumbnailBase64={formValue.thumbnail}
                     content={formValue.content}
                     usePostActions={false}
                   />
