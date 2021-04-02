@@ -40,6 +40,9 @@ export default function Post({
   const [isLiked, setIsLiked] = useState(hasLiked)
 
   function onClickLike() {
+    if (!authenticationData.isAuthenticated) {
+      return Router.push(urls.auth.login)
+    }
     LikeService.create(id_post, authenticationData.token)
       .then(() => {
         setLikes(likes + 1)
