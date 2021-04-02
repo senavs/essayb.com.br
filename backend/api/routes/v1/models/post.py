@@ -3,9 +3,9 @@ from typing import Optional, Union
 
 from pydantic import BaseSettings, Field, validator
 
+from ....modules.v1.utils import from_base64
 from .category import Category
 from .user import User
-from ....modules.v1.utils import from_base64
 
 
 class Post(BaseSettings):

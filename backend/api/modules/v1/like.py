@@ -1,11 +1,11 @@
 from loguru import logger
 from sqlalchemy import func
 
-from . import user, post
 from ...database import Post
 from ...database.client import DatabaseClient
 from ...database.models import Like
 from ...error.http import bad_request, not_found
+from . import post, user
 
 
 def check(username: str, id_post: int, *, connection: DatabaseClient = None) -> bool:

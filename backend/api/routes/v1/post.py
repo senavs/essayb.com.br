@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends
 from starlette.responses import StreamingResponse
 
 from ...modules.v1.authentication import AuthModel, login_required
-from ...modules.v1.post import count_by_id, count_by_username, create, list_, search, thumbnail, update, delete
-from .models.post import CountResponse, CreateRequest, CreateResponse, ListResponse, SearchResponse, UpdateResponse, UpdateRequest, DeleteResponse, \
-    DeleteRequest
+from ...modules.v1.post import count_by_id, count_by_username, create, delete, list_, search, thumbnail, update
+from .models.post import (CountResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse, SearchResponse, UpdateRequest,
+                          UpdateResponse)
 
 router = APIRouter(prefix='/posts', tags=['Post'])
 
@@ -37,7 +37,7 @@ def _create(body: CreateRequest, auth: AuthModel = Depends(login_required)):
 
 
 @router.put('/update', summary='Update user post', status_code=200, response_model=UpdateResponse)
-def _create(body: UpdateRequest, auth: AuthModel = Depends(login_required)):
+def _update(body: UpdateRequest, auth: AuthModel = Depends(login_required)):
     return update(auth.id_user, **body.dict())
 
 
