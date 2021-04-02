@@ -30,6 +30,7 @@ export const urls = {
     list: `${protocol}://${backendDomain}/v1/posts/user/{username}/list`,
   },
   like: {
+    check: `${protocol}://${backendDomain}/v1/likes/{username}/{id_post}/check`,
     countPostLikes: `${protocol}://${backendDomain}/v1/likes/post/{id_post}/count`,
     countUserLikes: `${protocol}://${backendDomain}/v1/likes/user/{username}/count`,
   }

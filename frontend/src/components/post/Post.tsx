@@ -16,9 +16,22 @@ interface PostProps {
   thumbnailBase64?: string,
   usePostActions?: boolean
   useEditButton?: boolean
+  hasLiked: boolean
+  likesCount: number
 }
 
-export default function Post({ id_post, username, title, description, content, thumbnailBase64, usePostActions = true, useEditButton }: PostProps) {
+export default function Post({
+  id_post,
+  username,
+  title,
+  description,
+  content,
+  thumbnailBase64,
+  usePostActions = true,
+  useEditButton,
+  hasLiked,
+  likesCount
+}: PostProps) {
 
   function onClickEdit() {
     Router.push(urls.post.edit.replace('{id_post}', id_post.toString()))
@@ -43,9 +56,9 @@ export default function Post({ id_post, username, title, description, content, t
           <span className="h5 ms-2">{username}</span>
         </div>
         {usePostActions && <div className="ms-auto">
-          <span className="ms-2">1127</span>
+          <span className="ms-2">{likesCount}</span>
           <button className="btn btn-sm btn-outline-secondary ms-2">
-            <i className="bi bi-heart"></i>
+            <i className={`bi bi-heart${hasLiked ? "-fill" : ""}`}></i>
           </button>
           {useEditButton && <button className="btn btn-sm btn-outline-secondary ms-2" onClick={onClickEdit}>
             <i className="bi bi-pencil"></i>
@@ -55,7 +68,7 @@ export default function Post({ id_post, username, title, description, content, t
 
       {/* thumbnail */}
       <div className="mb-5">
-        <PostThumbnail id_post={id_post} base64={thumbnailBase64}/>
+        <PostThumbnail id_post={id_post} base64={thumbnailBase64} />
       </div>
 
       {/* post content */}

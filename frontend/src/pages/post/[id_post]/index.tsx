@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next"
 import Post from "src/components/post/Post"
 import Title from "../../../components/common/Title"
 import Layout from "../../../components/common/Layout"
+import LikeService, { LikeCheckInterface, LikeCountInterface } from "../../../libs/services/like"
 import { getAuthenticationData, AuthenticationData } from "../../../libs/serverSide/auth"
 import { CategoryData, getCategoryData } from "../../../libs/serverSide/category"
 import { getPostData, PostData } from "../../../libs/serverSide/post"
@@ -15,6 +16,8 @@ interface ProfileIndexProps {
   postData: PostData
   userPostData: ProfileUserData
   isLoggedUserPost: boolean
+  hasLiked: LikeCheckInterface
+  likesCount: LikeCountInterface
 }
 
 export default function ProfileIndex({
@@ -22,7 +25,9 @@ export default function ProfileIndex({
   categoryData,
   postData,
   userPostData,
-  isLoggedUserPost
+  isLoggedUserPost,
+  hasLiked,
+  likesCount
 }: ProfileIndexProps) {
 
   return (
@@ -39,6 +44,8 @@ export default function ProfileIndex({
               description={postData.description}
               content={postData.content}
               useEditButton={isLoggedUserPost}
+              hasLiked={hasLiked.has_liked}
+              likesCount={likesCount.likes}
             />
 
             {/* separator */}
@@ -69,6 +76,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // get post data
   const { id_post } = ctx.query
   const postData = await getPostData(id_post[0])
+  const likesCount = await LikeService.countPostLikes(postData.id_post)
+
+  // has user liked the post?
+  let hasLiked = { has_liked: false }
+  if (authenticationData.isAuthenticated) {
+    hasLiked = await LikeService.check(authenticationData.user.username, postData.id_post)
+  }
 
   if (Object.keys(postData).length === 0) {
     return {
@@ -81,6 +95,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const isLoggedUserPost = userPostData.username === authenticationData.user.username
 
   return {
-    props: { authenticationData, categoryData, postData, userPostData, isLoggedUserPost },
+    props: {
+      authenticationData,
+      categoryData,
+      postData,
+      userPostData,
+      isLoggedUserPost,
+      hasLiked,
+      likesCount
+    },
   }
 }

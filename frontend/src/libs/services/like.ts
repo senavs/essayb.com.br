@@ -14,7 +14,17 @@ export interface LikeCountInterface {
   likes: number
 }
 
+export interface LikeCheckInterface {
+  has_liked: boolean
+}
+
 export default class LikeService {
+
+  static async check(username: string, id_post: number): Promise<LikeCheckInterface> {
+    const url = urls.like.check.replace('{username}', username).replace('{id_post}', id_post.toString())
+    return await callAPI(url, 'GET')
+  }
+
   static async countPostLikes(id_post: number): Promise<LikeCountInterface> {
     return await callAPI(urls.like.countPostLikes.replace('{id_post}', id_post.toString()), 'GET')
   }
