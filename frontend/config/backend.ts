@@ -22,10 +22,11 @@ export const urls = {
     list: `${protocol}://${backendDomain}/v1/categories/list`
   },
   post: {
+    search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
     count: `${protocol}://${backendDomain}/v1/posts/{id_user_or_username}/count`,
     thumbnail: `${protocol}://${backendDomain}/v1/posts/{id_post}/thumbnail`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
+    update: `${protocol}://${backendDomain}/v1/posts/update`,
     list: `${protocol}://${backendDomain}/v1/posts/user/{username}/list`,
-    search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
   }
 }

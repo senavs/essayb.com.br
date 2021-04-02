@@ -38,4 +38,16 @@ export default class PostService {
     return await callAPI(urls.post.create, 'POST', { title, description, thumbnail, id_category, content: '' }, { 'JWT-Token': `Bearer ${token}` })
   }
 
+  static async update(id_post: number, title?: string, description?: string, thumbnail?: string, id_category?: number, content?: string, token?: string): Promise<PostInterface> {
+    let body = { id_post, title, description, thumbnail, id_category, content }
+
+    for (let prop in body) {
+      if (body[prop] === null || body[prop] === undefined) {
+        delete body[prop]
+      }
+    }
+
+    return await callAPI(urls.post.update, 'PUT', body, { 'JWT-Token': `Bearer ${token}` })
+  }
+
 }

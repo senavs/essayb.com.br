@@ -9,6 +9,7 @@ export interface PostData {
   category?: CategoryInterface
   title?: string
   description?: string
+  content?: string
   is_published?: boolean
   created_at?: string
   updated_at?: string
