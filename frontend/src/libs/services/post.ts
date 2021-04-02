@@ -18,7 +18,7 @@ export interface PostInterface {
 export type PostListInterface = Array<PostInterface>
 
 export interface PostCountInterface {
-  count: number
+  posts: number
 }
 
 export default class PostService {

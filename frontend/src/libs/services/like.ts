@@ -1,0 +1,25 @@
+import { urls } from "../../../config/backend";
+import { callAPI } from "./base";
+import { PostInterface } from "./post";
+import { UserInterface } from "./user";
+
+
+export interface LikeInterface {
+  id_like: number,
+  user: UserInterface,
+  post: PostInterface
+}
+
+export interface LikeCountInterface {
+  likes: number
+}
+
+export default class LikeService {
+  static async countPostLikes(id_post: number): Promise<LikeCountInterface> {
+    return await callAPI(urls.like.countPostLikes.replace('{id_post}', id_post.toString()), 'GET')
+  }
+
+  static async countUserLikes(username: string): Promise<LikeCountInterface> {
+    return await callAPI(urls.like.countUserLikes.replace('{username}', username), 'GET')
+  }
+}

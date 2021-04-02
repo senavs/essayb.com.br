@@ -16,7 +16,7 @@ def _count(id_user_or_username: str):
         n_posts = count_by_id(int(id_user_or_username))
     else:
         n_posts = count_by_username(id_user_or_username)
-    return {'count': n_posts}
+    return {'posts': n_posts}
 
 
 @router.get('/{id_post}/search', summary='Search post by ID', status_code=200, response_model=SearchResponse)

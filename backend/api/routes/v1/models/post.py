@@ -31,7 +31,7 @@ ListResponse = list[Post]
 
 
 class CountResponse(BaseSettings):
-    count: int
+    posts: int
 
 
 class CreateRequest(BaseSettings):

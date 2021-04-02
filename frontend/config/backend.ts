@@ -28,5 +28,9 @@ export const urls = {
     create: `${protocol}://${backendDomain}/v1/posts/create`,
     update: `${protocol}://${backendDomain}/v1/posts/update`,
     list: `${protocol}://${backendDomain}/v1/posts/user/{username}/list`,
+  },
+  like: {
+    countPostLikes: `${protocol}://${backendDomain}/v1/likes/post/{id_post}/count`,
+    countUserLikes: `${protocol}://${backendDomain}/v1/likes/user/{username}/count`,
   }
 }

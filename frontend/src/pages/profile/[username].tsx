@@ -10,6 +10,7 @@ import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide
 import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
 import PostCard from "src/components/post/PostCard"
+import LikeService, { LikeCountInterface } from "src/libs/services/like"
 
 
 interface ProfileIndexProps {
@@ -19,6 +20,7 @@ interface ProfileIndexProps {
   isLoggedUserProfile: boolean
   postCount: PostCountInterface
   postList: PostListInterface
+  likeCount: LikeCountInterface
 }
 
 export default function ProfileIndex({
@@ -27,6 +29,7 @@ export default function ProfileIndex({
   profileUserData,
   isLoggedUserProfile,
   postCount,
+  likeCount,
   postList
 }: ProfileIndexProps) {
 
@@ -58,8 +61,8 @@ export default function ProfileIndex({
 
             </div>
             <div className="d-flex justify-content-evenly">
-              <span><span className="fw-bold">{postCount.count}</span> posts</span>
-              <span><span className="fw-bold">{0}</span> likes</span>
+              <span><span className="fw-bold">{postCount.posts}</span> posts</span>
+              <span><span className="fw-bold">{likeCount.likes}</span> likes</span>
               <span><span className="fw-bold">{0}</span> followers</span>
               <span><span className="fw-bold">{0}</span> following</span>
             </div>
@@ -128,9 +131,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get base page data
   const postCount = await PostService.count(profileUserData.username)
+  const likeCount = await LikeService.countUserLikes(profileUserData.username)
   const postList = await PostService.list(profileUserData.username)
 
   return {
-    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, postList },
+    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, likeCount, postList },
   }
 }
