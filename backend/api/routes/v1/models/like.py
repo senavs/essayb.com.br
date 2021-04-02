@@ -28,3 +28,7 @@ class DeleteResponse(BaseSettings):
 
 class CountResponse(BaseSettings):
     likes: int
+
+
+class CheckResponse(BaseSettings):
+    has_liked: bool
