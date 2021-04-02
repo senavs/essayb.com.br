@@ -4,7 +4,7 @@ from loguru import logger
 
 from ...database import Post
 from ...database.client import DatabaseClient
-from ...error.http import not_found
+from ...error.http import not_found, forbidden
 from ...modules.v1 import category, user
 
 
@@ -57,7 +57,7 @@ def list_(username: str, *, connection: DatabaseClient = None) -> list[dict]:
         searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
 
         posts = searched_user.posts.all()
-        posts = [post.to_dict(exclude=['THUMBNAIL']) for post in posts]
+        posts = [post.to_dict() for post in posts]
 
     logger.info(f'Listed user posts with username @{username} successfully')
     return posts
@@ -78,7 +78,7 @@ def thumbnail(id_post: int, *, connection: DatabaseClient = None) -> bytes:
 def create(id_user: int, id_category: int, title: str, description: str, content: str, thumbnail: bytes, *, connection: DatabaseClient = None) -> dict:
     """Create new user post"""
 
-    logger.info(f'Creating new user post with title {title!r}')
+    logger.info(f'Creating new user post for user id number {id_user}')
     with DatabaseClient(connection=connection) as connection:
         category.search(id_category, raise_404=True)
         user.search_by_id(id_user, raise_404=True)
@@ -88,5 +88,32 @@ def create(id_user: int, id_category: int, title: str, description: str, content
 
         post = post.to_dict()
 
-    logger.info(f'User post with title {title!r} was create successfully')
+    logger.info(f'User post for user id number {id_user} was create successfully')
+    return post
+
+
+def update(id_user: int,
+           id_post: int,
+           id_category: int = None,
+           title: str = None,
+           description: str = None,
+           content: str = None,
+           thumbnail: bytes = None, *,
+           connection: DatabaseClient = None) -> dict:
+    """Edit user post"""
+
+    logger.info(f'Updating user post with id number {id_post}')
+    with DatabaseClient(connection=connection) as connection:
+        post = search(id_post, connection=connection, raise_404=True, use_dict=False)
+
+        if post.ID_USER != id_user:
+            raise forbidden.UserUpdatingOthersPostException()
+
+        if id_category is not None:
+            category.search(id_category, connection=connection, raise_404=True)
+
+        post.update(connection, ID_CATEGORY=id_category, TITLE=title, DESCRIPTION=description, CONTENT=content, THUMBNAIL=thumbnail)
+        post = post.to_dict()
+
+    logger.info(f'Updated user post with id number {id_post} successfully')
     return post
