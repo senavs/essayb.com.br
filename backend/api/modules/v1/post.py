@@ -1,6 +1,7 @@
 from typing import Union
 
 from loguru import logger
+from sqlalchemy import desc
 
 from ...database import Post
 from ...database.client import DatabaseClient
@@ -56,7 +57,7 @@ def list_(username: str, *, connection: DatabaseClient = None) -> list[dict]:
     with DatabaseClient(connection=connection) as connection:
         searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
 
-        posts = searched_user.posts.all()
+        posts = searched_user.posts.order_by(desc(Post.ID_POST)).all()
         posts = [post.to_dict() for post in posts]
 
     logger.info(f'Listed user posts with username @{username} successfully')
