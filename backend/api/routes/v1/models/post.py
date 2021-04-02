@@ -66,3 +66,11 @@ class UpdateRequest(BaseSettings):
 
 class UpdateResponse(Post):
     pass
+
+
+class DeleteRequest(BaseSettings):
+    id_post: int
+
+
+class DeleteResponse(BaseSettings):
+    deleted: bool

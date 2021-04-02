@@ -118,3 +118,19 @@ def update(id_user: int,
 
     logger.info(f'Updated user post with id number {id_post} successfully')
     return post
+
+
+def delete(id_user: int, id_post: int, *, connection: DatabaseClient = None) -> bool:
+    """Delete user post"""
+
+    logger.info(f'Deleting user post with id number {id_post}')
+    with DatabaseClient(connection=connection) as connection:
+        post = search(id_post, connection=connection, raise_404=True, use_dict=False)
+
+        if post.ID_USER != id_user:
+            raise forbidden.UserDeletingOthersPostException()
+
+        post.delete(connection)
+
+    logger.info(f'Delited user post with id number {id_post} successfully')
+    return True
