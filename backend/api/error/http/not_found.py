@@ -20,5 +20,9 @@ class PostNotFoundException(NotFoundException):
     detail: str = 'Post not found'
 
 
+class LikeNotFoundException(NotFoundException):
+    detail: str = 'Like not found'
+
+
 class CategoryNotFoundException(NotFoundException):
     detail: str = 'Category not found'
