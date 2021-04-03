@@ -150,7 +150,6 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
                         <label className="col-form-label">Content:</label>
                         <textarea
                           name="content"
-                          maxLength={128}
                           rows={10}
                           className="form-control"
                           value={formValue.content}
