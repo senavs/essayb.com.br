@@ -11,14 +11,14 @@ from . import post, user
 def check(username: str, id_post: int, *, connection: DatabaseClient = None) -> bool:
     """Check if user has liked the post"""
 
-    logger.info(f'Checking if user @{username} has liked post with id number ${id_post}')
+    logger.info(f'Checking if user @{username} has liked post with id number {id_post}')
     with DatabaseClient(connection=connection) as connection:
         searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
         searched_post = post.search(id_post, connection=connection, raise_404=True, use_dict=False)
 
         has_liked = bool(searched_post.likes.filter_by(ID_USER=searched_user.ID_USER).first())
 
-    logger.info(f'Checked if user @{username} has liked post with id number ${id_post} successfully')
+    logger.info(f'Checked if user @{username} has liked post with id number {id_post} successfully')
     return has_liked
 
 

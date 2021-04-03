@@ -50,14 +50,14 @@ def search(id_post: int, *, connection: DatabaseClient = None, raise_404: bool =
     return post
 
 
-def list_(username: str, *, connection: DatabaseClient = None) -> list[dict]:
+def list_(username: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
     """List all user post"""
 
     logger.info(f'Listing user posts with username @{username}')
     with DatabaseClient(connection=connection) as connection:
         searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
 
-        posts = searched_user.posts.order_by(desc(Post.ID_POST)).all()
+        posts = searched_user.posts.order_by(desc(Post.ID_POST)).offset(skip).limit(limit).all()
         posts = [post.to_dict() for post in posts]
 
     logger.info(f'Listed user posts with username @{username} successfully')

@@ -1,6 +1,6 @@
 from io import BytesIO
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette.responses import StreamingResponse
 
 from ...modules.v1.authentication import AuthModel, login_required
@@ -41,11 +41,11 @@ def _update(body: UpdateRequest, auth: AuthModel = Depends(login_required)):
     return update(auth.id_user, **body.dict())
 
 
-@router.get('/user/{username}/list', summary='List all user posts', status_code=200, response_model=ListResponse)
-def _list(username: str):
-    return list_(username)
-
-
 @router.delete('/delete', summary='Delete user post', status_code=200, response_model=DeleteResponse)
 def _delete(body: DeleteRequest, auth: AuthModel = Depends(login_required)):
     return {'deleted': delete(auth.id_user, **body.dict())}
+
+
+@router.get('/user/{username}/list', summary='List all user posts', status_code=200, response_model=ListResponse)
+def _list(username: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    return list_(username, skip=skip, limit=limit)
