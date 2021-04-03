@@ -21,7 +21,7 @@ export function fileToBase64(file: any, resolve?: (...rest: any) => void, reject
 }
 
 export function formatDate(datetime: Date): string {
-  const date = `${(datetime.getDate() + 1).toString().padStart(2, '0')}/${(datetime.getMonth() + 1).toString().padStart(2, '0')}/${datetime.getFullYear()}`
+  const date = `${(datetime.getDate()).toString().padStart(2, '0')}/${(datetime.getMonth() + 1).toString().padStart(2, '0')}/${datetime.getFullYear()}`
   const time = `${datetime.getHours().toString().padStart(2, '0')}:${datetime.getMinutes().toString().padStart(2, '0')}`
   return `${date} ${time}`
 }
