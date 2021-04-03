@@ -26,7 +26,7 @@ export default class PostService {
     return await callAPI(urls.post.list.replace('{username}', username), 'GET')
   }
 
-  static async search(id_post: string): Promise<PostInterface> {
+  static async search(id_post: number): Promise<PostInterface> {
     return await callAPI(urls.post.search.replace('{id_post}', id_post), 'GET')
   }
 

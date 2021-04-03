@@ -16,11 +16,12 @@ export interface PostData {
   message?: string
 }
 
-export async function getPostData(id_post: string): Promise<PostData> {
+export async function getPostData(id_post: number): Promise<PostData> {
   if (typeof window === 'undefined') {
     try {
       return await PostService.search(id_post)
-    } catch {
+    } catch (err) {
+      console.log(err)
     }
   }
   return {}

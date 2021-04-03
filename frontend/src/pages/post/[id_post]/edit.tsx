@@ -200,7 +200,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get post data
   const { id_post } = ctx.query
-  const postData = await getPostData(id_post[0])
+  const postData = await getPostData(parseInt(id_post.toString()))
   const { user: userPostData } = postData
 
   if (Object.keys(postData).length === 0 || authenticationData.user.username !== userPostData.username) {

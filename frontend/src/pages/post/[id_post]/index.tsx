@@ -75,25 +75,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get post data
   const { id_post } = ctx.query
-  const postData = await getPostData(id_post[0])
-  const likesCount = await LikeService.countPostLikes(postData.id_post)
-
-  // has user liked the post?
-  let hasLiked = { has_liked: false }
-  if (authenticationData.isAuthenticated) {
-    hasLiked = await LikeService.check(authenticationData.user.username, postData.id_post)
-  }
-
+  const postData = await getPostData(parseInt(id_post.toString()))
   if (Object.keys(postData).length === 0) {
     return {
       notFound: true
     }
   }
-
-  // get post's user data
+  
+  let hasLiked = { has_liked: false }
+  if (authenticationData.isAuthenticated) {
+    hasLiked = await LikeService.check(authenticationData.user.username, postData.id_post)
+  }
+  
   const { user: userPostData } = postData
-  const isLoggedUserPost = userPostData.username === authenticationData.user.username
-
+  const isLoggedUserPost = userPostData.username === authenticationData.user.username  
+  const likesCount = await LikeService.countPostLikes(postData.id_post)
+  
   return {
     props: {
       authenticationData,
