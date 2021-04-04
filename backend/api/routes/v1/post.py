@@ -11,6 +11,17 @@ from .models.post import (CountResponse, CreateRequest, CreateResponse, DeleteRe
 router = APIRouter(prefix='/posts', tags=['Post'])
 
 
+@router.get('/{id_post}/search', summary='Search post by ID', status_code=200, response_model=SearchResponse)
+def _search(id_post: int):
+    return search(id_post)
+
+
+@router.get('/{username}/list', summary='List all user posts', status_code=200, response_model=ListResponse)
+def _list(username: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    print(skip, limit)
+    return list_(username, skip=skip, limit=limit)
+
+
 @router.get('/{id_user_or_username}/count', summary='Count published posts', status_code=200, response_model=CountResponse)
 def _count(id_user_or_username: str):
     if id_user_or_username.isdigit():
@@ -18,11 +29,6 @@ def _count(id_user_or_username: str):
     else:
         n_posts = count_by_username(id_user_or_username)
     return {'posts': n_posts}
-
-
-@router.get('/{id_post}/search', summary='Search post by ID', status_code=200, response_model=SearchResponse)
-def _search(id_post: int):
-    return search(id_post)
 
 
 @router.get('/{id_post}/thumbnail', summary='Get post thumbnail', status_code=200)
@@ -44,8 +50,3 @@ def _update(body: UpdateRequest, auth: AuthModel = Depends(login_required)):
 @router.delete('/delete', summary='Delete user post', status_code=200, response_model=DeleteResponse)
 def _delete(body: DeleteRequest, auth: AuthModel = Depends(login_required)):
     return {'deleted': delete(auth.id_user, **body.dict())}
-
-
-@router.get('/user/{username}/list', summary='List all user posts', status_code=200, response_model=ListResponse)
-def _list(username: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
-    return list_(username, skip=skip, limit=limit)
