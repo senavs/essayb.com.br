@@ -18,7 +18,7 @@ def _search(id_post: int):
 
 @router.get('/{username}/list', summary='List all user posts', status_code=200, response_model=ListResponse)
 def _list(username: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
-        return list_(username, skip=skip, limit=limit)
+    return list_(username, skip=skip, limit=limit)
 
 
 @router.get('/{id_user_or_username}/count', summary='Count published posts', status_code=200, response_model=CountResponse)

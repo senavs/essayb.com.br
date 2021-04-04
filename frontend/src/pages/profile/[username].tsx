@@ -6,6 +6,7 @@ import Avatar from "../../components/profile/Avatar"
 import LinkIcon from "../../components/profile/LinkIcon"
 import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
 import PostService, { PostCountInterface, PostListInterface } from "../../libs/services/post"
+import FollowService, { FollowCountInterface } from "../../libs/services/follow"
 import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
 import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
@@ -19,9 +20,11 @@ interface ProfileIndexProps {
   categoryData: CategoryData
   profileUserData: ProfileUserData
   isLoggedUserProfile: boolean
-  postCount: PostCountInterface
   postList: PostListInterface
   likeCount: LikeCountInterface
+  postCount: PostCountInterface
+  followerCount: FollowCountInterface,
+  followingCount: FollowCountInterface
 }
 
 export default function ProfileIndex({
@@ -31,7 +34,9 @@ export default function ProfileIndex({
   isLoggedUserProfile,
   postCount,
   likeCount,
-  postList
+  postList,
+  followerCount,
+  followingCount
 }: ProfileIndexProps) {
   const [skip, setSkip] = useState(10)
   const [posts, setPosts] = useState(postList)
@@ -45,7 +50,7 @@ export default function ProfileIndex({
         setSkip(skip + 10)
         setPosts(posts.concat(res))
       })
-      
+
   }
 
   return (
@@ -78,8 +83,8 @@ export default function ProfileIndex({
             <div className="d-flex justify-content-evenly">
               <span><span className="fw-bold">{postCount.posts}</span> posts</span>
               <span><span className="fw-bold">{likeCount.likes}</span> likes</span>
-              <span><span className="fw-bold">{0}</span> followers</span>
-              <span><span className="fw-bold">{0}</span> following</span>
+              <span><span className="fw-bold">{followerCount.count}</span> followers</span>
+              <span><span className="fw-bold">{followingCount.count}</span> following</span>
             </div>
           </div>
 
@@ -162,8 +167,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const postCount = await PostService.count(profileUserData.username)
   const likeCount = await LikeService.countUserLikes(profileUserData.username)
   const postList = await PostService.list(profileUserData.username)
+  const followerCount = await FollowService.count_follower(profileUserData.username)
+  const followingCount = await FollowService.count_following(profileUserData.username)
 
   return {
-    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, likeCount, postList },
+    props: {
+      authenticationData,
+      categoryData,
+      profileUserData,
+      isLoggedUserProfile,
+      postCount,
+      likeCount,
+      postList,
+      followerCount,
+      followingCount
+    }
   }
 }

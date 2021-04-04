@@ -36,5 +36,9 @@ export const urls = {
     countUserLikes: `${protocol}://${backendDomain}/v1/likes/user/{username}/count`,
     create: `${protocol}://${backendDomain}/v1/likes/create`,
     delete: `${protocol}://${backendDomain}/v1/likes/delete`,
+  },
+  follow: {
+    count_follower: `${protocol}://${backendDomain}/v1/follows/follower/{username}/count`,
+    count_following: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`
   }
 }

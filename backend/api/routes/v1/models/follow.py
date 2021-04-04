@@ -10,12 +10,8 @@ class Follow(BaseSettings):
 ListResponse = list[Follow]
 
 
-class CheckFollowerResponse(BaseSettings):
+class CheckResponse(BaseSettings):
     is_following: bool
-
-
-class CheckFollowingResponse(BaseSettings):
-    is_followed: bool
 
 
 class CreateRequest(BaseSettings):
@@ -34,3 +30,7 @@ class DeleteRequest(BaseSettings):
 
 class DeleteResponse(BaseSettings):
     deleted: bool
+
+
+class CountResponse(BaseSettings):
+    count: int

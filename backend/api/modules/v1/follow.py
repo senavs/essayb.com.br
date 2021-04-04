@@ -8,11 +8,11 @@ from ...error.http import bad_request, not_found
 from . import user
 
 
-def search_by_id(id_user_follower: str,
-                 id_user_following: str, *,
-                 connection: DatabaseClient = None,
-                 raise_404: bool = True,
-                 use_dict: bool = True) -> Union[dict, Follow, None]:
+def search(id_user_follower: str,
+           id_user_following: str, *,
+           connection: DatabaseClient = None,
+           raise_404: bool = True,
+           use_dict: bool = True) -> Union[dict, Follow, None]:
     """Search follow by id"""
 
     logger.info(f'Searching follow by ID number {id_user_follower} and {id_user_following}')
@@ -29,32 +29,70 @@ def search_by_id(id_user_follower: str,
     return follow
 
 
-def check_follower_by_username(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> bool:
-    """Check if some username is following other one by username"""
+def list_follower(username: str, *, connection: DatabaseClient = None) -> list[dict]:
+    """List all users that follow username"""
+
+    logger.info(f'Listing all users that follow @{username}')
+    with DatabaseClient(connection=connection) as connection:
+        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
+        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWING=searched_user.ID_USER).all()
+
+        result = [row.to_dict() for row in followings]
+
+    logger.info(f'Listed all users that follow @{username} successfully')
+    return result
+
+
+def list_following(username: str, *, connection: DatabaseClient = None) -> list[dict]:
+    """List all users that username is following"""
+
+    logger.info(f'Listing all users that @{username} is followings')
+    with DatabaseClient(connection=connection) as connection:
+        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
+        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWER=searched_user.ID_USER).all()
+
+        result = [row.to_dict() for row in followings]
+
+    logger.info(f'Listed all users that @{username} is followings successfully')
+    return result
+
+
+def count_follower(username: str, *, connection: DatabaseClient = None) -> int:
+    """Following counter"""
+
+    logger.info(f'Counting how many users follow @{username}')
+    with DatabaseClient(connection=connection) as connection:
+        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
+        n_followers = connection.query(Follow).filter_by(ID_USER_FOLLOWING=searched_user.ID_USER).count()
+
+    logger.info(f'Counted how many users follow @{username} successfully')
+    return n_followers
+
+
+def count_following(username: str, *, connection: DatabaseClient = None) -> int:
+    """Following counter"""
+
+    logger.info(f'Counting how many users @{username} is following')
+    with DatabaseClient(connection=connection) as connection:
+        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
+        n_followings = connection.query(Follow).filter_by(ID_USER_FOLLOWER=searched_user.ID_USER).count()
+
+    logger.info(f'Counted how many users @{username} is following successfully')
+    return n_followings
+
+
+def check(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> bool:
+    """Check if some username follows other one"""
 
     logger.info(f'Checking if username {username_follower} is following {username_following}')
     with DatabaseClient(connection=connection) as connection:
         follower = user.search_by_username(username_follower, connection=connection, raise_404=True, use_dict=False)
         following = user.search_by_username(username_following, connection=connection, raise_404=True, use_dict=False)
 
-        query = connection.query(Follow).filter_by(ID_USER_FOLLOWER=follower.ID_USER, ID_USER_FOLLOWING=following.ID_USER).first()
+        follow = connection.query(Follow).filter_by(ID_USER_FOLLOWER=follower.ID_USER, ID_USER_FOLLOWING=following.ID_USER).first()
 
     logger.info(f'Checking if username {username_follower} is following {username_following} successfully')
-    return bool(query)
-
-
-def check_follower_by_id(id_user_follower: int, id_user_following: int, *, connection: DatabaseClient = None) -> bool:
-    """Check if some username is following other one by ID"""
-
-    logger.info(f'Checking if username with id number {id_user_follower} is following {id_user_following} id')
-    with DatabaseClient(connection=connection) as connection:
-        follower = user.search_by_id(id_user_follower, connection=connection, raise_404=True, use_dict=False)
-        following = user.search_by_id(id_user_following, connection=connection, raise_404=True, use_dict=False)
-
-        query = connection.query(Follow).filter_by(ID_USER_FOLLOWER=follower.ID_USER, ID_USER_FOLLOWING=following.ID_USER).first()
-
-    logger.info(f'Checking if username with id number {id_user_follower} is following {id_user_following} id')
-    return bool(query)
+    return bool(follow)
 
 
 def create(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> dict:
@@ -87,36 +125,8 @@ def delete(username_follower: str, username_following: str, *, connection: Datab
         follower = user.search_by_username(username_follower, connection=connection, raise_404=True, use_dict=False)
         following = user.search_by_username(username_following, connection=connection, raise_404=True, use_dict=False)
 
-        follow = search_by_id(follower.ID_USER, following.ID_USER, connection=connection, raise_404=True, use_dict=False)
+        follow = search(follower.ID_USER, following.ID_USER, connection=connection, raise_404=True, use_dict=False)
         follow.delete(connection)
 
     logger.info(f'Deleted follow between @{username_follower} and @{username_following} successfully')
     return True
-
-
-def list_follower(username: str, *, connection: DatabaseClient = None) -> list[dict]:
-    """List all users that follow username"""
-
-    logger.info(f'Listing all users that follow @{username}')
-    with DatabaseClient(connection=connection) as connection:
-        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
-        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWING=searched_user.ID_USER).all()
-
-        result = [row.to_dict() for row in followings]
-
-    logger.info(f'Listed all users that follow @{username} successfully')
-    return result
-
-
-def list_following(username: str, *, connection: DatabaseClient = None) -> list[dict]:
-    """List all users that username is following"""
-
-    logger.info(f'Listing all users that @{username} is followings')
-    with DatabaseClient(connection=connection) as connection:
-        searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
-        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWER=searched_user.ID_USER).all()
-
-        result = [row.to_dict() for row in followings]
-
-    logger.info(f'Listed all users that @{username} is followings successfully')
-    return result

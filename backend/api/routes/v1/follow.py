@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from ...modules.v1.follow import check_follower_by_id, check_follower_by_username, create, delete, list_follower, list_following
-from .models.follow import CheckFollowerResponse, CheckFollowingResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse
+from ...modules.v1.follow import check, count_follower, count_following, create, delete, list_follower, list_following
+from .models.follow import CheckResponse, CountResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse
 
 router = APIRouter(prefix='/follows', tags=['Follow'])
 
@@ -16,28 +16,21 @@ def _list_following(username: str):
     return list_following(username)
 
 
-@router.get('/follower/{username_or_id_user_follower}/{username_or_id_user_following}/check',
-            summary='Check follower by ID or username',
-            status_code=200,
-            response_model=CheckFollowerResponse)
-def _check_follower_username(username_or_id_user_follower: str, username_or_id_user_following: str):
-    if username_or_id_user_follower.isdigit() and username_or_id_user_following.isdigit():
-        is_following = check_follower_by_id(int(username_or_id_user_follower), int(username_or_id_user_following))
-    else:
-        is_following = check_follower_by_username(username_or_id_user_follower, username_or_id_user_following)
-    return {'is_following': is_following}
+@router.get('/follower/{username}/count', summary="Follower counter", status_code=200, response_model=CountResponse)
+def _count_follower(username: str):
+    n_follower = count_follower(username)
+    return {'count': n_follower}
 
 
-@router.get('/following/{username_or_id_user_following}/{username_or_id_user_follower}/check',
-            summary='Check following by ID or username',
-            status_code=200,
-            response_model=CheckFollowingResponse)
-def _check_following_username(username_or_id_user_following: str, username_or_id_user_follower: str):
-    if username_or_id_user_following.isdigit() and username_or_id_user_follower.isdigit():
-        is_follower = check_follower_by_id(int(username_or_id_user_following), int(username_or_id_user_follower))
-    else:
-        is_follower = check_follower_by_username(username_or_id_user_following, username_or_id_user_follower)
-    return {'is_following': is_follower}
+@router.get('/following/{username}/count', summary="Following counter", status_code=200, response_model=CountResponse)
+def _count_following(username: str):
+    n_following = count_following(username)
+    return {'count': n_following}
+
+
+@router.get('/{username_follower}/{username_following}/check', summary='Check follow', status_code=200, response_model=CheckResponse)
+def _check(username_follower: str, username_following: str):
+    return {'is_following': check(username_follower, username_following)}
 
 
 @router.post('/create', summary='Create follow', status_code=201, response_model=CreateResponse)
