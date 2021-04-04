@@ -11,6 +11,7 @@ import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
 import PostCard from "src/components/post/PostCard"
 import LikeService, { LikeCountInterface } from "src/libs/services/like"
+import { useState } from "react"
 
 
 interface ProfileIndexProps {
@@ -32,6 +33,20 @@ export default function ProfileIndex({
   likeCount,
   postList
 }: ProfileIndexProps) {
+  const [skip, setSkip] = useState(10)
+  const [posts, setPosts] = useState(postList)
+
+  function onClickLoadMore(event) {
+    PostService.list(profileUserData.username, skip)
+      .then((res) => {
+        if (res.length < 10) {
+          event.target.hidden = true
+        }
+        setSkip(skip + 10)
+        setPosts(posts.concat(res))
+      })
+      
+  }
 
   return (
     <Layout authenticationData={authenticationData} categoryData={categoryData} title={`${authenticationData.user.username} profile`}>
@@ -83,10 +98,18 @@ export default function ProfileIndex({
         </div>
 
         <div className="row">
-          {/* posts */}
           <Title>Posts</Title>
 
-          {postList.map((e, i) => {
+          {/* Info 'no post' */}
+          {posts.length === 0 && (
+            <div className="d-flex justify-content-center">
+              <i className="fs-2 bi bi-emoji-frown mx-2"></i>
+              <span className="fs-2">No post yet</span>
+            </div>
+          )}
+
+          {/* posts */}
+          {posts.map((e, i) => {
             return (<div className="col-12 col-md-4 mb-4" key={i}>
               <PostCard
                 id_post={e.id_post}
@@ -97,8 +120,14 @@ export default function ProfileIndex({
               />
             </div>)
           })}
-        </div>
 
+          {/* button loadmore */}
+          {posts.length >= 10 && (
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-outline-secondary" onClick={onClickLoadMore}>Load more</button>
+            </div>
+          )}
+        </div>
 
         {/* update user profile modal */}
         <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />

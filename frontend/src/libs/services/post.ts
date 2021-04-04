@@ -22,12 +22,12 @@ export interface PostCountInterface {
 }
 
 export default class PostService {
-  static async list(username: string): Promise<PostListInterface> {
-    return await callAPI(urls.post.list.replace('{username}', username), 'GET')
+  static async list(username: string, skip: number = 0): Promise<PostListInterface> {
+    return await callAPI(urls.post.list.replace('{username}', username) + `?skip=${skip}`, 'GET')
   }
 
   static async search(id_post: number): Promise<PostInterface> {
-    return await callAPI(urls.post.search.replace('{id_post}', id_post), 'GET')
+    return await callAPI(urls.post.search.replace('{id_post}', id_post.toString()), 'GET')
   }
 
   static async count(username: string): Promise<PostCountInterface> {

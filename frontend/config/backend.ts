@@ -23,12 +23,12 @@ export const urls = {
   },
   post: {
     search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
+    list: `${protocol}://${backendDomain}/v1/posts/{username}/list`,
     count: `${protocol}://${backendDomain}/v1/posts/{id_user_or_username}/count`,
     thumbnail: `${protocol}://${backendDomain}/v1/posts/{id_post}/thumbnail`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
     update: `${protocol}://${backendDomain}/v1/posts/update`,
     delete: `${protocol}://${backendDomain}/v1/posts/delete`,
-    list: `${protocol}://${backendDomain}/v1/posts/user/{username}/list`,
   },
   like: {
     check: `${protocol}://${backendDomain}/v1/likes/{username}/{id_post}/check`,
