@@ -61,7 +61,7 @@ services:
       context: gateway
       dockerfile: Dockerfile.dev
     volumes:
-      - ./gateway/default.conf:/etc/nginx/conf.d/default.conf
+      - ./gateway/default.dev.conf:/etc/nginx/conf.d/default.conf
     ports:
       - 8080:80
     depends_on:
