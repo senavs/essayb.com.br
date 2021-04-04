@@ -42,3 +42,7 @@ class UserFollowItselfException(BadRequestException):
 
 class FollowAlreadyExistsException(BadRequestException):
     detail: str = 'Follow already exists'
+
+
+class LikeAlreadyExistsException(BadRequestException):
+    detail: str = 'Like already exists'

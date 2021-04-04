@@ -34,6 +34,23 @@ Or you can run the development project with the follow command:
 docker-compose -f docker-compose.dev.yml up
 ```
 
+Note: to run `docker-compose.dev.yml` you need to set your local IP address into `BACKEND_DOMAIN` and `FRONTEND_DOMAIN` envs inside compose file. Like:
+```yaml
+...
+    build:
+      context: frontend
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    environment:
+      # Use your IPv4 address to BACKEND_DOMAIN and FRONTEND_DOMAIN envs
+      # Use port 8080 if gateway is activated, otherwise use 8080 to FRONTEND_DOMAIN and 8888 to BACKEND_DOMAIN
+      BACKEND_DOMAIN: 172.17.0.1:8080
+      FRONTEND_DOMAIN: 172.17.0.1:8080
+    volumes:
+      - ./frontend/next.config.js:/code/next.config.js
+...
+```
+
 ## Setup locally (without Docker)
 You can also run the application without docker installed. To do that, it's necessary to install all programs and libraries locally.
 

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy import Column, ForeignKey, Integer, UniqueConstraint
 from sqlalchemy.orm import backref, relationship
 
@@ -18,3 +20,15 @@ class Like(DeclarativeBase, BaseModel):
 
     post = relationship('Post', backref=backref('likes', cascade='all,delete', lazy='dynamic'))
     user = relationship('User', backref=backref('likes', cascade='all,delete', lazy='dynamic'))
+
+    def to_dict(self, *, exclude: Optional[list] = None, **include) -> dict:
+        like = super().to_dict(exclude=exclude, **include)
+
+        if like.get('id_post'):
+            like.update(post=self.post.to_dict())
+            like.pop('id_post')
+        if like.get('id_user'):
+            like.update(user=self.user.to_dict(exclude=['PROFILE_IMAGE']))
+            like.pop('id_user')
+
+        return like

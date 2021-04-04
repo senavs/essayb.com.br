@@ -9,7 +9,9 @@ import PostService, { PostCountInterface, PostListInterface } from "../../libs/s
 import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
 import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
-import PostIcon from "src/components/post/PostIcon"
+import PostCard from "src/components/post/PostCard"
+import LikeService, { LikeCountInterface } from "src/libs/services/like"
+import { useState } from "react"
 
 
 interface ProfileIndexProps {
@@ -19,6 +21,7 @@ interface ProfileIndexProps {
   isLoggedUserProfile: boolean
   postCount: PostCountInterface
   postList: PostListInterface
+  likeCount: LikeCountInterface
 }
 
 export default function ProfileIndex({
@@ -27,11 +30,26 @@ export default function ProfileIndex({
   profileUserData,
   isLoggedUserProfile,
   postCount,
+  likeCount,
   postList
 }: ProfileIndexProps) {
+  const [skip, setSkip] = useState(10)
+  const [posts, setPosts] = useState(postList)
+
+  function onClickLoadMore(event) {
+    PostService.list(profileUserData.username, skip)
+      .then((res) => {
+        if (res.length < 10) {
+          event.target.hidden = true
+        }
+        setSkip(skip + 10)
+        setPosts(posts.concat(res))
+      })
+      
+  }
 
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title={`${authenticationData.user.username} profile`}>
       <div className="container">
         <div className="row">
 
@@ -58,8 +76,8 @@ export default function ProfileIndex({
 
             </div>
             <div className="d-flex justify-content-evenly">
-              <span><span className="fw-bold">{postCount.count}</span> posts</span>
-              <span><span className="fw-bold">{0}</span> likes</span>
+              <span><span className="fw-bold">{postCount.posts}</span> posts</span>
+              <span><span className="fw-bold">{likeCount.likes}</span> likes</span>
               <span><span className="fw-bold">{0}</span> followers</span>
               <span><span className="fw-bold">{0}</span> following</span>
             </div>
@@ -80,12 +98,20 @@ export default function ProfileIndex({
         </div>
 
         <div className="row">
-          {/* posts */}
           <Title>Posts</Title>
 
-          {postList.map((e, i) => {
+          {/* Info 'no post' */}
+          {posts.length === 0 && (
+            <div className="d-flex justify-content-center">
+              <i className="fs-2 bi bi-emoji-frown mx-2"></i>
+              <span className="fs-2">No post yet</span>
+            </div>
+          )}
+
+          {/* posts */}
+          {posts.map((e, i) => {
             return (<div className="col-12 col-md-4 mb-4" key={i}>
-              <PostIcon
+              <PostCard
                 id_post={e.id_post}
                 title={e.title}
                 descriprion={e.description}
@@ -94,8 +120,14 @@ export default function ProfileIndex({
               />
             </div>)
           })}
-        </div>
 
+          {/* button loadmore */}
+          {posts.length >= 10 && (
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-outline-secondary" onClick={onClickLoadMore}>Load more</button>
+            </div>
+          )}
+        </div>
 
         {/* update user profile modal */}
         <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
@@ -128,9 +160,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get base page data
   const postCount = await PostService.count(profileUserData.username)
+  const likeCount = await LikeService.countUserLikes(profileUserData.username)
   const postList = await PostService.list(profileUserData.username)
 
   return {
-    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, postList },
+    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, likeCount, postList },
   }
 }

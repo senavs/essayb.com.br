@@ -15,7 +15,7 @@ interface LoginProps {
 
 export default function Login({ authenticationData, categoryData }: LoginProps) {
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title="Login">
       <div className='container'>
         <div className='row'>
           <div className='offset-md-4 col-md-4 col-12'>

@@ -12,7 +12,7 @@ interface IndexProps {
 
 export default function Index({ authenticationData, categoryData }: IndexProps) {
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title="Home page">
       <div className="container">
         <h1>Hello world!!</h1>
       </div>

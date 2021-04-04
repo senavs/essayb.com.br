@@ -57,9 +57,9 @@ export default function CreateNewPostModal() {
     }
 
     PostService.create(formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, authenticationData.token)
-      .then(() => {
+      .then(res => {
         document.getElementById('btn-close').click()
-        Router.push(urls.post.create)
+        Router.push(urls.post.edit.replace('{id_post}', res.id_post.toString()))
       })
       .catch(err => setErrorMessage(err.message))
   }
