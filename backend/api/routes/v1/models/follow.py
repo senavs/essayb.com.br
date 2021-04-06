@@ -15,7 +15,6 @@ class CheckResponse(BaseSettings):
 
 
 class CreateRequest(BaseSettings):
-    username_follower: str
     username_following: str
 
 
@@ -24,7 +23,6 @@ class CreateResponse(Follow):
 
 
 class DeleteRequest(BaseSettings):
-    username_follower: str
     username_following: str
 
 
