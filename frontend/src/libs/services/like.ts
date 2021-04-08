@@ -34,10 +34,10 @@ export default class LikeService {
   }
 
   static async create(id_post: number, token: string): Promise<LikeCountInterface> {
-    return await callAPI(urls.like.create.replace('{id_post}', id_post.toString()), 'POST', { id_post }, { 'JWT-Token': `Bearer ${token}` })
+    return await callAPI(urls.like.create, 'POST', { id_post }, { 'JWT-Token': `Bearer ${token}` })
   }
 
   static async delete(id_post: number, token: string): Promise<LikeCountInterface> {
-    return await callAPI(urls.like.delete.replace('{id_post}', id_post.toString()), 'DELETE', { id_post }, { 'JWT-Token': `Bearer ${token}` })
+    return await callAPI(urls.like.delete, 'DELETE', { id_post }, { 'JWT-Token': `Bearer ${token}` })
   }
 }

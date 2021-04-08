@@ -14,6 +14,21 @@ export interface FollowCountInterface {
   count: number
 }
 
+export interface CheckFollowingInterface {
+  is_following: boolean
+}
+
+export interface CreateInterface {
+  id_follow: number
+  id_user_follower: number
+  id_user_following: number
+}
+
+export interface DeleteInterface {
+  deleted: boolean
+}
+
+
 export default class FollowService {
 
   static async count_follower(username: string): Promise<FollowCountInterface> {
@@ -23,4 +38,16 @@ export default class FollowService {
   static async count_following(username: string): Promise<FollowCountInterface> {
     return await callAPI(urls.follow.count_following.replace('{username}', username), 'GET')
   }
+
+  static async check(username_follower: string, username_following: string): Promise<CheckFollowingInterface> {
+    return await callAPI(urls.follow.check.replace('{username_follower}', username_follower).replace('{username_following}', username_following), 'GET')
+  }
+
+  static async create(token: string, username_following: string): Promise<CreateInterface> {
+    return await callAPI(urls.follow.create, 'POST', {username_following}, { 'JWT-Token': `Bearer ${token}`})
+  }
+
+   static async delete(token: string, username_following: string): Promise<DeleteInterface> {
+     return await callAPI(urls.follow.delete, 'DELETE', {username_following},{ 'JWT-Token': `Bearer ${token}`})
+   }
 }

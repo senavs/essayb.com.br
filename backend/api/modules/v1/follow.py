@@ -95,38 +95,46 @@ def check(username_follower: str, username_following: str, *, connection: Databa
     return bool(follow)
 
 
-def create(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> dict:
-    """Create new follows by username"""
+def create(id_user_follower: int, username_following: str, *, connection: DatabaseClient = None) -> dict:
+    """Create new follows by username
+    :rtype: object
+    """
 
-    logger.info(f'Create follow between @{username_follower} and @{username_following}')
+    follower = user.search_by_id(id_user_follower, connection=connection, raise_404=True, use_dict=False)
+    name_follower = follower.USERNAME
+
+    following = user.search_by_username(username_following, connection=connection, raise_404=True, use_dict=False)
+
+    logger.info(f'Create follow between @{name_follower} and @{username_following}')
     with DatabaseClient(connection=connection) as connection:
-        if username_follower == username_following:
+
+        if name_follower == username_following:
             raise bad_request.UserFollowItselfException()
 
-        follower = user.search_by_username(username_follower, connection=connection, raise_404=True, use_dict=False)
-        following = user.search_by_username(username_following, connection=connection, raise_404=True, use_dict=False)
-
-        if connection.query(Follow).filter_by(ID_USER_FOLLOWER=follower.ID_USER, ID_USER_FOLLOWING=following.ID_USER).first():
+        if connection.query(Follow).filter_by(ID_USER_FOLLOWER=id_user_follower, ID_USER_FOLLOWING=following.ID_USER).first():
             raise bad_request.FollowAlreadyExistsException()
 
-        new_follow = Follow(ID_USER_FOLLOWER=follower.ID_USER, ID_USER_FOLLOWING=following.ID_USER)
+        new_follow = Follow(ID_USER_FOLLOWER=id_user_follower, ID_USER_FOLLOWING=following.ID_USER)
         new_follow.insert(connection)
         new_follow = new_follow.to_dict()
 
-    logger.info(f'Follow created between @{username_follower} and @{username_following} successfully')
+    logger.info(f'Follow created between @{name_follower} and @{username_following} successfully')
     return new_follow
 
 
-def delete(username_follower: str, username_following: str, *, connection: DatabaseClient = None) -> bool:
+def delete(id_user_follower: int, username_following: str, *, connection: DatabaseClient = None) -> bool:
     """Delete follow between users"""
 
-    logger.info(f'Delete follow between @{username_follower} and @{username_following}')
+    follower = user.search_by_id(id_user_follower, connection=connection, raise_404=True, use_dict=False)
+    name_follower = follower.USERNAME
+
+    logger.info(f'Delete follow between @{name_follower} and @{username_following}')
     with DatabaseClient(connection=connection) as connection:
-        follower = user.search_by_username(username_follower, connection=connection, raise_404=True, use_dict=False)
+
         following = user.search_by_username(username_following, connection=connection, raise_404=True, use_dict=False)
 
-        follow = search(follower.ID_USER, following.ID_USER, connection=connection, raise_404=True, use_dict=False)
+        follow = search(id_user_follower, following.ID_USER, connection=connection, raise_404=True, use_dict=False)
         follow.delete(connection)
 
-    logger.info(f'Deleted follow between @{username_follower} and @{username_following} successfully')
+    logger.info(f'Deleted follow between @{name_follower} and @{username_following} successfully')
     return True

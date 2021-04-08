@@ -1,5 +1,7 @@
 from fastapi import APIRouter
+from fastapi.params import Depends
 
+from ...modules.v1.authentication import AuthModel, login_required
 from ...modules.v1.follow import check, count_follower, count_following, create, delete, list_follower, list_following
 from .models.follow import CheckResponse, CountResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse
 
@@ -34,10 +36,10 @@ def _check(username_follower: str, username_following: str):
 
 
 @router.post('/create', summary='Create follow', status_code=201, response_model=CreateResponse)
-def _create(body: CreateRequest):
-    return create(**body.dict())
+def _create(body: CreateRequest, auth: AuthModel = Depends(login_required)):
+    return create(auth.id_user, **body.dict())
 
 
 @router.delete('/delete', summary='Delete follow', status_code=200, response_model=DeleteResponse)
-def _delete(body: DeleteRequest):
-    return {'deleted': delete(**body.dict())}
+def _delete(body: DeleteRequest, auth: AuthModel = Depends(login_required)):
+    return {'deleted': delete(auth.id_user, **body.dict())}
