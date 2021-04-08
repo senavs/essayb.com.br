@@ -38,8 +38,8 @@ export const urls = {
     delete: `${protocol}://${backendDomain}/v1/likes/delete`,
   },
   follow: {
-    count_follower: `${protocol}://${backendDomain}/v1/follows/follower/{username}/count`,
-    count_following: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`,
+    countFollowers: `${protocol}://${backendDomain}/v1/follows/follower/{username}/count`,
+    countFollowings: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`,
     check: `${protocol}://${backendDomain}/v1/follows/{username_follower}/{username_following}/check`,
     create: `${protocol}://${backendDomain}/v1/follows/create`, 
     delete: `${protocol}://${backendDomain}/v1/follows/delete`
