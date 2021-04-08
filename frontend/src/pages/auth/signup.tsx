@@ -15,7 +15,7 @@ interface SignUpProps {
 
 export default function SignUp({ authenticationData, categoryData }: SignUpProps) {
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title="Create account">
       <div className="container">
         <div className="row">
           <div className="offset-md-4 col-md-4 col-12">

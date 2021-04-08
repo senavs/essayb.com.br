@@ -19,6 +19,6 @@ export const urls = {
   },
   post: {
     search: '/post/{id_post}',
-    create: '/post/create'
+    edit: '/post/{id_post}/edit'
   }
 }

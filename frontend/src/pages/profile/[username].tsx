@@ -1,15 +1,20 @@
+import Router from "next/router"
 import { GetServerSideProps } from "next"
+import { useState } from "react"
 
 import Layout from "../../components/common/Layout"
 import Title from "../../components/common/Title"
 import Avatar from "../../components/profile/Avatar"
 import LinkIcon from "../../components/profile/LinkIcon"
+import PostCard from "../../components/post/PostCard"
 import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
+import LikeService, { LikeCountInterface } from "src/libs/services/like"
 import PostService, { PostCountInterface, PostListInterface } from "../../libs/services/post"
+import FollowService, { FollowCountInterface, CheckFollowingInterface, FollowInterface, DeleteInterface } from "../../libs/services/follow"
 import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
 import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
-import PostIcon from "src/components/post/PostIcon"
+import { urls } from "../../../config/frontend"
 
 
 interface ProfileIndexProps {
@@ -17,8 +22,14 @@ interface ProfileIndexProps {
   categoryData: CategoryData
   profileUserData: ProfileUserData
   isLoggedUserProfile: boolean
-  postCount: PostCountInterface
   postList: PostListInterface
+  likeCount: LikeCountInterface
+  postCount: PostCountInterface
+  followerCount: FollowCountInterface
+  followingCount: FollowCountInterface
+  followCheck: CheckFollowingInterface
+  create_follow: FollowInterface
+  delete_follow: DeleteInterface
 }
 
 export default function ProfileIndex({
@@ -27,11 +38,45 @@ export default function ProfileIndex({
   profileUserData,
   isLoggedUserProfile,
   postCount,
-  postList
+  likeCount,
+  postList,
+  followerCount,
+  followingCount,
+  followCheck,
+
 }: ProfileIndexProps) {
+  const [skip, setSkip] = useState(10)
+  const [posts, setPosts] = useState(postList)
+  const [follows, setFollows] = useState(followerCount.count)
+  const [isFollowed, setIsFollowed] = useState(followCheck.is_following)
+
+  function onClickLoadMore(event) {
+    PostService.list(profileUserData.username, skip)
+      .then((res) => {
+        if (res.length < 10) {
+          event.target.hidden = true
+        }
+        setSkip(skip + 10)
+        setPosts(posts.concat(res))
+      })
+  }
+  function createFollow() {
+    if (!authenticationData.isAuthenticated) {
+      return Router.push(urls.auth.login)
+    } FollowService.create(authenticationData.token, profileUserData.username).then(() => {
+      setFollows(follows + 1)
+      setIsFollowed(true)
+    }).catch(console.log)
+  }
+  function deleteFollow() {
+    FollowService.delete(authenticationData.token, profileUserData.username).then(() => {
+      setFollows(follows - 1)
+      setIsFollowed(false)
+    }).catch(console.log)
+  }
 
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title={`${authenticationData.user.username} profile`}>
       <div className="container">
         <div className="row">
 
@@ -48,20 +93,26 @@ export default function ProfileIndex({
               </div>
 
               <div className="ms-auto my-auto">
-                {isLoggedUserProfile && (
-                  <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                {isLoggedUserProfile &&
+                  <button className="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
                     <i className="bi bi-pencil-fill"></i>
-                  </button>
-                )}
+                  </button>}
+
+                {!isLoggedUserProfile && <div className="ms-auto my-auto">
+                  {!isFollowed ?
+                    <button className="btn btn-sm btn-primary" onClick={createFollow}>Follow</button>
+                    :
+                    <button className="btn btn-sm btn-outline-secondary" onClick={deleteFollow}>Unfollow</button>
+                  }
+                </div>}
               </div>
-
-
             </div>
+
             <div className="d-flex justify-content-evenly">
-              <span><span className="fw-bold">{postCount.count}</span> posts</span>
-              <span><span className="fw-bold">{0}</span> likes</span>
-              <span><span className="fw-bold">{0}</span> followers</span>
-              <span><span className="fw-bold">{0}</span> following</span>
+              <span><span className="fw-bold">{postCount.posts}</span> posts</span>
+              <span><span className="fw-bold">{likeCount.likes}</span> likes</span>
+              <span><span className="fw-bold">{follows}</span> followers</span>
+              <span><span className="fw-bold">{followingCount.count}</span> following</span>
             </div>
           </div>
 
@@ -80,12 +131,20 @@ export default function ProfileIndex({
         </div>
 
         <div className="row">
-          {/* posts */}
           <Title>Posts</Title>
 
-          {postList.map((e, i) => {
+          {/* Info 'no post' */}
+          {posts.length === 0 && (
+            <div className="d-flex justify-content-center">
+              <i className="fs-2 bi bi-emoji-frown mx-2"></i>
+              <span className="fs-2">No post yet</span>
+            </div>
+          )}
+
+          {/* posts */}
+          {posts.map((e, i) => {
             return (<div className="col-12 col-md-4 mb-4" key={i}>
-              <PostIcon
+              <PostCard
                 id_post={e.id_post}
                 title={e.title}
                 descriprion={e.description}
@@ -94,8 +153,14 @@ export default function ProfileIndex({
               />
             </div>)
           })}
-        </div>
 
+          {/* button loadmore */}
+          {posts.length >= 10 && (
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-outline-secondary" onClick={onClickLoadMore}>Load more</button>
+            </div>
+          )}
+        </div>
 
         {/* update user profile modal */}
         <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
@@ -128,9 +193,24 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get base page data
   const postCount = await PostService.count(profileUserData.username)
+  const likeCount = await LikeService.countUserLikes(profileUserData.username)
   const postList = await PostService.list(profileUserData.username)
+  const followerCount = await FollowService.countFollowers(profileUserData.username)
+  const followingCount = await FollowService.countFollowings(profileUserData.username)
+  const followCheck = await FollowService.check(authenticationData.user.username, profileUserData.username)
 
   return {
-    props: { authenticationData, categoryData, profileUserData, isLoggedUserProfile, postCount, postList },
+    props: {
+      authenticationData,
+      categoryData,
+      profileUserData,
+      isLoggedUserProfile,
+      postCount,
+      likeCount,
+      postList,
+      followerCount,
+      followingCount,
+      followCheck
+    }
   }
 }

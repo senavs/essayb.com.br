@@ -1,10 +1,10 @@
-import styles from '../../styles/components/post/PostIcon.module.css'
+import styles from '../../styles/components/post/PostCard.module.css'
 import { formatDate } from '../../libs/utils/form'
 import { urls as backendUrl } from '../../../config/backend'
 import { urls as frontendUrl } from '../../../config/frontend'
 
 
-interface PostIconProps {
+interface PostCardProps {
   id_post: number
   category: string
   title: string
@@ -12,7 +12,7 @@ interface PostIconProps {
   created_at: string
 }
 
-export default function PostIcon({ id_post, category, title, descriprion, created_at }: PostIconProps) {
+export default function PostCard({ id_post, category, title, descriprion, created_at }: PostCardProps) {
   return (
     <a className={styles.button} href={frontendUrl.post.search.replace('{id_post}', id_post.toString())}>
       <div className={`${styles.body} container border rounded shadow-sm p-2`}>
