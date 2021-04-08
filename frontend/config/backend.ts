@@ -39,6 +39,9 @@ export const urls = {
   },
   follow: {
     count_follower: `${protocol}://${backendDomain}/v1/follows/follower/{username}/count`,
-    count_following: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`
+    count_following: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`,
+    check: `${protocol}://${backendDomain}/v1/follows/{username_follower}/{username_following}/check`,
+    create: `${protocol}://${backendDomain}/v1/follows/create`, 
+    delete: `${protocol}://${backendDomain}/v1/follows/delete`
   }
 }

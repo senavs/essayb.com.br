@@ -6,13 +6,15 @@ import Avatar from "../../components/profile/Avatar"
 import LinkIcon from "../../components/profile/LinkIcon"
 import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
 import PostService, { PostCountInterface, PostListInterface } from "../../libs/services/post"
-import FollowService, { FollowCountInterface } from "../../libs/services/follow"
+import FollowService, { FollowCountInterface, CheckFollowingInterface, CreateInterface, DeleteInterface } from "../../libs/services/follow"
 import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
 import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
 import PostCard from "src/components/post/PostCard"
 import LikeService, { LikeCountInterface } from "src/libs/services/like"
 import { useState } from "react"
+import Router from "next/router"
+import { urls } from "config/frontend"
 
 
 interface ProfileIndexProps {
@@ -23,8 +25,12 @@ interface ProfileIndexProps {
   postList: PostListInterface
   likeCount: LikeCountInterface
   postCount: PostCountInterface
-  followerCount: FollowCountInterface,
+  followerCount: FollowCountInterface
   followingCount: FollowCountInterface
+  check_follow: CheckFollowingInterface
+  create_follow: CreateInterface
+  delete_follow: DeleteInterface
+
 }
 
 export default function ProfileIndex({
@@ -36,10 +42,15 @@ export default function ProfileIndex({
   likeCount,
   postList,
   followerCount,
-  followingCount
+  followingCount,
+  check_follow,
+
 }: ProfileIndexProps) {
   const [skip, setSkip] = useState(10)
   const [posts, setPosts] = useState(postList)
+
+  const [isFollower, setFollow] = useState(followerCount.count)
+  const [isFollowed, setIsFollowed] = useState(check_follow.is_following)
 
   function onClickLoadMore(event) {
     PostService.list(profileUserData.username, skip)
@@ -50,8 +61,26 @@ export default function ProfileIndex({
         setSkip(skip + 10)
         setPosts(posts.concat(res))
       })
-
   }
+  
+  // function create follow
+  function createFollow(){
+    if (!authenticationData.isAuthenticated) {
+      return Router.push(urls.auth.login)
+    } FollowService.create(authenticationData.token, profileUserData.username).then(() => {
+      setFollow(isFollower + 1)
+      setIsFollowed(true) 
+    }).catch(console.log)
+  }
+
+  // function delete follow
+  function deleteFollow(){
+    FollowService.delete(authenticationData.token, profileUserData.username).then(() => {
+      setFollow(isFollower -1)
+      setIsFollowed(false) 
+    }).catch(console.log)
+  }
+
 
   return (
     <Layout authenticationData={authenticationData} categoryData={categoryData} title={`${authenticationData.user.username} profile`}>
@@ -70,20 +99,30 @@ export default function ProfileIndex({
                 {profileUserData.username} {profileUserData.is_premium && <i title="Premium" className="fs-3 bi bi-gem"></i>}
               </div>
 
+
+        
               <div className="ms-auto my-auto">
-                {isLoggedUserProfile && (
+                {isLoggedUserProfile &&
                   <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
                     <i className="bi bi-pencil-fill"></i>
-                  </button>
-                )}
+                  </button>  }  
+                                 
+                {isLoggedUserProfile === false && <div className="ms-auto my-auto"> 
+                    
+                {!isFollowed ?
+                <button className="btn btn-primary" onClick={createFollow}> FOLLOW</button>
+                :
+                <button className="btn btn-outline-secondary" onClick={deleteFollow} >UNFOLLOW</button>
+                }
+
+                </div>  }
               </div>
-
-
             </div>
+
             <div className="d-flex justify-content-evenly">
               <span><span className="fw-bold">{postCount.posts}</span> posts</span>
               <span><span className="fw-bold">{likeCount.likes}</span> likes</span>
-              <span><span className="fw-bold">{followerCount.count}</span> followers</span>
+              <span><span className="fw-bold">{isFollower}</span> followers</span>
               <span><span className="fw-bold">{followingCount.count}</span> following</span>
             </div>
           </div>
@@ -169,6 +208,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const postList = await PostService.list(profileUserData.username)
   const followerCount = await FollowService.count_follower(profileUserData.username)
   const followingCount = await FollowService.count_following(profileUserData.username)
+  const check_follow = await FollowService.check(authenticationData.user.username, profileUserData.username)
 
   return {
     props: {
@@ -180,7 +220,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       likeCount,
       postList,
       followerCount,
-      followingCount
+      followingCount,
+      check_follow
     }
   }
 }
