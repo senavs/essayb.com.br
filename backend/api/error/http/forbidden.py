@@ -14,3 +14,7 @@ class UserUpdatingOthersPostException(ForbiddenException):
 
 class UserDeletingOthersPostException(ForbiddenException):
     detail: str = 'User can only delete it\'s own post'
+
+
+class UserDeletingOthersPostCommentException(ForbiddenException):
+    detail: str = 'User can only delete it\'s own post comment'

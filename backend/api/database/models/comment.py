@@ -22,7 +22,8 @@ class Comment(DeclarativeBase, BaseModel):
         comment = super().to_dict(exclude=exclude, **include)
 
         if comment.get('id_user'):
-            comment.update(user=self.user.to_dict(exclude=exclude.extend(['PROFILE_IMAGE']), **include))
+            exclude = ['PROFILE_IMAGE'] if not exclude else ['PROFILE_IMAGE', *exclude]
+            comment.update(user=self.user.to_dict(exclude=exclude), **include)
             comment.pop('id_user')
 
         return comment

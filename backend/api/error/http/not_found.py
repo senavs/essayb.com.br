@@ -20,6 +20,10 @@ class PostNotFoundException(NotFoundException):
     detail: str = 'Post not found'
 
 
+class PostCommentNotFoundException(NotFoundException):
+    detail: str = 'Post comment not found'
+
+
 class LikeNotFoundException(NotFoundException):
     detail: str = 'Like not found'
 
