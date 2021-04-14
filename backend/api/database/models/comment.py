@@ -1,4 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, UniqueConstraint
+from typing import Optional
+
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import backref, relationship
 
 from .. import DeclarativeBase
@@ -13,9 +15,14 @@ class Comment(DeclarativeBase, BaseModel):
     ID_POST = Column(Integer, ForeignKey('POST.ID_POST', ondelete='CASCADE'), nullable=False, unique=False)
     COMMENT = Column(String(256), nullable=False, unique=False)
 
-    __table_args__ = (
-        UniqueConstraint('ID_USER', 'ID_POST'),
-    )
-
     post = relationship('Post', backref=backref('comments', cascade='all,delete', lazy='dynamic'))
     user = relationship('User', backref=backref('comments', cascade='all,delete', lazy='dynamic'))
+
+    def to_dict(self, *, exclude: Optional[list] = None, **include) -> dict:
+        comment = super().to_dict(exclude=exclude, **include)
+
+        if comment.get('id_user'):
+            comment.update(user=self.user.to_dict(exclude=exclude.extend(['PROFILE_IMAGE']), **include))
+            comment.pop('id_user')
+
+        return comment
