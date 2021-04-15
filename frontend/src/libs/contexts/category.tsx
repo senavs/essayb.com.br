@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from "react";
 
-import { CategoryData } from '../serverSide/category';
+import { CategoryData } from '../props/category';
 
 
 interface CategoryProviderProps {

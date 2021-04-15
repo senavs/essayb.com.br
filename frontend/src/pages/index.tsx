@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
 
 import Layout from "../components/common/Layout";
-import { AuthenticationData, getAuthenticationData } from "../libs/serverSide/auth";
-import { CategoryData, getCategoryData } from "../libs/serverSide/category";
+import { AuthenticationData, getAuthenticationData } from "../libs/props/auth";
+import { CategoryData, getCategoryData } from "../libs/props/category";
 
 
 interface IndexProps {

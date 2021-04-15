@@ -4,10 +4,10 @@ import Post from "src/components/post/Post"
 import Title from "../../../components/common/Title"
 import Layout from "../../../components/common/Layout"
 import LikeService, { LikeCheckInterface, LikeCountInterface } from "../../../libs/services/like"
-import { getAuthenticationData, AuthenticationData } from "../../../libs/serverSide/auth"
-import { CategoryData, getCategoryData } from "../../../libs/serverSide/category"
-import { getPostData, PostData } from "../../../libs/serverSide/post"
-import { ProfileUserData } from "../../../libs/serverSide/profile"
+import { getAuthenticationData, AuthenticationData } from "../../../libs/props/auth"
+import { CategoryData, getCategoryData } from "../../../libs/props/category"
+import { getPostData, PostData } from "../../../libs/props/post"
+import { ProfileUserData } from "../../../libs/props/profile"
 
 
 interface ProfileIndexProps {

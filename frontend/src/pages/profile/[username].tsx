@@ -11,9 +11,9 @@ import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileMo
 import LikeService, { LikeCountInterface } from "src/libs/services/like"
 import PostService, { PostCountInterface, PostListInterface } from "../../libs/services/post"
 import FollowService, { FollowCountInterface, CheckFollowingInterface, FollowInterface, DeleteInterface } from "../../libs/services/follow"
-import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
-import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
-import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
+import { getAuthenticationData, AuthenticationData } from "../../libs/props/auth"
+import { CategoryData, getCategoryData } from "../../libs/props/category"
+import { getProfileUserData, ProfileUserData } from "../../libs/props/profile"
 import { urls } from "../../../config/frontend"
 
 

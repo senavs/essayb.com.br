@@ -1,4 +1,4 @@
-import CategoryService, { CategoryInterface } from "../../libs/services/category";
+import CategoryService, { CategoryInterface } from "../services/category";
 
 
 export type CategoryData = Array<CategoryInterface>
