@@ -8,6 +8,8 @@ import { getAuthenticationData, AuthenticationData } from "../../../libs/props/a
 import { CategoryData, getCategoryData } from "../../../libs/props/category"
 import { getPostData, PostData } from "../../../libs/props/post"
 import { ProfileUserData } from "../../../libs/props/profile"
+import CommentService, { CommentListInterface } from "src/libs/services/comment"
+import Comment from "src/components/post/Comment"
 
 
 interface ProfileIndexProps {
@@ -18,6 +20,7 @@ interface ProfileIndexProps {
   isLoggedUserPost: boolean
   hasLiked: LikeCheckInterface
   likesCount: LikeCountInterface
+  commentList: CommentListInterface
 }
 
 export default function ProfileIndex({
@@ -27,7 +30,8 @@ export default function ProfileIndex({
   userPostData,
   isLoggedUserPost,
   hasLiked,
-  likesCount
+  likesCount,
+  commentList
 }: ProfileIndexProps) {
 
   return (
@@ -58,6 +62,19 @@ export default function ProfileIndex({
             {/* comments */}
             <div>
               <Title>Comments</Title>
+
+              {commentList.map(element => {
+                return (
+                  <div className="mb-2" key={element.id_comment} >
+                    <Comment
+                      id_coment={element.id_comment}
+                      username={element.user.username}
+                      postUserUsername={userPostData.username}
+                      comment={element.comment}
+                    />
+                  </div>
+                )
+              })}
             </div>
 
           </div>
@@ -81,16 +98,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       notFound: true
     }
   }
-  
+
+  // check if user has liked the post
   let hasLiked = { has_liked: false }
   if (authenticationData.isAuthenticated) {
     hasLiked = await LikeService.check(authenticationData.user.username, postData.id_post)
   }
-  
+
+  // get comment data
+  const commentList = await CommentService.list(parseInt(id_post.toString()))
+
   const { user: userPostData } = postData
-  const isLoggedUserPost = userPostData.username === authenticationData.user.username  
+  const isLoggedUserPost = userPostData.username === authenticationData.user.username
   const likesCount = await LikeService.countPostLikes(postData.id_post)
-  
+
   return {
     props: {
       authenticationData,
@@ -99,7 +120,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       userPostData,
       isLoggedUserPost,
       hasLiked,
-      likesCount
+      likesCount,
+      commentList
     },
   }
 }
