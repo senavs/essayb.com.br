@@ -1,16 +1,17 @@
 import { GetServerSideProps } from "next"
+import { useState } from "react"
 
-import Post from "src/components/post/Post"
-import Title from "../../../components/common/Title"
 import Layout from "../../../components/common/Layout"
-import LikeService, { LikeCheckInterface, LikeCountInterface } from "../../../libs/services/like"
-import { getAuthenticationData, AuthenticationData } from "../../../libs/props/auth"
+import Title from "../../../components/common/Title"
+import Comment from "../../../components/post/Comment"
+import CommentInput from "../../../components/post/CommentInput"
+import Post from "../../../components/post/Post"
+import { AuthenticationData, getAuthenticationData } from "../../../libs/props/auth"
 import { CategoryData, getCategoryData } from "../../../libs/props/category"
 import { getPostData, PostData } from "../../../libs/props/post"
 import { ProfileUserData } from "../../../libs/props/profile"
-import CommentService, { CommentListInterface } from "src/libs/services/comment"
-import Comment from "src/components/post/Comment"
-import CommentInput from "src/components/post/CommentInput"
+import CommentService, { CommentListInterface } from "../../../libs/services/comment"
+import LikeService, { LikeCheckInterface, LikeCountInterface } from "../../../libs/services/like"
 
 
 interface ProfileIndexProps {
@@ -34,6 +35,19 @@ export default function ProfileIndex({
   likesCount,
   commentList
 }: ProfileIndexProps) {
+  const [comments, setComments] = useState(commentList)
+  const [skip, setSkip] = useState(10)
+
+  function onClickLoadMore(event) {
+    CommentService.list(postData.id_post, skip)
+      .then((res) => {
+        if (res.length < 10) {
+          event.target.hidden = true
+        }
+        setSkip(skip + 10)
+        setComments(comments.concat(res))
+      })
+  }
 
   return (
     <Layout authenticationData={authenticationData} categoryData={categoryData} title={postData.title}>
@@ -71,7 +85,7 @@ export default function ProfileIndex({
               </div>
 
 
-              {commentList.map(element => {
+              {comments.map(element => {
                 return (
                   <div className="mb-2" key={element.id_comment} >
                     <Comment
@@ -83,6 +97,12 @@ export default function ProfileIndex({
                   </div>
                 )
               })}
+
+              {comments.length >= 10 && (
+                <div className="d-flex justify-content-center">
+                  <button className="btn btn-outline-secondary" onClick={onClickLoadMore} >Load more</button>
+                </div>
+              )}
             </div>
 
           </div>
