@@ -45,7 +45,15 @@ export default function CommentInput({ id_post }: CommentInpuProps) {
         </div>
         <div className="col">
           <form className={`${styles.form}`}>
-            <textarea className="w-100" maxLength={256} rows={rows} onChange={onChange} value={comment} wrap="off" />
+            <textarea
+              className="w-100"
+              maxLength={256}
+              rows={rows}
+              onChange={onChange}
+              value={comment}
+              wrap="off"
+              placeholder="Leave your comment here"
+            />
           </form>
         </div>
 
