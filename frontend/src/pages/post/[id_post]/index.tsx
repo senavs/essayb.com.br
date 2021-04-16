@@ -10,6 +10,7 @@ import { getPostData, PostData } from "../../../libs/props/post"
 import { ProfileUserData } from "../../../libs/props/profile"
 import CommentService, { CommentListInterface } from "src/libs/services/comment"
 import Comment from "src/components/post/Comment"
+import CommentInput from "src/components/post/CommentInput"
 
 
 interface ProfileIndexProps {
@@ -62,6 +63,13 @@ export default function ProfileIndex({
             {/* comments */}
             <div>
               <Title>Comments</Title>
+
+              <div className="row mb-4">
+                {authenticationData.isAuthenticated && (
+                  <CommentInput id_post={postData.id_post} />
+                )}
+              </div>
+
 
               {commentList.map(element => {
                 return (
