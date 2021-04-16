@@ -65,7 +65,7 @@ def profile_image(username: str, *, connection: DatabaseClient = None) -> bytes:
     return image
 
 
-def create(username: str, password: str, profile_image: bytes = None, *, connection: DatabaseClient = None) -> dict:
+def create(username: str, password: str, *, connection: DatabaseClient = None) -> dict:
     """Create new user"""
 
     logger.info(f'Creating user profile with username @{username}')
@@ -73,7 +73,7 @@ def create(username: str, password: str, profile_image: bytes = None, *, connect
         if search_by_username(username, connection=connection, raise_404=False, use_dict=False):
             raise bad_request.UsernameAlreadyExistsException()
 
-        user = User(USERNAME=username, PASSWORD=password, PROFILE_IMAGE=profile_image)
+        user = User(USERNAME=username, PASSWORD=password)
         user.insert(connection)
         user = user.to_dict()
 

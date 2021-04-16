@@ -32,13 +32,6 @@ ListResponse = list[User]
 class CreateRequest(BaseSettings):
     username: str = Field(max_length=32)
     password: str = Field(min_length=3)
-    profile_image: Optional[bytes] = None
-
-    @validator('profile_image', pre=True)
-    def to_image(cls, value: str) -> Union[bytes, None]:
-        if not value:
-            return None
-        return from_base64(value)
 
 
 class CreateResponse(User):
