@@ -47,7 +47,7 @@ export default function Comment({ id_coment, username, postUserUsername, comment
 
       <div className="row">
         <div className="col">
-          <div className="p-2">
+          <div className="p-2" style={{ textAlign: 'justify', whiteSpace: 'pre-wrap' }}>
             {comment}
           </div>
         </div>
