@@ -51,14 +51,14 @@ def search(id_post: int, *, connection: DatabaseClient = None, raise_404: bool =
     return post
 
 
-def query(q: str, *, connection: DatabaseClient = None) -> list[dict]:
+def query(q: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
     """Search query into posts"""
 
     logger.info(f'Searching for posts with query {q!r}')
     with DatabaseClient(connection=connection) as connection:
         if not (q := q.strip()):
             return []
-        results = connection.query(Post).filter(ilike_query(q, Post, 'TITLE'))
+        results = connection.query(Post).filter(ilike_query(q, Post, 'TITLE')).offset(skip).limit(limit)
         results = [result.to_dict() for result in results]
 
     logger.info(f'Searched for posts with query {q!r} successfully')

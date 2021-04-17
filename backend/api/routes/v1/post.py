@@ -12,8 +12,8 @@ router = APIRouter(prefix='/posts', tags=['Post'])
 
 
 @router.get('/query', summary='Search posts by query', status_code=200, response_model=ListResponse)
-def _query(q: str):
-    return query(q)
+def _query(q: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    return query(q, skip=skip, limit=limit)
 
 
 @router.get('/{id_post}/search', summary='Search post by ID', status_code=200, response_model=SearchResponse)
