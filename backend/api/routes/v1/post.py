@@ -4,11 +4,16 @@ from fastapi import APIRouter, Depends, Query
 from starlette.responses import StreamingResponse
 
 from ...modules.v1.authentication import AuthModel, login_required
-from ...modules.v1.post import count_by_id, count_by_username, create, delete, list_, search, thumbnail, update
+from ...modules.v1.post import count_by_id, count_by_username, create, delete, list_, search, thumbnail, update, query
 from .models.post import (CountResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse, SearchResponse, UpdateRequest,
                           UpdateResponse)
 
 router = APIRouter(prefix='/posts', tags=['Post'])
+
+
+@router.get('/query', summary='Search posts by query', status_code=200, response_model=ListResponse)
+def _query(q: str):
+    return query(q)
 
 
 @router.get('/{id_post}/search', summary='Search post by ID', status_code=200, response_model=SearchResponse)
