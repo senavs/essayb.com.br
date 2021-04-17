@@ -13,12 +13,18 @@ export interface UserInterface {
   message?: string
 }
 
+export type UserListInterface = Array<UserInterface>
+
 export default class UserService {
+  static async query(q: string): Promise<UserListInterface> {
+    return await callAPI(urls.user.query + `?q=${q}`, 'GET')
+  }
+
   static async search(id_user_or_username: string | number): Promise<UserInterface> {
     return await callAPI(urls.user.search.replace('{id_user_or_username}', id_user_or_username.toString()), 'GET')
   }
 
-  static async list(): Promise<Array<UserInterface>> {
+  static async list(): Promise<UserListInterface> {
     return await callAPI(urls.user.list, 'GET')
   }
 

@@ -29,6 +29,9 @@ export default function Navbar() {
                 <i className="bi bi-journal-text"></i>
               </a>
             )}
+            <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.common.search} >
+              <i className="bi bi-search"></i>
+            </a>
           </div>
           <div className='col-4 d-flex justify-content-center align-self-end'>
             <a href={urls.common.index}>

@@ -12,6 +12,7 @@ export const urls = {
     validate: `${protocol}://${backendDomain}/v1/auth/validate`,
   },
   user: {
+    query: `${protocol}://${backendDomain}/v1/users/query`,
     search: `${protocol}://${backendDomain}/v1/users/{id_user_or_username}/search`,
     list: `${protocol}://${backendDomain}/v1/users/list`,
     profile_image: `${protocol}://${backendDomain}/v1/users/{username}/profile_image`,
@@ -22,6 +23,7 @@ export const urls = {
     list: `${protocol}://${backendDomain}/v1/categories/list`
   },
   post: {
+    query: `${protocol}://${backendDomain}/v1/posts/query`,
     search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
     list: `${protocol}://${backendDomain}/v1/posts/{username}/list`,
     count: `${protocol}://${backendDomain}/v1/posts/{id_user_or_username}/count`,
