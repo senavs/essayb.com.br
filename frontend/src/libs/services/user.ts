@@ -16,8 +16,8 @@ export interface UserInterface {
 export type UserListInterface = Array<UserInterface>
 
 export default class UserService {
-  static async query(q: string): Promise<UserListInterface> {
-    return await callAPI(urls.user.query + `?q=${q}`, 'GET')
+  static async query(q: string, skip: number = 0): Promise<UserListInterface> {
+    return await callAPI(urls.user.query + `?q=${q}&skip=${skip}`, 'GET')
   }
 
   static async search(id_user_or_username: string | number): Promise<UserInterface> {

@@ -8,14 +8,14 @@ from ...error.http import bad_request, not_found
 from .utils import ilike_query
 
 
-def query(q: str, *, connection: DatabaseClient = None) -> list[dict]:
+def query(q: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
     """Search query into users"""
 
     logger.info(f'Searching for users with query {q!r}')
     with DatabaseClient(connection=connection) as connection:
         if not (q := q.strip()):
             return []
-        results = connection.query(User).filter(ilike_query(q, User, 'USERNAME'))
+        results = connection.query(User).filter(ilike_query(q, User, 'USERNAME')).offset(skip).limit(limit)
         results = [result.to_dict() for result in results]
 
     logger.info(f'Searched for users with query {q!r} successfully')

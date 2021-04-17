@@ -1,6 +1,6 @@
 from io import BytesIO
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette.responses import StreamingResponse
 
 from ...modules.v1.authentication import AuthModel, login_required
@@ -11,8 +11,8 @@ router = APIRouter(prefix='/users', tags=['User'])
 
 
 @router.get('/query', summary='Search users by query', status_code=200, response_model=ListResponse)
-def _query(q: str):
-    return query(q)
+def _query(q: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    return query(q, skip=skip, limit=limit)
 
 
 @router.get('/{id_user_or_username}/search', summary='Search user by ID or username', status_code=200, response_model=SearchResponse)
