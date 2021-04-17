@@ -3,11 +3,11 @@ from typing import Union
 from loguru import logger
 from sqlalchemy import desc
 
-from .utils import ilike_query
 from ...database import Post
 from ...database.client import DatabaseClient
-from ...error.http import forbidden, not_found, bad_request
+from ...error.http import forbidden, not_found
 from ...modules.v1 import category, user
+from .utils import ilike_query
 
 
 def count_by_id(id_user: int, *, connection: DatabaseClient = None) -> int:
@@ -57,7 +57,7 @@ def query(q: str, *, connection: DatabaseClient = None) -> list[dict]:
     logger.info(f'Searching for posts with query {q!r}')
     with DatabaseClient(connection=connection) as connection:
         if not (q := q.strip()):
-            raise bad_request.InvalidPostSearchQueryException()
+            return []
         results = connection.query(Post).filter(ilike_query(q, Post, 'TITLE'))
         results = [result.to_dict() for result in results]
 

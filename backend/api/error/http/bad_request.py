@@ -46,11 +46,3 @@ class FollowAlreadyExistsException(BadRequestException):
 
 class LikeAlreadyExistsException(BadRequestException):
     detail: str = 'Like already exists'
-
-
-class InvalidPostSearchQueryException(BadRequestException):
-    detail: str = 'Invalid Post search query. Cannot be empty'
-
-
-class InvalidUserSearchQueryException(BadRequestException):
-    detail: str = 'Invalid User search query. Cannot be empty'

@@ -2,10 +2,10 @@ from typing import Union
 
 from loguru import logger
 
-from .utils import ilike_query
 from ...database import User
 from ...database.client import DatabaseClient
 from ...error.http import bad_request, not_found
+from .utils import ilike_query
 
 
 def query(q: str, *, connection: DatabaseClient = None) -> list[dict]:
@@ -14,7 +14,7 @@ def query(q: str, *, connection: DatabaseClient = None) -> list[dict]:
     logger.info(f'Searching for users with query {q!r}')
     with DatabaseClient(connection=connection) as connection:
         if not (q := q.strip()):
-            raise bad_request.InvalidUserSearchQueryException()
+            return []
         results = connection.query(User).filter(ilike_query(q, User, 'USERNAME'))
         results = [result.to_dict() for result in results]
 
