@@ -5,6 +5,21 @@ from loguru import logger
 from ...database import User
 from ...database.client import DatabaseClient
 from ...error.http import bad_request, not_found
+from .utils import ilike_query
+
+
+def query(q: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
+    """Search query into users"""
+
+    logger.info(f'Searching for users with query {q!r}')
+    with DatabaseClient(connection=connection) as connection:
+        if not (q := q.strip()):
+            return []
+        results = connection.query(User).filter(ilike_query(q, User, 'USERNAME')).offset(skip).limit(limit)
+        results = [result.to_dict() for result in results]
+
+    logger.info(f'Searched for users with query {q!r} successfully')
+    return results
 
 
 def search_by_id(id_user: int, *, connection: DatabaseClient = None, raise_404: bool = True, use_dict: bool = True) -> Union[dict, User, None]:
@@ -65,7 +80,7 @@ def profile_image(username: str, *, connection: DatabaseClient = None) -> bytes:
     return image
 
 
-def create(username: str, password: str, profile_image: bytes = None, *, connection: DatabaseClient = None) -> dict:
+def create(username: str, password: str, *, connection: DatabaseClient = None) -> dict:
     """Create new user"""
 
     logger.info(f'Creating user profile with username @{username}')
@@ -73,7 +88,7 @@ def create(username: str, password: str, profile_image: bytes = None, *, connect
         if search_by_username(username, connection=connection, raise_404=False, use_dict=False):
             raise bad_request.UsernameAlreadyExistsException()
 
-        user = User(USERNAME=username, PASSWORD=password, PROFILE_IMAGE=profile_image)
+        user = User(USERNAME=username, PASSWORD=password)
         user.insert(connection)
         user = user.to_dict()
 

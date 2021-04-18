@@ -2,6 +2,9 @@ from base64 import b64decode, b64encode
 from binascii import Error as Base64Error
 from typing import Union
 
+from sqlalchemy import and_
+
+from ...database import DeclarativeBase
 from ...error.http import bad_request
 
 
@@ -20,3 +23,9 @@ def from_base64(value: Union[bytes, str]) -> bytes:
         return b64decode(value)
     except Base64Error:
         raise bad_request.InvalidBase64Exception()
+
+
+def ilike_query(query: str, model: DeclarativeBase, attr: str) -> and_:
+    """Ilike query constructor"""
+
+    return and_(getattr(model, attr).ilike(f'%{q}%') for q in query.strip().split())

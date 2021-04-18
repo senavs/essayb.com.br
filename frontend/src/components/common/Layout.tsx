@@ -5,8 +5,8 @@ import Navbar from './Navbar'
 import Body from './Body';
 import Footer from './Footer';
 import { AuthProvider } from '../../libs/contexts/auth';
-import { AuthenticationData } from '../../libs/serverSide/auth';
-import { CategoryData } from '../../libs/serverSide/category';
+import { AuthenticationData } from '../../libs/props/auth';
+import { CategoryData } from '../../libs/props/category';
 import { CategoryProvider } from 'src/libs/contexts/category';
 
 

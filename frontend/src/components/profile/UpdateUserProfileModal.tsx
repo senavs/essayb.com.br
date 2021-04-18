@@ -4,8 +4,8 @@ import { useState } from "react"
 import Avatar from "./Avatar"
 import UserService from "../../libs/services/user"
 import styles from '../../styles/components/profile/UpdateUserProfileModal.module.css'
-import { AuthenticationData } from "../../libs/serverSide/auth"
-import { ProfileUserData } from "../../libs/serverSide/profile"
+import { AuthenticationData } from "../../libs/props/auth"
+import { ProfileUserData } from "../../libs/props/profile"
 import { fileToBase64, validateImage, validatePasswords } from "../../libs/utils/form"
 
 
