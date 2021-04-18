@@ -17,7 +17,7 @@ export default function Avatar({ username, width, useProfileUrl = true, base64 }
     <a href={useProfileUrl ? profileUrl : undefined}>
       <img
         className="rounded-circle border border-2 border-secondary"
-        style={{ 'width': width }}
+        style={{ 'width': width, 'height': width }}
         src={base64 ? `data:image/png;base64,${base64}` : profileImageUrl}
         alt="avatar"
       />
