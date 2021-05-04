@@ -7,6 +7,7 @@ from ...database import Post
 from ...database.client import DatabaseClient
 from ...error.http import forbidden, not_found
 from ...modules.v1 import category, user
+from .utils import ilike_query
 
 
 def count_by_id(id_user: int, *, connection: DatabaseClient = None) -> int:
@@ -48,6 +49,20 @@ def search(id_post: int, *, connection: DatabaseClient = None, raise_404: bool =
 
     logger.info(f'Searched for post with id number {id_post} successfully')
     return post
+
+
+def query(q: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
+    """Search query into posts"""
+
+    logger.info(f'Searching for posts with query {q!r}')
+    with DatabaseClient(connection=connection) as connection:
+        if not (q := q.strip()):
+            return []
+        results = connection.query(Post).filter(ilike_query(q, Post, 'TITLE')).offset(skip).limit(limit)
+        results = [result.to_dict() for result in results]
+
+    logger.info(f'Searched for posts with query {q!r} successfully')
+    return results
 
 
 def list_(username: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:

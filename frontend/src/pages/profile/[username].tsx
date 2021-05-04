@@ -8,12 +8,11 @@ import Avatar from "../../components/profile/Avatar"
 import LinkIcon from "../../components/profile/LinkIcon"
 import PostCard from "../../components/post/PostCard"
 import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
-import LikeService, { LikeCountInterface } from "src/libs/services/like"
-import PostService, { PostCountInterface, PostListInterface } from "../../libs/services/post"
-import FollowService, { FollowCountInterface, CheckFollowingInterface, FollowInterface, DeleteInterface } from "../../libs/services/follow"
-import { getAuthenticationData, AuthenticationData } from "../../libs/serverSide/auth"
-import { CategoryData, getCategoryData } from "../../libs/serverSide/category"
-import { getProfileUserData, ProfileUserData } from "../../libs/serverSide/profile"
+import PostService, { PostListInterface } from "../../libs/services/post"
+import FollowService from "../../libs/services/follow"
+import { getAuthenticationData, AuthenticationData } from "../../libs/props/auth"
+import { CategoryData, getCategoryData } from "../../libs/props/category"
+import { getProfileUserData, ProfileUserData } from "../../libs/props/profile"
 import { urls } from "../../../config/frontend"
 
 
@@ -21,15 +20,9 @@ interface ProfileIndexProps {
   authenticationData: AuthenticationData
   categoryData: CategoryData
   profileUserData: ProfileUserData
-  isLoggedUserProfile: boolean
   postList: PostListInterface
-  likeCount: LikeCountInterface
-  postCount: PostCountInterface
-  followerCount: FollowCountInterface
-  followingCount: FollowCountInterface
-  followCheck: CheckFollowingInterface
-  create_follow: FollowInterface
-  delete_follow: DeleteInterface
+  isLoggedUserProfile: boolean
+  followCheck: boolean
 }
 
 export default function ProfileIndex({
@@ -37,18 +30,14 @@ export default function ProfileIndex({
   categoryData,
   profileUserData,
   isLoggedUserProfile,
-  postCount,
-  likeCount,
   postList,
-  followerCount,
-  followingCount,
   followCheck,
 
 }: ProfileIndexProps) {
   const [skip, setSkip] = useState(10)
   const [posts, setPosts] = useState(postList)
-  const [follows, setFollows] = useState(followerCount.count)
-  const [isFollowed, setIsFollowed] = useState(followCheck.is_following)
+  const [follows, setFollows] = useState(profileUserData.followerCount)
+  const [isFollowed, setIsFollowed] = useState(followCheck)
 
   function onClickLoadMore(event) {
     PostService.list(profileUserData.username, skip)
@@ -76,7 +65,7 @@ export default function ProfileIndex({
   }
 
   return (
-    <Layout authenticationData={authenticationData} categoryData={categoryData} title={`${authenticationData.user.username} profile`}>
+    <Layout authenticationData={authenticationData} categoryData={categoryData} title={`${profileUserData.username} profile`}>
       <div className="container">
         <div className="row">
 
@@ -109,10 +98,10 @@ export default function ProfileIndex({
             </div>
 
             <div className="d-flex justify-content-evenly">
-              <span><span className="fw-bold">{postCount.posts}</span> posts</span>
-              <span><span className="fw-bold">{likeCount.likes}</span> likes</span>
+              <span><span className="fw-bold">{profileUserData.postCount}</span> posts</span>
+              <span><span className="fw-bold">{profileUserData.likeCount}</span> likes</span>
               <span><span className="fw-bold">{follows}</span> followers</span>
-              <span><span className="fw-bold">{followingCount.count}</span> following</span>
+              <span><span className="fw-bold">{profileUserData.followingCount}</span> following</span>
             </div>
           </div>
 
@@ -179,25 +168,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const isLoggedUserProfile = authenticationData.user.username === username.toString()
 
   // get user information (user page or user loged in)
-  let profileUserData = authenticationData.user
-  if (!isLoggedUserProfile) {
-    profileUserData = await getProfileUserData(username.toString())
-  }
+  const profileUserData = await getProfileUserData(username.toString())
 
   // no user was found
-  if (Object.keys(profileUserData).length === 0) {
+  if (!profileUserData.wasFound) {
     return {
       notFound: true
     }
   }
 
-  // get base page data
-  const postCount = await PostService.count(profileUserData.username)
-  const likeCount = await LikeService.countUserLikes(profileUserData.username)
+  // get post list
   const postList = await PostService.list(profileUserData.username)
-  const followerCount = await FollowService.countFollowers(profileUserData.username)
-  const followingCount = await FollowService.countFollowings(profileUserData.username)
-  const followCheck = await FollowService.check(authenticationData.user.username, profileUserData.username)
+
+  // check if logged user is following the user page
+  let followCheck = false
+  if (authenticationData.isAuthenticated) {
+    followCheck = await (await FollowService.check(authenticationData.user.username, profileUserData.username)).is_following
+  }
 
   return {
     props: {
@@ -205,11 +192,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       categoryData,
       profileUserData,
       isLoggedUserProfile,
-      postCount,
-      likeCount,
       postList,
-      followerCount,
-      followingCount,
       followCheck
     }
   }

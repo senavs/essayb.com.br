@@ -3,7 +3,7 @@ import CookieClient from 'js-cookie'
 import Router from 'next/router';
 import { createContext, ReactNode } from "react";
 
-import { AuthenticationData } from "../../libs/serverSide/auth"
+import { AuthenticationData } from "../props/auth"
 import AuthService, { AuthInterface } from "../services/auth";
 
 

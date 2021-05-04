@@ -1,13 +1,17 @@
 import { GetServerSideProps } from "next"
+import { useState } from "react"
 
-import Post from "src/components/post/Post"
-import Title from "../../../components/common/Title"
 import Layout from "../../../components/common/Layout"
+import Title from "../../../components/common/Title"
+import Comment from "../../../components/post/Comment"
+import CommentInput from "../../../components/post/CommentInput"
+import Post from "../../../components/post/Post"
+import { AuthenticationData, getAuthenticationData } from "../../../libs/props/auth"
+import { CategoryData, getCategoryData } from "../../../libs/props/category"
+import { getPostData, PostData } from "../../../libs/props/post"
+import { ProfileUserData } from "../../../libs/props/profile"
+import CommentService, { CommentListInterface } from "../../../libs/services/comment"
 import LikeService, { LikeCheckInterface, LikeCountInterface } from "../../../libs/services/like"
-import { getAuthenticationData, AuthenticationData } from "../../../libs/serverSide/auth"
-import { CategoryData, getCategoryData } from "../../../libs/serverSide/category"
-import { getPostData, PostData } from "../../../libs/serverSide/post"
-import { ProfileUserData } from "../../../libs/serverSide/profile"
 
 
 interface ProfileIndexProps {
@@ -18,6 +22,7 @@ interface ProfileIndexProps {
   isLoggedUserPost: boolean
   hasLiked: LikeCheckInterface
   likesCount: LikeCountInterface
+  commentList: CommentListInterface
 }
 
 export default function ProfileIndex({
@@ -27,8 +32,22 @@ export default function ProfileIndex({
   userPostData,
   isLoggedUserPost,
   hasLiked,
-  likesCount
+  likesCount,
+  commentList
 }: ProfileIndexProps) {
+  const [comments, setComments] = useState(commentList)
+  const [skip, setSkip] = useState(10)
+
+  function onClickLoadMore(event) {
+    CommentService.list(postData.id_post, skip)
+      .then((res) => {
+        if (res.length < 10) {
+          event.target.hidden = true
+        }
+        setSkip(skip + 10)
+        setComments(comments.concat(res))
+      })
+  }
 
   return (
     <Layout authenticationData={authenticationData} categoryData={categoryData} title={postData.title}>
@@ -58,6 +77,32 @@ export default function ProfileIndex({
             {/* comments */}
             <div>
               <Title>Comments</Title>
+
+              <div className="row mb-4">
+                {authenticationData.isAuthenticated && (
+                  <CommentInput id_post={postData.id_post} />
+                )}
+              </div>
+
+
+              {comments.map(element => {
+                return (
+                  <div className="mb-2" key={element.id_comment} >
+                    <Comment
+                      id_coment={element.id_comment}
+                      username={element.user.username}
+                      postUserUsername={userPostData.username}
+                      comment={element.comment}
+                    />
+                  </div>
+                )
+              })}
+
+              {comments.length >= 10 && (
+                <div className="d-flex justify-content-center">
+                  <button className="btn btn-outline-secondary" onClick={onClickLoadMore} >Load more</button>
+                </div>
+              )}
             </div>
 
           </div>
@@ -81,16 +126,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       notFound: true
     }
   }
-  
+
+  // check if user has liked the post
   let hasLiked = { has_liked: false }
   if (authenticationData.isAuthenticated) {
     hasLiked = await LikeService.check(authenticationData.user.username, postData.id_post)
   }
-  
+
+  // get comment data
+  const commentList = await CommentService.list(parseInt(id_post.toString()))
+
   const { user: userPostData } = postData
-  const isLoggedUserPost = userPostData.username === authenticationData.user.username  
+  const isLoggedUserPost = userPostData.username === authenticationData.user.username
   const likesCount = await LikeService.countPostLikes(postData.id_post)
-  
+
   return {
     props: {
       authenticationData,
@@ -99,7 +148,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       userPostData,
       isLoggedUserPost,
       hasLiked,
-      likesCount
+      likesCount,
+      commentList
     },
   }
 }

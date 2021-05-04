@@ -12,6 +12,7 @@ export const urls = {
     validate: `${protocol}://${backendDomain}/v1/auth/validate`,
   },
   user: {
+    query: `${protocol}://${backendDomain}/v1/users/query`,
     search: `${protocol}://${backendDomain}/v1/users/{id_user_or_username}/search`,
     list: `${protocol}://${backendDomain}/v1/users/list`,
     profile_image: `${protocol}://${backendDomain}/v1/users/{username}/profile_image`,
@@ -22,6 +23,7 @@ export const urls = {
     list: `${protocol}://${backendDomain}/v1/categories/list`
   },
   post: {
+    query: `${protocol}://${backendDomain}/v1/posts/query`,
     search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
     list: `${protocol}://${backendDomain}/v1/posts/{username}/list`,
     count: `${protocol}://${backendDomain}/v1/posts/{id_user_or_username}/count`,
@@ -41,7 +43,12 @@ export const urls = {
     countFollowers: `${protocol}://${backendDomain}/v1/follows/follower/{username}/count`,
     countFollowings: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`,
     check: `${protocol}://${backendDomain}/v1/follows/{username_follower}/{username_following}/check`,
-    create: `${protocol}://${backendDomain}/v1/follows/create`, 
+    create: `${protocol}://${backendDomain}/v1/follows/create`,
     delete: `${protocol}://${backendDomain}/v1/follows/delete`
+  },
+  comment: {
+    list: `${protocol}://${backendDomain}/v1/comments/{id_post}/list`,
+    create: `${protocol}://${backendDomain}/v1/comments/create`,
+    delete: `${protocol}://${backendDomain}/v1/comments/delete`
   }
 }

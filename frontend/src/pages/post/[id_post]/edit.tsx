@@ -5,10 +5,10 @@ import { useState } from "react";
 import Layout from "../../../components/common/Layout";
 import Post from "../../../components/post/Post";
 import PostService from "../../../libs/services/post";
-import { ProfileUserData } from "../../../libs/serverSide/profile";
-import { AuthenticationData, getAuthenticationData } from "../../../libs/serverSide/auth";
-import { CategoryData, getCategoryData } from "../../../libs/serverSide/category";
-import { getPostData, PostData } from "../../../libs/serverSide/post";
+import { ProfileUserData } from "../../../libs/props/profile";
+import { AuthenticationData, getAuthenticationData } from "../../../libs/props/auth";
+import { CategoryData, getCategoryData } from "../../../libs/props/category";
+import { getPostData, PostData } from "../../../libs/props/post";
 import { urls } from "config/frontend";
 import { fileToBase64, validateImage } from "src/libs/utils/form";
 

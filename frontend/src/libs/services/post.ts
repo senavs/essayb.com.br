@@ -22,6 +22,10 @@ export interface PostCountInterface {
 }
 
 export default class PostService {
+  static async query(q: string, skip: number = 0): Promise<PostListInterface> {
+    return await callAPI(urls.post.query + `?q=${q}&skip=${skip}`, 'GET')
+  }
+
   static async list(username: string, skip: number = 0): Promise<PostListInterface> {
     return await callAPI(urls.post.list.replace('{username}', username) + `?skip=${skip}`, 'GET')
   }

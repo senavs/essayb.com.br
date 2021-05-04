@@ -3,8 +3,8 @@ import { GetServerSideProps } from 'next';
 import SignUpForm from '../../components/auth/SignUpForm';
 import Layout from '../../components/common/Layout';
 import Title from '../../components/common/Title';
-import { getAuthenticationData, AuthenticationData } from '../../libs/serverSide/auth';
-import { CategoryData, getCategoryData } from '../../libs/serverSide/category';
+import { getAuthenticationData, AuthenticationData } from '../../libs/props/auth';
+import { CategoryData, getCategoryData } from '../../libs/props/category';
 import { urls } from '../../../config/frontend';
 
 
