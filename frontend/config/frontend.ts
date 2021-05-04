@@ -20,6 +20,7 @@ export const urls = {
   },
   post: {
     search: '/post/{id_post}',
-    edit: '/post/{id_post}/edit'
-  }
+    edit: '/post/{id_post}/edit',
+    filter: '/category/{category}'
+  },
 }

@@ -30,6 +30,10 @@ export default class PostService {
     return await callAPI(urls.post.list.replace('{username}', username) + `?skip=${skip}`, 'GET')
   }
 
+  static async filter(id_category: number, skip: number = 0): Promise<PostListInterface> {
+    return await callAPI(urls.post.filter.replace('{id_category}', id_category.toString()) + `?skip=${skip}`, 'GET')
+  }
+
   static async search(id_post: number): Promise<PostInterface> {
     return await callAPI(urls.post.search.replace('{id_post}', id_post.toString()), 'GET')
   }

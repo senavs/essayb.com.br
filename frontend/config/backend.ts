@@ -26,6 +26,7 @@ export const urls = {
     query: `${protocol}://${backendDomain}/v1/posts/query`,
     search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
     list: `${protocol}://${backendDomain}/v1/posts/{username}/list`,
+    filter: `${protocol}://${backendDomain}/v1/posts/{id_category}/filter`,
     count: `${protocol}://${backendDomain}/v1/posts/{id_user_or_username}/count`,
     thumbnail: `${protocol}://${backendDomain}/v1/posts/{id_post}/thumbnail`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
