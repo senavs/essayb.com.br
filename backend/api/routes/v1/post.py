@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from starlette.responses import StreamingResponse
 
 from ...modules.v1.authentication import AuthModel, login_required
-from ...modules.v1.post import count_by_id, count_by_username, create, delete, list_, query, search, thumbnail, update
+from ...modules.v1.post import count_by_id, count_by_username, create, delete, list_, query, search, thumbnail, update, filter_by_id_category
 from .models.post import (CountResponse, CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListResponse, SearchResponse, UpdateRequest,
                           UpdateResponse)
 
@@ -24,6 +24,11 @@ def _search(id_post: int):
 @router.get('/{username}/list', summary='List all user posts', status_code=200, response_model=ListResponse)
 def _list(username: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
     return list_(username, skip=skip, limit=limit)
+
+
+@router.get('/{id_category}/filter', summary='List all posts by category', status_code=200, response_model=ListResponse)
+def _filter_by_id_category(id_category: int, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    return filter_by_id_category(id_category, skip=skip, limit=limit)
 
 
 @router.get('/{id_user_or_username}/count', summary='Count published posts', status_code=200, response_model=CountResponse)
