@@ -47,6 +47,14 @@ export default function Category({ authenticationData, categoryData, category, p
 
         <div className="row">
 
+          {/* Info 'no post' */}
+          {posts.length === 0 && (
+            <div className="d-flex justify-content-center">
+              <i className="fs-2 bi bi-emoji-frown mx-2"></i>
+              <span className="fs-2">No post yet</span>
+            </div>
+          )}
+
           {/* posts */}
           {posts.map((e, i) => {
             return (<div className="col-12 col-md-4 mb-4" key={i}>
