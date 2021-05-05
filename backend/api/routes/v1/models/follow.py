@@ -1,10 +1,12 @@
 from pydantic import BaseSettings
 
+from .user import User
+
 
 class Follow(BaseSettings):
     id_follow: int
-    id_user_follower: int
-    id_user_following: int
+    follower: User
+    following: User
 
 
 ListResponse = list[Follow]

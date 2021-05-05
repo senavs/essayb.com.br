@@ -10,6 +10,8 @@ import PostCard from "../../components/post/PostCard"
 import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
 import PostService, { PostListInterface } from "../../libs/services/post"
 import FollowService from "../../libs/services/follow"
+import ModalFollowing from "../../components/profile/ModalFollowing"
+import ModalFollower from "../../components/profile/ModalFollower"
 import { getAuthenticationData, AuthenticationData } from "../../libs/props/auth"
 import { CategoryData, getCategoryData } from "../../libs/props/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/props/profile"
@@ -100,8 +102,8 @@ export default function ProfileIndex({
             <div className="d-flex justify-content-evenly">
               <span><span className="fw-bold">{profileUserData.postCount}</span> posts</span>
               <span><span className="fw-bold">{profileUserData.likeCount}</span> likes</span>
-              <span><span className="fw-bold">{follows}</span> followers</span>
-              <span><span className="fw-bold">{profileUserData.followingCount}</span> following</span>
+              <span><span className="fw-bold">{follows}</span> <a data-bs-toggle="modal" style={{ cursor: "pointer" }} data-bs-target="#followers">  followers </a> </span>
+              <span><span className="fw-bold">{profileUserData.followingCount}</span> <a data-bs-toggle="modal" style={{ cursor: "pointer" }} data-bs-target="#followings"> followings </a></span>
             </div>
           </div>
 
@@ -153,6 +155,11 @@ export default function ProfileIndex({
 
         {/* update user profile modal */}
         <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
+
+        {/* modal follow*/}
+        <ModalFollower username={profileUserData.username} />
+        <ModalFollowing username={profileUserData.username} />
+
       </div>
     </Layout>
   )
