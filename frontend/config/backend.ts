@@ -6,6 +6,10 @@ const backendDomain = publicRuntimeConfig.BACKEND_DOMAIN
 const protocol = process.env.USE_HTTPS ? 'https' : 'http'
 
 export const urls = {
+  analytics: {
+    mostFollowedUsers: `${protocol}://${backendDomain}/v1/analytics/most_followed_users`,
+    mostLikedPosts: `${protocol}://${backendDomain}/v1/analytics/most_liked_posts`,
+  },
   auth: {
     login: `${protocol}://${backendDomain}/v1/auth/login`,
     logout: `${protocol}://${backendDomain}/v1/auth/logout`,
