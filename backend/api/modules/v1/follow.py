@@ -29,13 +29,13 @@ def search(id_user_follower: int,
     return follow
 
 
-def list_follower(username: str, *, connection: DatabaseClient = None) -> list[dict]:
+def list_follower(username: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
     """List all users that follow username"""
 
     logger.info(f'Listing all users that follow @{username}')
     with DatabaseClient(connection=connection) as connection:
         searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
-        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWING=searched_user.ID_USER).all()
+        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWING=searched_user.ID_USER).offset(skip).limit(limit).all()
 
         result = [row.to_dict() for row in followings]
 
@@ -43,13 +43,13 @@ def list_follower(username: str, *, connection: DatabaseClient = None) -> list[d
     return result
 
 
-def list_following(username: str, *, connection: DatabaseClient = None) -> list[dict]:
+def list_following(username: str, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
     """List all users that username is following"""
 
     logger.info(f'Listing all users that @{username} is followings')
     with DatabaseClient(connection=connection) as connection:
         searched_user = user.search_by_username(username, connection=connection, raise_404=True, use_dict=False)
-        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWER=searched_user.ID_USER).all()
+        followings = connection.query(Follow).filter_by(ID_USER_FOLLOWER=searched_user.ID_USER).offset(skip).limit(limit).all()
 
         result = [row.to_dict() for row in followings]
 

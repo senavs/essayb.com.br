@@ -8,30 +8,30 @@ interface FollowProfileModalProps {
 
 export default function ModalFollowing({username }: FollowProfileModalProps) {
 
-  const [skip, setSkip] = useState(10)
+  const [skip, setSkip] = useState(7)
   const [follow, setFollow] = useState([])
 
   useEffect(() => {
-    FollowService.list_following(username)
+    FollowService.list_following(username, 0, 7)
       .then(setFollow).catch()
   }, [])
 
 
 
   function onClickLoadMore(event) {
-    FollowService.list_following(username, skip)
+    FollowService.list_following(username, skip, 7)
       .then((res) => {
-        if (res.length < 10) {
+        if (res.length < 7) {
           event.target.hidden = true
         }
-        setSkip(skip + 10)
+        setSkip(skip + 7)
         setFollow(follow.concat(res))
       })
   }
 
 
   return (
-    <div className="modal fade" id="followings" tabIndex={-1} aria-labelledby="modalFollowingHeader" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div className="modal fade " id="followings" tabIndex={-1} aria-labelledby="modalFollowingHeader" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
       <div className="modal-dialog modal-dialog-scrollable">
         <div className="modal-content">
           <div className="modal-header">
@@ -57,7 +57,7 @@ export default function ModalFollowing({username }: FollowProfileModalProps) {
 
 
               {/* button loadmore */}
-              {follow.length >= 10 && (
+              {follow.length >= 7 && (
 
                 <div className="d-flex justify-content-center">
                   <button className="btn btn-outline-secondary" onClick={onClickLoadMore}>Load more</button>

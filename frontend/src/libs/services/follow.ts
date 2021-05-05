@@ -44,11 +44,11 @@ export default class FollowService {
     return await callAPI(urls.follow.delete, 'DELETE', { username_following }, { 'JWT-Token': `Bearer ${token}` })
   }
   
-  static async list_follower(username: string, skip: number = 0): Promise<FollowListInterface> {
-    return await callAPI(urls.follow.list_follower.replace('{username}', username) + `?skip=${skip}`, 'GET')
+  static async list_follower(username: string, skip: number = 0, limit: number = 10): Promise<FollowListInterface> {
+    return await callAPI(urls.follow.list_follower.replace('{username}', username) + `?skip=${skip}&limit=${limit}`, 'GET')
   }
 
-  static async list_following(username: string, skip: number = 0): Promise<FollowListInterface> {
-    return await callAPI(urls.follow.list_following.replace('{username}', username) + `?skip=${skip}`, 'GET')
+  static async list_following(username: string, skip: number = 0, limit: number = 10): Promise<FollowListInterface> {
+    return await callAPI(urls.follow.list_following.replace('{username}', username) + `?skip=${skip}&limit=${limit}`, 'GET')
   }
 }

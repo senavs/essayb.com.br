@@ -6,25 +6,25 @@ interface FollowProfileModalProps {
   username: string
 }
 
-export default function ModalFollower({username }: FollowProfileModalProps) {
+export default function ModalFollower({ username }: FollowProfileModalProps) {
 
-  const [skip, setSkip] = useState(10)
+  const [skip, setSkip] = useState(7)
   const [follow, setFollow] = useState([])
 
   useEffect(() => {
-    FollowService.list_follower(username)
+    FollowService.list_follower(username, 0, 7)
       .then(setFollow).catch()
   }, [])
 
 
 
   function onClickLoadMore(event) {
-    FollowService.list_follower(username, skip)
+    FollowService.list_follower(username, skip, 7)
       .then((res) => {
-        if (res.length < 10) {
+        if (res.length < 7) {
           event.target.hidden = true
         }
-        setSkip(skip + 10)
+        setSkip(skip + 7)
         setFollow(follow.concat(res))
       })
   }
@@ -57,7 +57,8 @@ export default function ModalFollower({username }: FollowProfileModalProps) {
 
 
               {/* button loadmore */}
-              {follow.length >= 10 && (
+              {follow.length >= 7 && (
+
                 <div className="d-flex justify-content-center">
                   <button className="btn btn-outline-secondary" onClick={onClickLoadMore}>Load more</button>
                 </div>
