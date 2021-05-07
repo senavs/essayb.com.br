@@ -49,11 +49,13 @@ export const urls = {
     countFollowings: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`,
     check: `${protocol}://${backendDomain}/v1/follows/{username_follower}/{username_following}/check`,
     create: `${protocol}://${backendDomain}/v1/follows/create`,
-    delete: `${protocol}://${backendDomain}/v1/follows/delete`
+    delete: `${protocol}://${backendDomain}/v1/follows/delete`,
+    list_follower: `${protocol}://${backendDomain}/v1/follows/follower/{username}/list`,
+    list_following: `${protocol}://${backendDomain}/v1/follows/following/{username}/list`
   },
   comment: {
     list: `${protocol}://${backendDomain}/v1/comments/{id_post}/list`,
     create: `${protocol}://${backendDomain}/v1/comments/create`,
-    delete: `${protocol}://${backendDomain}/v1/comments/delete`
+    delete: `${protocol}://${backendDomain}/v1/comments/delete`,
   }
 }

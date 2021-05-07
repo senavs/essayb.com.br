@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-from fastapi.params import Depends
+from fastapi import APIRouter, Depends, Query
 
 from ...modules.v1.authentication import AuthModel, login_required
 from ...modules.v1.follow import check, count_follower, count_following, create, delete, list_follower, list_following
@@ -9,13 +8,13 @@ router = APIRouter(prefix='/follows', tags=['Follow'])
 
 
 @router.get('/follower/{username}/list', summary='List all users that follows username', status_code=200, response_model=ListResponse)
-def _list_follower(username: str):
-    return list_follower(username)
+def _list_follower(username: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    return list_follower(username, skip=skip, limit=limit)
 
 
 @router.get('/following/{username}/list', summary='List all users that username is following', status_code=200, response_model=ListResponse)
-def _list_following(username: str):
-    return list_following(username)
+def _list_following(username: str, skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    return list_following(username, skip=skip, limit=limit)
 
 
 @router.get('/follower/{username}/count', summary="Follower counter", status_code=200, response_model=CountResponse)
