@@ -57,7 +57,7 @@ export default function Navbar() {
       <div className={`${styles.horizontalNavbar} nav border-bottom border-lg-secondary mb-3 d-flex flex-nowrap justify-content-between`}>
         {categoryData.map(element => {
           return (
-            <a key={element.id_category} className='p-2 mx-auto link-secondary' href={`/categories/${element.category.toLowerCase()}`}>
+            <a key={element.id_category} className='p-2 mx-auto link-secondary' href={urls.post.filter.replace('{category}', element.category)}>
               {element.category}
             </a>
           )

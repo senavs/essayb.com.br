@@ -6,6 +6,10 @@ const backendDomain = publicRuntimeConfig.BACKEND_DOMAIN
 const protocol = process.env.USE_HTTPS ? 'https' : 'http'
 
 export const urls = {
+  analytics: {
+    mostFollowedUsers: `${protocol}://${backendDomain}/v1/analytics/most_followed_users`,
+    mostLikedPosts: `${protocol}://${backendDomain}/v1/analytics/most_liked_posts`,
+  },
   auth: {
     login: `${protocol}://${backendDomain}/v1/auth/login`,
     logout: `${protocol}://${backendDomain}/v1/auth/logout`,
@@ -26,6 +30,7 @@ export const urls = {
     query: `${protocol}://${backendDomain}/v1/posts/query`,
     search: `${protocol}://${backendDomain}/v1/posts/{id_post}/search`,
     list: `${protocol}://${backendDomain}/v1/posts/{username}/list`,
+    filter: `${protocol}://${backendDomain}/v1/posts/{id_category}/filter`,
     count: `${protocol}://${backendDomain}/v1/posts/{id_user_or_username}/count`,
     thumbnail: `${protocol}://${backendDomain}/v1/posts/{id_post}/thumbnail`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
@@ -44,11 +49,13 @@ export const urls = {
     countFollowings: `${protocol}://${backendDomain}/v1/follows/following/{username}/count`,
     check: `${protocol}://${backendDomain}/v1/follows/{username_follower}/{username_following}/check`,
     create: `${protocol}://${backendDomain}/v1/follows/create`,
-    delete: `${protocol}://${backendDomain}/v1/follows/delete`
+    delete: `${protocol}://${backendDomain}/v1/follows/delete`,
+    list_follower: `${protocol}://${backendDomain}/v1/follows/follower/{username}/list`,
+    list_following: `${protocol}://${backendDomain}/v1/follows/following/{username}/list`
   },
   comment: {
     list: `${protocol}://${backendDomain}/v1/comments/{id_post}/list`,
     create: `${protocol}://${backendDomain}/v1/comments/create`,
-    delete: `${protocol}://${backendDomain}/v1/comments/delete`
+    delete: `${protocol}://${backendDomain}/v1/comments/delete`,
   }
 }
