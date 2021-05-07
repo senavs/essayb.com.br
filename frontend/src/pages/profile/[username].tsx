@@ -7,11 +7,10 @@ import Title from "../../components/common/Title"
 import Avatar from "../../components/profile/Avatar"
 import LinkIcon from "../../components/profile/LinkIcon"
 import PostCard from "../../components/post/PostCard"
+import ModalFollows from "../../components/profile/ModalFollows"
+import FollowService from "../../libs/services/follow"
 import UpdateUserProfileModal from "../../components/profile/UpdateUserProfileModal"
 import PostService, { PostListInterface } from "../../libs/services/post"
-import FollowService from "../../libs/services/follow"
-import ModalFollowing from "../../components/profile/ModalFollowing"
-import ModalFollower from "../../components/profile/ModalFollower"
 import { getAuthenticationData, AuthenticationData } from "../../libs/props/auth"
 import { CategoryData, getCategoryData } from "../../libs/props/category"
 import { getProfileUserData, ProfileUserData } from "../../libs/props/profile"
@@ -79,16 +78,20 @@ export default function ProfileIndex({
           {/* profile infos */}
           <div className="col-md-6">
             <div className="mb-3 p-2 border-bottom d-flex">
+
+              {/* username */}
               <div className="h1 d-inline-block">
                 {profileUserData.username} {profileUserData.is_premium && <i title="Premium" className="fs-3 bi bi-gem"></i>}
               </div>
 
               <div className="ms-auto my-auto">
+                {/* edit profile button */}
                 {isLoggedUserProfile &&
                   <button className="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
                     <i className="bi bi-pencil-fill"></i>
                   </button>}
 
+                {/* follow/unfollow button */}
                 {!isLoggedUserProfile && <div className="ms-auto my-auto">
                   {!isFollowed ?
                     <button className="btn btn-sm btn-primary" onClick={createFollow}>Follow</button>
@@ -99,11 +102,16 @@ export default function ProfileIndex({
               </div>
             </div>
 
+            {/* counters */}
             <div className="d-flex justify-content-evenly">
               <span><span className="fw-bold">{profileUserData.postCount}</span> posts</span>
               <span><span className="fw-bold">{profileUserData.likeCount}</span> likes</span>
-              <span><span className="fw-bold">{follows}</span> <a data-bs-toggle="modal" style={{ cursor: "pointer" }} data-bs-target="#followers">  followers </a> </span>
-              <span><span className="fw-bold">{profileUserData.followingCount}</span> <a data-bs-toggle="modal" style={{ cursor: "pointer" }} data-bs-target="#followings"> followings </a></span>
+              <a data-bs-toggle="modal" data-bs-target="#followers" style={{ cursor: "pointer" }} >
+                <span><span className="fw-bold">{follows}</span> followers</span>
+              </a>
+              <a data-bs-toggle="modal" data-bs-target="#followings" style={{ cursor: "pointer" }} >
+                <span><span className="fw-bold">{profileUserData.followingCount}</span> followings</span>
+              </a>
             </div>
           </div>
 
@@ -156,12 +164,12 @@ export default function ProfileIndex({
         {/* update user profile modal */}
         <UpdateUserProfileModal authenticationData={authenticationData} profileUserData={profileUserData} />
 
-        {/* modal follow*/}
-        <ModalFollower username={profileUserData.username} />
-        <ModalFollowing username={profileUserData.username} />
+        {/* modal followers and followings*/}
+        <ModalFollows username={profileUserData.username} modalType="followers" />
+        <ModalFollows username={profileUserData.username} modalType="followings" />
 
       </div>
-    </Layout>
+    </Layout >
   )
 }
 

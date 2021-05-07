@@ -1,11 +1,12 @@
 import { urls } from "../../../config/backend";
 import { callAPI } from "./base";
+import { UserInterface } from "./user";
 
 
 export interface FollowInterface {
   id_follow: number
-  id_user_follower: number
-  id_user_following: number
+  follower: UserInterface
+  following: UserInterface
 }
 
 export type FollowListInterface = Array<FollowInterface>

@@ -1,6 +1,3 @@
-from fastapi import APIRouter
-from fastapi.params import Depends
-
 from fastapi import APIRouter, Depends, Query
 
 from ...modules.v1.authentication import AuthModel, login_required

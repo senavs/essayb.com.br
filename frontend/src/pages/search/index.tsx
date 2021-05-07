@@ -82,8 +82,7 @@ export default function Search({ authenticationData, categoryData }: SearchProps
           {users.map((user, index) => {
             return (
               <div className="col-md-4 col-12" key={index}>
-                <UserCard
-                  username={user.username} />
+                <UserCard username={user.username} />
               </div>
             )
           })}
