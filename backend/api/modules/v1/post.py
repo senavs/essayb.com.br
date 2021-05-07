@@ -79,6 +79,22 @@ def list_(username: str, *, connection: DatabaseClient = None, skip: int = 0, li
     return posts
 
 
+def filter_by_id_category(id_category: int, *, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
+    """List all user post"""
+
+    logger.info(f'Listing posts with category id number {id_category}')
+    with DatabaseClient(connection=connection) as connection:
+        posts = connection.query(Post).filter_by(ID_CATEGORY=id_category) \
+            .order_by(Post.CREATED_AT.desc()) \
+            .offset(skip) \
+            .limit(limit)
+
+        posts = [post.to_dict() for post in posts]
+
+    logger.info(f'Listed posts with category id number {id_category} successfully')
+    return posts
+
+
 def thumbnail(id_post: int, *, connection: DatabaseClient = None) -> bytes:
     """Get post thumbnail"""
 
