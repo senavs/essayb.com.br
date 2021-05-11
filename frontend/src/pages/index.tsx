@@ -6,6 +6,7 @@ import AnalyticsService, { MostFollowedUsersInterface } from "src/libs/services/
 import Layout from "../components/common/Layout";
 import { AuthenticationData, getAuthenticationData } from "../libs/props/auth";
 import { CategoryData, getCategoryData } from "../libs/props/category";
+import Carousel from "src/components/homepage/Carousel";
 
 
 interface IndexProps {
@@ -24,6 +25,7 @@ export default function Index({ authenticationData, categoryData, topUsers }: In
 
           <div className="col-12">
             {/* carousel */}
+            <Carousel/>
           </div>
 
           <div className="col-6">
