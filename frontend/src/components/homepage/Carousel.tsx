@@ -15,19 +15,19 @@ export default function Carousel(){
         </div>
                 {/* First label */}
         <div className="carousel-inner">
-            <div className="carousel-item active" data-bs-interval="9000">
+            <div className="carousel-item active" data-bs-interval="10000">
             <img src="https://media.treasy.com.br/media/2016/07/Cen%C3%A1rios-Econ%C3%B4micos-e-Financeiros.jpg" className="img-fluid" alt="Post image"></img>
             <div className="carousel-caption d-none d-md-block">
-                <h2>Article title</h2>
-                <p className="fst-italic">Article subtitle</p>
+                <h2>SUBSCRIBE NOW</h2>
+                <p className="fst-italic">You can have many benefits!</p>
             </div>
             </div>
                 {/* Second label */}
             <div className="carousel-item" data-bs-interval="8000">
             <img src="https://media.treasy.com.br/media/2016/07/Cen%C3%A1rios-Econ%C3%B4micos-e-Financeiros.jpg" className="d-block w-100" alt="Post image"></img>
             <div className="carousel-caption d-none d-md-block">
-                <h2 >Article title</h2>
-                <p className="fst-italic">Article subtitle</p>
+                <h2 >What's your favorite topic?</h2>
+                <p className="fst-italic">Enjoy countless articles by categories</p>
             </div>
             </div>
                     {/* Third label */}
