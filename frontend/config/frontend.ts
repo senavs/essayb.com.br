@@ -20,8 +20,12 @@ const urls = {
   },
   common: {
     index: '/',
-    subscribe: '/subscribe',
     search: '/search'
+  },
+  payment: {
+    subscribe: '/payment/subscribe',
+    success: '/payment/success',
+    error: '/payment/error',
   },
   post: {
     search: '/post/{id_post}',
