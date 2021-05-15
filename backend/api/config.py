@@ -34,8 +34,20 @@ class PathSetting(BaseSettings):
         return os.path.join(self.PROJECT_PATH, *args)
 
 
+class PaymentSetting(BaseSettings):
+    STRIPE_SECRET_KEY: str
+    STRIPE_PRICE_ID: str
+
+
+class DomainSettings(BaseSettings):
+    BACKEND_DOMAIN: str
+    FRONTEND_DOMAIN: str
+
+
 auth = AuthSetting()
 database = DatabaseSettings()
 deploy = DeploySettings()
 logging = LoggingSetting()
 path = PathSetting()
+payment = PaymentSetting()
+domain = DomainSettings()

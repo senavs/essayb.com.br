@@ -2,7 +2,7 @@ from typing import Union
 
 from loguru import logger
 
-from ...database import Follow, User
+from ...database import Follow
 from ...database.client import DatabaseClient
 from ...error.http import bad_request, not_found
 from . import user

@@ -20,7 +20,8 @@ run_requirements = [
     'psycopg2==2.8.6',
     'SQLAlchemy==1.3.23',
     'uvicorn==0.13.3',
-    'uvloop==0.15.0'
+    'uvloop==0.15.0',
+    'stripe==2.56.0',
 ]
 
 with io.open('api/__init__.py', encoding='utf8') as version_f:
