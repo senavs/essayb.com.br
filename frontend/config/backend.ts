@@ -1,5 +1,6 @@
 import getConfig from "next/config"
 
+
 const { publicRuntimeConfig } = getConfig()
 
 const backendDomain = publicRuntimeConfig.BACKEND_DOMAIN
@@ -57,5 +58,8 @@ export const urls = {
     list: `${protocol}://${backendDomain}/v1/comments/{id_post}/list`,
     create: `${protocol}://${backendDomain}/v1/comments/create`,
     delete: `${protocol}://${backendDomain}/v1/comments/delete`,
+  },
+  payment: {
+    checkout: `${protocol}://${backendDomain}/v1/payments/checkout`,
   }
 }
