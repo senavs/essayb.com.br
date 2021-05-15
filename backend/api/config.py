@@ -42,6 +42,7 @@ class PaymentSetting(BaseSettings):
 class DomainSettings(BaseSettings):
     BACKEND_DOMAIN: str
     FRONTEND_DOMAIN: str
+    USE_HTTPS: bool = False
 
 
 auth = AuthSetting()

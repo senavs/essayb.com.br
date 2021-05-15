@@ -12,6 +12,8 @@ def checkout(id_user: int, *, connection: DatabaseClient = None) -> str:
     """Create payment session"""
 
     logger.info(f'Creating payment session')
+    url = f'http{"s" if config.domain.USE_HTTPS else ""}://{config.domain.FRONTEND_DOMAIN}'
+    
     session = stripe.checkout.Session().create(
         payment_method_types=['card'],
         line_items=[{
@@ -19,8 +21,8 @@ def checkout(id_user: int, *, connection: DatabaseClient = None) -> str:
             'quantity': 1
         }],
         mode='payment',
-        success_url=f'http://{config.domain.FRONTEND_DOMAIN}/payment/success',
-        cancel_url=f'http://{config.domain.FRONTEND_DOMAIN}/payment/error'
+        success_url=f'{url}/payment/success',
+        cancel_url=f'{url}/payment/error'
     )
     logger.info(f'Counted payment session successfully')
 
