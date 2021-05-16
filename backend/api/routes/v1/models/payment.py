@@ -10,3 +10,7 @@ class Payment(BaseSettings):
 
 class CheckoutResponse(BaseSettings):
     session_id: str
+
+
+class AcceptResponse(BaseSettings):
+    accept: bool

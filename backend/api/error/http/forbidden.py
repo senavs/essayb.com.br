@@ -18,3 +18,7 @@ class UserDeletingOthersPostException(ForbiddenException):
 
 class UserDeletingOthersPostCommentException(ForbiddenException):
     detail: str = 'User can only delete it\'s own post comment'
+
+
+class WrongPaymentSessionException(ForbiddenException):
+    detail: str = 'Wrong payment session'
