@@ -5,6 +5,10 @@ export interface PaymentCheckoutInterface {
   session_id: string
 }
 
+export interface PaymentAcceptInterface {
+  accept: boolean
+}
+
 
 export default class PaymentService {
 
@@ -12,5 +16,8 @@ export default class PaymentService {
     return await callAPI(urls.payment.checkout, 'POST', null, { 'JWT-Token': `Bearer ${token}` })
   }
 
-
+  static async accept(id_session: string, token: string): Promise<PaymentAcceptInterface> {
+    const url = urls.payment.accept + `?id_session=${id_session}`
+    return await callAPI(url, 'POST', null, { 'JWT-Token': `Bearer ${token}` })
+  }
 }

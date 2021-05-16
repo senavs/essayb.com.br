@@ -61,5 +61,6 @@ export const urls = {
   },
   payment: {
     checkout: `${protocol}://${backendDomain}/v1/payments/checkout`,
+    accept: `${protocol}://${backendDomain}/v1/payments/accept`,
   }
 }

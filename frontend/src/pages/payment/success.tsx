@@ -1,4 +1,6 @@
+import { urls } from "config/frontend";
 import { GetServerSideProps } from "next";
+import PaymentService from "src/libs/services/payment";
 
 import Layout from "../../components/common/Layout";
 import { AuthenticationData, getAuthenticationData } from "../../libs/props/auth";
@@ -36,6 +38,24 @@ export default function Success({ authenticationData, categoryData }: SuccessPro
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const authenticationData = await getAuthenticationData(ctx)
   const categoryData = await getCategoryData()
+
+  const { session_id } = ctx.query
+  console.log(session_id)
+
+  let accept = false
+  try {
+    accept = (await PaymentService.accept(session_id.toString(), authenticationData.token)).accept
+  } catch { }
+  if (!accept) {
+    console.log('aa')
+    return {
+      props: { authenticationData, categoryData },
+      redirect: {
+        permanent: false,
+        destination: urls.payment.error
+      }
+    }
+  }
 
   return {
     props: { authenticationData, categoryData }
