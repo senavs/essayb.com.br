@@ -1,6 +1,6 @@
 import { urls } from "config/frontend";
 import { GetServerSideProps } from "next";
-import PaymentService from "src/libs/services/payment";
+import { getPaymentAceptData } from "src/libs/props/payment";
 
 import Layout from "../../components/common/Layout";
 import { AuthenticationData, getAuthenticationData } from "../../libs/props/auth";
@@ -40,14 +40,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const categoryData = await getCategoryData()
 
   const { session_id } = ctx.query
-  console.log(session_id)
 
-  let accept = false
-  try {
-    accept = (await PaymentService.accept(session_id.toString(), authenticationData.token)).accept
-  } catch { }
-  if (!accept) {
-    console.log('aa')
+  const paymentAceptData = await getPaymentAceptData(session_id.toString(), authenticationData.token)
+  if (!paymentAceptData.accept) {
     return {
       props: { authenticationData, categoryData },
       redirect: {
@@ -59,6 +54,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: { authenticationData, categoryData }
-
   }
 }
