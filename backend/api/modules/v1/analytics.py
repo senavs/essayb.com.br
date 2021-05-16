@@ -2,7 +2,7 @@ from loguru import logger
 from sqlalchemy import func, text
 
 from ...database.client import DatabaseClient
-from ...database.models import Follow, User, Post, Like
+from ...database.models import Follow, Like, Post, User
 
 
 def most_followed_users(top: int, *, connection: DatabaseClient = None) -> list[dict]:

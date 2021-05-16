@@ -1,10 +1,10 @@
 import stripe
-from stripe.error import InvalidRequestError
 from loguru import logger
+from stripe.error import InvalidRequestError
 
+from ... import config
 from ...database import Payment
 from ...database.client import DatabaseClient
-from ... import config
 from ...error.http import forbidden
 
 stripe.api_key = config.payment.STRIPE_SECRET_KEY
@@ -13,7 +13,7 @@ stripe.api_key = config.payment.STRIPE_SECRET_KEY
 def checkout(id_user: int, *, connection: DatabaseClient = None) -> str:
     """Create payment session"""
 
-    logger.info(f'Creating payment session')
+    logger.info('Creating payment session')
     url = f'http{"s" if config.domain.USE_HTTPS else ""}://{config.domain.FRONTEND_DOMAIN}'
 
     session = stripe.checkout.Session().create(
@@ -26,9 +26,9 @@ def checkout(id_user: int, *, connection: DatabaseClient = None) -> str:
         success_url=f'{url}/payment/success' + '?session_id={CHECKOUT_SESSION_ID}',
         cancel_url=f'{url}/payment/error'
     )
-    logger.info(f'Counted payment session successfully')
+    logger.info('Counted payment session successfully')
 
-    logger.info(f'Saving session id into payment table')
+    logger.info('Saving session id into payment table')
     with DatabaseClient(connection=connection) as conn:
         if payment := conn.query(Payment).filter_by(ID_USER=id_user).first():
             payment.update(conn, ID_SESSION=session.id)
@@ -36,7 +36,7 @@ def checkout(id_user: int, *, connection: DatabaseClient = None) -> str:
             payment = Payment(ID_USER=id_user, ID_SESSION=session.id)
             payment.insert(conn)
 
-    logger.info(f'Saved session id into payment table successfully')
+    logger.info('Saved session id into payment table successfully')
     return session.id
 
 
@@ -50,7 +50,7 @@ def accept(id_user: int, id_session: str, *, connection: DatabaseClient = None) 
         raise forbidden.WrongPaymentSessionException()
 
     if session.to_dict().get('payment_status', 'unpaid').lower() != 'paid':
-        logger.warning(f'Payment with status not \'paid\'')
+        logger.warning('Payment with status not \'paid\'')
         return False
 
     with DatabaseClient(connection=connection) as conn:

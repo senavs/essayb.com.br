@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from .models.payment import CheckoutResponse, AcceptResponse
 from ...modules.v1.authentication import AuthModel, login_required
-from ...modules.v1.payment import checkout, accept
+from ...modules.v1.payment import accept, checkout
+from .models.payment import AcceptResponse, CheckoutResponse
 
 router = APIRouter(prefix='/payments', tags=['Payment'])
 
