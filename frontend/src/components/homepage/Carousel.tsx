@@ -1,4 +1,4 @@
-import styles from '../../styles/home/Carousel.module.css'
+import styles from '../../styles/components/homepage/CardPost.module.css'
 
 export default function Carousel(){
 
