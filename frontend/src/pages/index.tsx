@@ -6,6 +6,8 @@ import AnalyticsService, { MostFollowedUsersInterface } from "src/libs/services/
 import Layout from "../components/common/Layout";
 import { AuthenticationData, getAuthenticationData } from "../libs/props/auth";
 import { CategoryData, getCategoryData } from "../libs/props/category";
+import Carousel from "src/components/homepage/Carousel";
+import CardPost from "src/components/homepage/CardPost";
 
 
 interface IndexProps {
@@ -20,17 +22,23 @@ export default function Index({ authenticationData, categoryData, topUsers }: In
       <div className="container">
 
         {/* main baners  */}
-        <div className="row">
+        <div className="row mb-5">
 
           <div className="col-12">
             {/* carousel */}
+            <Carousel/>
           </div>
+        </div>
 
-          <div className="col-6">
+        <div className="row mb-5">
+          
+          <div className="col-md-6 col-12">
             {/* post 1 */}
+            <CardPost/>
           </div>
-          <div className="col-6">
+          <div className="col-md-6 col-12">
             {/* post 2 */}
+            <CardPost/>
           </div>
 
         </div>
