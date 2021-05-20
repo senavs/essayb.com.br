@@ -20,7 +20,7 @@ export default function Navbar() {
         <div className='row'>
           <div className='col-4 d-flex justify-content-start align-self-end'>
             {!authenticationData.user.is_premium && (
-              <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.common.subscribe} >
+              <a className='btn btn-sm btn-outline-secondary ms-2' href={urls.payment.subscribe} >
                 <i className="bi bi-gem"></i>
               </a>
             )}

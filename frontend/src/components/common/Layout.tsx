@@ -14,7 +14,7 @@ interface LayoutProps {
   children: ReactNode,
   authenticationData: AuthenticationData,
   categoryData: CategoryData,
-  title?: string
+  title?: string,
 }
 
 export default function Layout({ children, authenticationData, categoryData, title }: LayoutProps) {

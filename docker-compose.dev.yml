@@ -21,9 +21,15 @@ services:
       dockerfile: Dockerfile.dev
     restart: unless-stopped
     environment:
+      # Use your IPv4 address to BACKEND_DOMAIN and FRONTEND_DOMAIN envs
+      # Use port 8080 if gateway is activated, otherwise use 8080 to FRONTEND_DOMAIN and 8888 to BACKEND_DOMAIN
+      BACKEND_DOMAIN: 172.17.0.1:8080
+      FRONTEND_DOMAIN: 172.17.0.1:8080
       DEPLOY_DEBUG: "true"
       DEPLOY_RELOAD: "true"
       DATABASE_URI: 'postgres://root:toor@database/ESSAYB_DEV'
+      STRIPE_SECRET_KEY: "sk_test_51IrNBMAZfbuxebHePd59vJFQjsyo2bqZU7wI28R2Ai8NKqMrRLChd3HbMmCxvxqB96RCkOpo48UytOYkdZZ5j5zl00Bwa5HeCF"
+      STRIPE_PRICE_ID: "price_1IrNDNAZfbuxebHeTNWS0YWP"
     volumes:
       - ./backend/api:/code/api
       - ./backend/logs:/code/logs
@@ -43,6 +49,7 @@ services:
       # Use port 8080 if gateway is activated, otherwise use 8080 to FRONTEND_DOMAIN and 8888 to BACKEND_DOMAIN
       BACKEND_DOMAIN: 172.17.0.1:8080
       FRONTEND_DOMAIN: 172.17.0.1:8080
+      STRIPE_PUBLIC_KEY: "pk_test_51IrNBMAZfbuxebHedj4AUGBC0kyo2xcc2l5DpvCAYaSSXRZZWQGs7btmaLyAJ6WQMmjXxW0k1FP7oZyqMaQuf0Gw00vm9T4sfj"
     volumes:
       - ./frontend/next.config.js:/code/next.config.js
       - ./frontend/src:/code/src/
