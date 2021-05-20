@@ -1,5 +1,5 @@
-from .user import User
 from .post import Post
+from .user import User
 
 ListMostFollowedUsers = list[User]
 

@@ -1,4 +1,9 @@
-export const urls = {
+import getConfig from "next/config"
+
+
+const { publicRuntimeConfig } = getConfig()
+
+const urls = {
   github: {
     Jmarcelo98: 'https://github.com/Jmarcelo98',
     Mat123Reis: 'https://github.com/Mat123Reis',
@@ -15,8 +20,12 @@ export const urls = {
   },
   common: {
     index: '/',
-    subscribe: '/subscribe',
     search: '/search'
+  },
+  payment: {
+    subscribe: '/payment/subscribe',
+    success: '/payment/success',
+    error: '/payment/error',
   },
   post: {
     search: '/post/{id_post}',
@@ -24,3 +33,9 @@ export const urls = {
     filter: '/category/{category}'
   },
 }
+
+const payments = {
+  publickKey: publicRuntimeConfig.STRIPE_PUBLIC_KEY
+}
+
+export { urls, payments }
