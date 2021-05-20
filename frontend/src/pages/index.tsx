@@ -28,7 +28,10 @@ export default function Index({ authenticationData, categoryData, topUsers }: In
             {/* carousel */}
             <Carousel/>
           </div>
+        </div>
 
+        <div className="row">
+          
           <div className="col-6">
             {/* post 1 */}
             <CardPost/>
