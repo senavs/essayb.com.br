@@ -1,3 +1,4 @@
+import { urls } from 'config/frontend';
 import styles from '../../styles/components/homepage/CardPost.module.css'
 
 export default function Carousel() {
@@ -27,7 +28,7 @@ export default function Carousel() {
 
                 {/* Second label */}
                 <div className="carousel-item" data-bs-interval="8000">
-                  <a href="/subscribe" target="_blank"><img src="./static/subscribe.gif" className="d-block w-100" width="100" alt="Post image"></img></a>
+                  <a href={urls.payment.subscribe} target="_blank"><img src="./static/subscribe.gif" className="d-block w-100" width="100" alt="Post image"></img></a>
                   <div className="carousel-caption d-none d-md-block"></div>
                 </div>
 
