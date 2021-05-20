@@ -41,6 +41,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { session_id } = ctx.query
 
+  if (!session_id || !authenticationData.isAuthenticated) {
+    return {
+      props: { authenticationData, categoryData },
+      redirect: {
+        permanent: false,
+        destination: urls.payment.error
+      }
+    }
+  }
   const paymentAceptData = await getPaymentAceptData(session_id.toString(), authenticationData.token)
   if (!paymentAceptData.accept) {
     return {
