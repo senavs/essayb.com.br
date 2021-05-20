@@ -22,7 +22,7 @@ export default function Index({ authenticationData, categoryData, topUsers }: In
       <div className="container">
 
         {/* main baners  */}
-        <div className="row">
+        <div className="row mb-5">
 
           <div className="col-12">
             {/* carousel */}
@@ -30,13 +30,13 @@ export default function Index({ authenticationData, categoryData, topUsers }: In
           </div>
         </div>
 
-        <div className="row">
+        <div className="row mb-5">
           
-          <div className="col-6">
+          <div className="col-md-6 col-12">
             {/* post 1 */}
             <CardPost/>
           </div>
-          <div className="col-6">
+          <div className="col-md-6 col-12">
             {/* post 2 */}
             <CardPost/>
           </div>
