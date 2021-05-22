@@ -6,6 +6,7 @@ import { fileToBase64, validateImage } from "../../libs/utils/form"
 import { AuthContext } from "../../libs/contexts/auth"
 import { CategoryContext } from "../../libs/contexts/category"
 import { urls } from "../../../config/frontend"
+import { PremiumContext } from "src/libs/contexts/premium"
 
 
 interface FormValue {
@@ -27,7 +28,8 @@ function initialFormValue(): FormValue {
 export default function CreateNewPostModal() {
   const { authenticationData } = useContext(AuthContext)
   const { categoryData } = useContext(CategoryContext)
-  
+  const { premiumData } = useContext(PremiumContext)
+
   const [formValue, setFormValue] = useState(initialFormValue())
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -65,6 +67,41 @@ export default function CreateNewPostModal() {
   }
   function onCancel() {
     setFormValue(initialFormValue())
+  }
+
+  if (!premiumData.is_allow_create_post) {
+    return (
+      <div className="modal fade" id="createPostModal" tabIndex={-1} aria-labelledby="createPostModalHeader" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="createPostModalHeader">Create new post</h5>
+            </div>
+
+            <div className="modal-body">
+              <div className="d-flex justify-content-center my-3">
+                <i className="fs-2 bi bi-emoji-frown mx-2"></i>
+                <span className="fs-2">Posts limit exceeded!</span>
+              </div>
+
+              <div className="d-flex justify-content-center my-3">
+                <span className="fs-4 text-center text-danger">You have reached the posts limit.</span>
+              </div>
+
+              <div className="d-flex justify-content-center my-3">
+                <span className="fs-3 text-center">
+                  Became <a href={urls.payment.subscribe}>premium</a> today and have limited access.
+                  </span>
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              <button id="btn-close" type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={onCancel}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

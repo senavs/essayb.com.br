@@ -8,6 +8,7 @@ import { AuthProvider } from '../../libs/contexts/auth';
 import { AuthenticationData } from '../../libs/props/auth';
 import { CategoryData } from '../../libs/props/category';
 import { CategoryProvider } from 'src/libs/contexts/category';
+import { PremiumProvider } from 'src/libs/contexts/premium';
 
 
 interface LayoutProps {
@@ -34,11 +35,13 @@ export default function Layout({ children, authenticationData, categoryData, tit
 
       <AuthProvider authenticationData={authenticationData}>
         <CategoryProvider categoryData={categoryData}>
-          <Navbar />
-          <Body>
-            {children}
-          </Body>
-          <Footer />
+          <PremiumProvider>
+            <Navbar />
+            <Body>
+              {children}
+            </Body>
+            <Footer />
+          </PremiumProvider>
         </CategoryProvider>
       </AuthProvider>
 
