@@ -104,7 +104,10 @@ export default function Search({ authenticationData, categoryData }: SearchProps
                   category={post.category.category}
                   title={post.title}
                   descriprion={post.description}
-                  created_at={post.created_at} />
+                  is_published={post.is_published}
+                  publish_at={post.publish_at}
+                  create_at={post.created_at}
+                />
               </div>
             )
           })}

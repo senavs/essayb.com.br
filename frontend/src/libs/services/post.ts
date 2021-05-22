@@ -10,6 +10,7 @@ export interface PostInterface {
   title: string
   description: string
   is_published: boolean
+  publish_at?: string
   created_at: string
   updated_at: string
   message?: string

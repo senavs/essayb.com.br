@@ -15,7 +15,7 @@ app = Celery('tasks', broker=worker.BROKER_URI)
 app.conf.beat_schedule = {
     'publish': {
         'task': 'api.queue_manager.task.publish_task',
-        'schedule': crontab(minute='*', hour='*', day_of_month='*', month_of_year='*', day_of_week='*'),
+        'schedule': crontab(minute='0', hour='0', day_of_month='*', month_of_year='*', day_of_week='*'),
     }
 }
 

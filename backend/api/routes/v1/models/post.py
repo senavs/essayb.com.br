@@ -17,7 +17,7 @@ class Post(BaseSettings):
     is_published: bool
     user: User
     category: Category
-    publish_at: datetime
+    publish_at: Optional[datetime]
     created_at: datetime
     updated_at: datetime
 
