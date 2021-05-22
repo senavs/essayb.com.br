@@ -25,3 +25,9 @@ export function formatDate(datetime: Date): string {
   const time = `${datetime.getHours().toString().padStart(2, '0')}:${datetime.getMinutes().toString().padStart(2, '0')}`
   return `${date} ${time}`
 }
+
+export function today(add: number = 0): string {
+  const date = new Date()
+  date.setDate(date.getDate() + add)
+  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`
+}

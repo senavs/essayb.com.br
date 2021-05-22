@@ -53,7 +53,7 @@ class PostAlreadyPublishedException(BadRequestException):
 
 
 class IsPublishedAndPublishAtException(BadRequestException):
-    detail: str = 'Post can not be publish and has published_at attribute at the same time'
+    detail: str = 'Post can not be public and has schedule date at the same time'
 
 
 class PastPublishDateException(BadRequestException):

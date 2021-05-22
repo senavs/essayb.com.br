@@ -2,7 +2,7 @@ import Router from "next/router"
 import { useContext, useState } from "react"
 
 import PostService from "../../libs/services/post"
-import { fileToBase64, validateImage } from "../../libs/utils/form"
+import { fileToBase64, today, validateImage } from "../../libs/utils/form"
 import { AuthContext } from "../../libs/contexts/auth"
 import { CategoryContext } from "../../libs/contexts/category"
 import { urls } from "../../../config/frontend"
@@ -14,6 +14,9 @@ interface FormValue {
   description: string
   thumbnail: string
   id_category: number
+  is_published: boolean,
+  use_schedule: boolean
+  publish_at: string
 }
 
 function initialFormValue(): FormValue {
@@ -21,7 +24,10 @@ function initialFormValue(): FormValue {
     title: '',
     description: '',
     thumbnail: '',
-    id_category: 1
+    id_category: 1,
+    is_published: false,
+    use_schedule: false,
+    publish_at: ""
   }
 }
 
@@ -33,11 +39,21 @@ export default function CreateNewPostModal() {
   const [formValue, setFormValue] = useState(initialFormValue())
   const [errorMessage, setErrorMessage] = useState('')
 
-  function onChange(event) {
-    const { name, value } = event.target
+  function disableSchedule(event) {
+    const { name, checked } = event.target
     setFormValue({
       ...formValue,
-      [name]: value
+      publish_at: checked ? formValue.publish_at : '',
+      [name]: checked
+    })
+    const element = (document.getElementsByName('publish_at') as any)[0]
+    element.disabled = !checked
+  }
+  function onChange(event) {
+    const { name, value, type, checked } = event.target
+    setFormValue({
+      ...formValue,
+      [name]: type === 'checkbox' ? checked : value
     })
   }
   function onFileUpload(event) {
@@ -58,7 +74,15 @@ export default function CreateNewPostModal() {
       return setErrorMessage('Images must be less then 500Kbs')
     }
 
-    PostService.create(formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, authenticationData.token)
+    PostService.create(
+      formValue.title,
+      formValue.description,
+      formValue.thumbnail,
+      formValue.id_category,
+      formValue.is_published,
+      formValue.publish_at,
+      authenticationData.token
+    )
       .then(res => {
         document.getElementById('btn-close').click()
         Router.push(urls.post.edit.replace('{id_post}', res.id_post.toString()))
@@ -164,6 +188,45 @@ export default function CreateNewPostModal() {
                 >
                   {categoryData.map(e => <option key={e.id_category} value={e.id_category}>{e.category}</option>)}
                 </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="col-form-label">Public:</label>
+                <div>
+                  <input
+                    type="checkbox"
+                    className="custom-control-input ms-2"
+                    name="is_published"
+                    checked={formValue.is_published}
+                    onChange={onChange}
+                  />
+                  <label className="custom-control-label ms-3">Make it public when create</label>
+                </div>
+              </div>
+
+              <div className="mb-3">
+                <label className="col-form-label"><i className="small bi bi-gem"></i> Schedule: </label>
+                <div>
+                  <input
+                    type="checkbox"
+                    className="custom-control-input ms-2"
+                    name="use_schedule"
+                    checked={formValue.use_schedule}
+                    onChange={disableSchedule}
+                    disabled={premiumData.is_premium ? false : true}
+                  />
+                  <label className="custom-control-label ms-3">Post with scheduler</label>
+                </div>
+                <div>
+                  <input
+                    className="form-control"
+                    type="date"
+                    name="publish_at"
+                    value={formValue.publish_at}
+                    onChange={onChange}
+                    disabled
+                  />
+                </div>
               </div>
 
               <button id="hidden-submit-button" className="d-none" type="submit"></button>
