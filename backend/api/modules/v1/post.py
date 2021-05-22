@@ -112,8 +112,11 @@ def create(id_user: int, id_category: int, title: str, description: str, content
 
     logger.info(f'Creating new user post for user id number {id_user}')
     with DatabaseClient(connection=connection) as connection:
-        category.search(id_category, raise_404=True)
-        user.search_by_id(id_user, raise_404=True)
+        category.search(id_category, connection=connection, raise_404=True)
+        searched_user = user.search_by_id(id_user, connection=connection, raise_404=True, use_dict=False)
+
+        if not searched_user.IS_PREMIUM and count_by_username(searched_user.USERNAME) >= 3:
+            raise forbidden.PostLimitExceededException()
 
         post = Post(ID_USER=id_user, ID_CATEGORY=id_category, TITLE=title, DESCRIPTION=description, CONTENT=content, THUMBNAIL=thumbnail)
         post.insert(connection)
