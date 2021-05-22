@@ -142,6 +142,9 @@ export default function ProfileIndex({
 
           {/* posts */}
           {posts.map((e, i) => {
+            if (!isLoggedUserProfile && !e.is_published) {
+              return null
+            }
             return (<div className="col-12 col-md-4 mb-4" key={i}>
               <PostCard
                 id_post={e.id_post}
