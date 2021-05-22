@@ -2,6 +2,15 @@ version: '3'
 
 services:
 
+  broker:
+    container_name: essayb-broker-dev
+    image: rabbitmq:3
+    restart: unless-stopped
+    ports:
+      - 5672:5672
+    logging:
+      driver: none
+
   database:
     image: postgres
     container_name: essayb-database-dev
