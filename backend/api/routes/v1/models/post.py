@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional, Union
 
 from pydantic import BaseSettings, Field, validator
 
+from ....error.http import bad_request
 from ....modules.v1.utils import from_base64
 from .category import Category
 from .user import User
@@ -16,6 +17,7 @@ class Post(BaseSettings):
     is_published: bool
     user: User
     category: Category
+    publish_at: datetime
     created_at: datetime
     updated_at: datetime
 
@@ -40,10 +42,22 @@ class CreateRequest(BaseSettings):
     description: str = Field(max_length=128)
     content: str
     thumbnail: bytes
+    publish_at: Optional[date] = None
+    is_published: Optional[bool] = False
 
     @validator('thumbnail', pre=True)
     def to_image(cls, value: str) -> bytes:
         return from_base64(value)
+
+    @validator('publish_at')
+    def validate_publish_at(cls, v: date) -> datetime:
+        return None if not v else datetime(v.year, v.month, v.day)
+
+    @validator('is_published', always=True)
+    def validate_publish(cls, v: bool, values: dict) -> bool:
+        if v and values.get('publish_at'):
+            raise bad_request.IsPublishedAndPublishAtException()
+        return v
 
 
 class CreateResponse(Post):
@@ -65,6 +79,14 @@ class UpdateRequest(BaseSettings):
 
 
 class UpdateResponse(Post):
+    pass
+
+
+class PublishRequest(BaseSettings):
+    id_post: int
+
+
+class PublishResponse(Post):
     pass
 
 

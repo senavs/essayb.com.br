@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Union
 
 from loguru import logger
@@ -5,7 +6,7 @@ from sqlalchemy import desc
 
 from ...database import Post
 from ...database.client import DatabaseClient
-from ...error.http import forbidden, not_found
+from ...error.http import forbidden, not_found, bad_request
 from ...modules.v1 import category, user
 from .utils import ilike_query
 
@@ -107,7 +108,15 @@ def thumbnail(id_post: int, *, connection: DatabaseClient = None) -> bytes:
     return image
 
 
-def create(id_user: int, id_category: int, title: str, description: str, content: str, thumbnail: bytes, *, connection: DatabaseClient = None) -> dict:
+def create(id_user: int,
+           id_category: int,
+           title: str,
+           description: str,
+           content: str,
+           thumbnail: bytes,
+           is_published: bool = False,
+           publish_at: datetime = None, *,
+           connection: DatabaseClient = None) -> dict:
     """Create new user post"""
 
     logger.info(f'Creating new user post for user id number {id_user}')
@@ -115,15 +124,45 @@ def create(id_user: int, id_category: int, title: str, description: str, content
         category.search(id_category, connection=connection, raise_404=True)
         searched_user = user.search_by_id(id_user, connection=connection, raise_404=True, use_dict=False)
 
+        if not searched_user.IS_PREMIUM and publish_at is not None:
+            raise forbidden.NonPremiumScheduleException()
+
+        if is_published and publish_at:
+            raise bad_request.IsPublishedAndPublishAtException()
+
+        if publish_at is not None and publish_at <= datetime.today():
+            raise bad_request.PastPublishDateException()
+
         if not searched_user.IS_PREMIUM and count_by_username(searched_user.USERNAME) >= 3:
             raise forbidden.PostLimitExceededException()
 
-        post = Post(ID_USER=id_user, ID_CATEGORY=id_category, TITLE=title, DESCRIPTION=description, CONTENT=content, THUMBNAIL=thumbnail)
+        post = Post(ID_USER=id_user, ID_CATEGORY=id_category, TITLE=title, DESCRIPTION=description, CONTENT=content, THUMBNAIL=thumbnail,
+                    IS_PUBLISHED=is_published, PUBLISH_AT=publish_at)
         post.insert(connection)
 
         post = post.to_dict()
 
     logger.info(f'User post for user id number {id_user} was create successfully')
+    return post
+
+
+def publish(id_user: int, id_post: int, connection: DatabaseClient = None) -> dict:
+    """Publish user post"""
+
+    logger.info(f'Publishing user post with id number {id_post}')
+    with DatabaseClient(connection=connection) as conn:
+        post = search(id_post, connection=conn, raise_404=True, use_dict=False)
+
+        if post.ID_USER != id_user:
+            raise forbidden.UserUpdatingOthersPostException()
+
+        if post.IS_PUBLISHED:
+            raise bad_request.PostAlreadyPublishedException()
+
+        post.update(conn, IS_PUBLISHED=True)
+        post = post.to_dict()
+
+    logger.info(f'Published user post with id number {id_post} successfully')
     return post
 
 

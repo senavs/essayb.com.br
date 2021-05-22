@@ -26,3 +26,7 @@ class PostLimitExceededException(ForbiddenException):
 
 class WrongPaymentSessionException(ForbiddenException):
     detail: str = 'Wrong payment session'
+
+
+class NonPremiumScheduleException(ForbiddenException):
+    detail: str = 'Only premium users can schedule posts'

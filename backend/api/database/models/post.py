@@ -19,6 +19,7 @@ class Post(DeclarativeBase, BaseModel):
     DESCRIPTION = Column(String(128), nullable=False, unique=False)
     CONTENT = Column(Text, nullable=False, unique=False)
     IS_PUBLISHED = Column(Boolean, nullable=False, unique=False, default=expression.false(), server_default=expression.false())
+    PUBLISH_AT = Column(DateTime, nullable=False, unique=False, default=func.now(), server_default=func.now())
     CREATED_AT = Column(DateTime, nullable=False, unique=False, default=func.now(), server_default=func.now())
     UPDATED_AT = Column(DateTime, nullable=False, unique=False, default=func.now(), server_default=func.now(), onupdate=func.now(), server_onupdate=func.now())
 
