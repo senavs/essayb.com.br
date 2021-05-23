@@ -25,7 +25,7 @@ app.conf.beat_schedule = {
 def publish_task():
     """Publish all posts with PUBLISH_AT until now"""
 
-    logger.info(f'Publishing users posts')
+    logger.info('Publishing users posts')
     with DatabaseClient() as conn:
         searched_posts = conn.query(Post).filter(Post.IS_PUBLISHED.is_(False), Post.PUBLISH_AT <= datetime.today())
 
@@ -33,4 +33,4 @@ def publish_task():
             logger.info(f'Publishing user post with id number {p.ID_POST}')
             post.publish(p.ID_USER, p.ID_POST, connection=conn)
 
-    logger.info(f'Published users posts successfully')
+    logger.info('Published users posts successfully')

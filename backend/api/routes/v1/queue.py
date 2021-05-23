@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from .models.queue import PublishResponse
 from ...queue_manager.task import publish_task
+from .models.queue import PublishResponse
 
 router = APIRouter(prefix='/queue', tags=['Queue Manager'])
 

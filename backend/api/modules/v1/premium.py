@@ -3,7 +3,7 @@ from collections import namedtuple
 from loguru import logger
 
 from ...database.client import DatabaseClient
-from ...modules.v1 import user, post
+from ...modules.v1 import post, user
 
 Status = namedtuple('Status', 'is_premium n_post is_allow_create_post')
 
