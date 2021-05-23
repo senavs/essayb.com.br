@@ -159,7 +159,7 @@ def publish(id_user: int, id_post: int, connection: DatabaseClient = None) -> di
         if post.IS_PUBLISHED:
             raise bad_request.PostAlreadyPublishedException()
 
-        post.update(conn, IS_PUBLISHED=True)
+        post.update(conn, IS_PUBLISHED=True, PUBLISH_AT=datetime.utcnow())
         post = post.to_dict()
 
     logger.info(f'Published user post with id number {id_post} successfully')

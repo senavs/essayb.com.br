@@ -55,6 +55,10 @@ export default class PostService {
     }, { 'JWT-Token': `Bearer ${token}` })
   }
 
+  static async publish(id_post: number, token: string): Promise<PostInterface> {
+    return await callAPI(urls.post.publish, 'POST', { id_post }, { 'JWT-Token': `Bearer ${token}` })
+  }
+
   static async update(id_post: number, title?: string, description?: string, thumbnail?: string, id_category?: number, content?: string, token?: string): Promise<PostInterface> {
     let body = { id_post, title, description, thumbnail, id_category, content }
 
