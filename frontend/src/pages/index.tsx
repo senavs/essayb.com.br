@@ -20,10 +20,7 @@ interface IndexProps {
 
 export default function Index({ authenticationData, categoryData, topUsers, topPostMonthly }: IndexProps) {
 
-  let post: any
-  let post2: any
-
-  const [posts, setPosts] = useState(topPostMonthly)
+  const [posts] = useState(topPostMonthly)
 
   return (
 
@@ -37,58 +34,22 @@ export default function Index({ authenticationData, categoryData, topUsers, topP
             {/* carousel */}
             <Carousel />
           </div>
-
-        </div>
-        <Title> Posts from most liked premium users of the month </Title>
-        <div>
-
         </div>
 
         <div className="row mb-5">
-
-
-
-          {/*  {topPostMonthly.forEach((element, index) => {
-
-            if (index == 0) {
-              <CardPost
-                id_post={element.id_post}
-                title={element.title}
-                descriprion={element.description}
-                created_at={element.created_at}
-              />
-
-            } else if (index == 1) {
-              post2 = element
-            }
-
-          })
-          } */}
-
-
-          {/* post 1 */}
+          {/* post 1 e 2 */}
           {posts.map((e, i) => {
-            if (i == 0) {
-              return (<div className="col-md-6 col-12" key={i}>
-                <CardPost
-                  id_post={e.id_post}
-                  title={e.title}
-                  descriprion={e.description}
-                  created_at={e.created_at}
-                />
-              </div>)
+            if (i >= 2) {
+              return
             }
-            if (i == 1) {
-              return (<div className="col-md-6 col-12" key={i}>
-                <CardPost
-                  id_post={e.id_post}
-                  title={e.title}
-                  descriprion={e.description}
-                  created_at={e.created_at}
-                />
-              </div>)
-            }
-
+            return (<div className="col-md-6 col-12" key={i}>
+              <CardPost
+                id_post={e.id_post}
+                title={e.title}
+                descriprion={e.description}
+                created_at={e.created_at}
+              />
+            </div>)
           })}
         </div>
 

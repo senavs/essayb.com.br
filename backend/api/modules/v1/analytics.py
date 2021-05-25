@@ -54,8 +54,8 @@ def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> 
             .group_by(Like.ID_POST, Like.ID_USER) \
             .order_by(text('3 DESC')) \
             .subquery('likes')
-        posts = conn.query(Post) \
-            .outerjoin(likes_sub, Post.ID_POST == likes_sub.c.ID_POST) \
+        posts = conn.query(likes_sub) \
+            .outerjoin(Post, Post.ID_POST == likes_sub.c.ID_POST) \
             .outerjoin(User, User.ID_USER == likes_sub.c.ID_USER) \
             .filter(extract('month', Post.CREATED_AT) == datetime.utcnow().month,
                     extract('year', Post.CREATED_AT) == datetime.utcnow().year,

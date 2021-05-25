@@ -1,6 +1,7 @@
 import styles from '../../styles/components/post/PostCard.module.css'
 import { formatDate } from '../../libs/utils/form'
 import { urls as backendUrl } from '../../../config/backend'
+import { urls as urls } from '../../../config/frontend'
 
 interface PostProps {
   id_post: number
@@ -11,7 +12,6 @@ interface PostProps {
 
 
 export default function PostCard({ id_post, title, descriprion, created_at }: PostProps) {
-
 
   return (
     <div className="card mb-3 max-width: 540px">
@@ -28,14 +28,13 @@ export default function PostCard({ id_post, title, descriprion, created_at }: Po
           <div className="card-body">
             <h5 className="card-title">{title}</h5>
             <div>
-              <small className={`${styles.createdAt} text-secondary`}>
+              <small className={`${styles.createdAt} text-suecondary`}>
                 <strong>Published at: </strong>
                 <i>{formatDate(new Date(created_at))}</i>
               </small>
             </div>
             <p className="card-text">{descriprion}</p>
-            {/* ARRUMAR AQUI */}
-            <a className="stretched-link" target="_blank" href={`/post/${id_post}`}>"Continue Reading"</a>
+            <a className="stretched-link" target="_blank" href={urls.post.search.replace('{id_post}', id_post.toString())} >"Continue Reading"</a>
           </div>
         </div>
       </div>
