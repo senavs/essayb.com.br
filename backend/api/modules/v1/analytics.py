@@ -48,17 +48,18 @@ def most_liked_posts(top: int, *, connection: DatabaseClient = None) -> list[dic
 
 def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> list[dict]:
     """List post with most monthly likes of premium users"""
+
     logger.info(f'List top {top} most monthly likes of premium users')
     with DatabaseClient(connection=connection) as conn:
-        likes_sub = conn.query(Like.ID_POST, Like.ID_USER, func.count(Like.ID_POST)) \
-            .group_by(Like.ID_POST, Like.ID_USER) \
-            .order_by(text('3 DESC')) \
+        likes_sub = conn.query(Like.ID_POST, func.count(Like.ID_POST)) \
+            .group_by(Like.ID_POST) \
+            .order_by(text('2 DESC')) \
             .subquery('likes')
         posts = conn.query(likes_sub) \
-            .outerjoin(Post, Post.ID_POST == likes_sub.c.ID_POST) \
-            .outerjoin(User, User.ID_USER == likes_sub.c.ID_USER) \
-            .filter(extract('month', Post.CREATED_AT) == datetime.utcnow().month,
-                    extract('year', Post.CREATED_AT) == datetime.utcnow().year,
+            .join(Post, Post.ID_POST == likes_sub.c.ID_POST) \
+            .join(User, User.ID_USER == Post.ID_USER) \
+            .filter(extract('month', Post.PUBLISH_AT) == datetime.utcnow().month,
+                    extract('year', Post.PUBLISH_AT) == datetime.utcnow().year,
                     User.IS_PREMIUM.is_(True)) \
             .limit(top) \
             .with_entities(Post)
