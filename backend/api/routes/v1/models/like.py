@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseSettings
 
 from .post import Post
@@ -8,6 +10,7 @@ class Like(BaseSettings):
     id_like: int
     post: Post
     user: User
+    created_at: datetime
 
 
 class CreateRequest(BaseSettings):

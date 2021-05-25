@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import Column, ForeignKey, Integer, UniqueConstraint
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, UniqueConstraint, func
 from sqlalchemy.orm import backref, relationship
 
 from .. import DeclarativeBase
@@ -13,6 +13,7 @@ class Like(DeclarativeBase, BaseModel):
     ID_LIKE = Column(Integer, autoincrement=True, nullable=False, primary_key=True, unique=True)
     ID_USER = Column(Integer, ForeignKey('USER.ID_USER', ondelete='CASCADE'), nullable=False, unique=False)
     ID_POST = Column(Integer, ForeignKey('POST.ID_POST', ondelete='CASCADE'), nullable=False, unique=False)
+    CREATED_AT = Column(DateTime, nullable=False, unique=False, default=func.now(), server_default=func.now())
 
     __table_args__ = (
         UniqueConstraint('ID_USER', 'ID_POST'),
