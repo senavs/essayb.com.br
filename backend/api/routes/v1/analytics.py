@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 
-from ...modules.v1.analytics import most_followed_users, most_liked_posts, most_liked_monthly_posts
+from ...modules.v1.analytics import most_followed_users, most_liked_monthly_posts, most_liked_posts
 from .models.analytics import ListMostFollowedUsers, ListMostLikedPosts, ListMostLikedPostsMonthly
 
 router = APIRouter(prefix='/analytics', tags=['Analytics'])

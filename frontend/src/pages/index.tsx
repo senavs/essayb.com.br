@@ -1,14 +1,13 @@
 import { GetServerSideProps } from "next";
-import { useState } from "react"
-import Title from "src/components/common/Title";
-import UserCard from "src/components/profile/UserCard";
-import AnalyticsService, { MostFollowedUsersInterface, MostPostLikedUserPremium } from "src/libs/services/analytics";
 
+import Title from "../components/common/Title";
+import UserCard from "../components/profile/UserCard";
 import Layout from "../components/common/Layout";
+import Carousel from "../components/homepage/Carousel";
+import CardPost from "../components/homepage/CardPost";
+import AnalyticsService, { MostFollowedUsersInterface, MostPostLikedUserPremium } from "../libs/services/analytics";
 import { AuthenticationData, getAuthenticationData } from "../libs/props/auth";
 import { CategoryData, getCategoryData } from "../libs/props/category";
-import Carousel from "src/components/homepage/Carousel";
-import CardPost from "src/components/homepage/CardPost";
 
 
 interface IndexProps {
@@ -19,8 +18,6 @@ interface IndexProps {
 }
 
 export default function Index({ authenticationData, categoryData, topUsers, topPostMonthly }: IndexProps) {
-
-  const [posts] = useState(topPostMonthly)
 
   return (
 
@@ -38,7 +35,7 @@ export default function Index({ authenticationData, categoryData, topUsers, topP
 
         <div className="row mb-5">
           {/* post 1 e 2 */}
-          {posts.map((e, i) => {
+          {topPostMonthly.map((e, i) => {
             if (i >= 2) {
               return
             }

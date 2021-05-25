@@ -28,7 +28,7 @@ export default function PostCard({ id_post, title, descriprion, created_at }: Po
           <div className="card-body">
             <h5 className="card-title">{title}</h5>
             <div>
-              <small className={`${styles.createdAt} text-suecondary`}>
+              <small className={`${styles.createdAt} text-secondary`}>
                 <strong>Published at: </strong>
                 <i>{formatDate(new Date(created_at))}</i>
               </small>

@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from pydantic import BaseSettings
 
-from datetime import datetime
 from .post import Post
 from .user import User
 

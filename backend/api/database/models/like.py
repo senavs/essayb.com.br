@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import Column, ForeignKey, Integer, UniqueConstraint, DateTime, func
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, UniqueConstraint, func
 from sqlalchemy.orm import backref, relationship
 
 from .. import DeclarativeBase
