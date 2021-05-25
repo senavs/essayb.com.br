@@ -1,6 +1,8 @@
+import Router from "next/router"
 import { GetServerSideProps } from "next"
 import { useState } from "react"
 
+import PostService from "../../../libs/services/post"
 import Layout from "../../../components/common/Layout"
 import Title from "../../../components/common/Title"
 import Comment from "../../../components/post/Comment"
@@ -48,6 +50,11 @@ export default function ProfileIndex({
         setComments(comments.concat(res))
       })
   }
+  function publish() {
+    PostService.publish(postData.id_post, authenticationData.token)
+      .then(() => Router.reload())
+      .catch(console.log)
+  }
 
   return (
     <Layout authenticationData={authenticationData} categoryData={categoryData} title={postData.title}>
@@ -55,6 +62,13 @@ export default function ProfileIndex({
       <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="col-12 col-md-6">
+
+            {!postData.is_published && (
+              <div className="alert alert-warning alert-dismissible fade show" role="alert">
+                Your post is private or schedule. If you want to post now <a href="#" className="alert-link" onClick={publish}>click here</a>.
+                <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            )}
 
             <Post
               id_post={postData.id_post}

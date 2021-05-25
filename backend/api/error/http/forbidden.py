@@ -20,5 +20,13 @@ class UserDeletingOthersPostCommentException(ForbiddenException):
     detail: str = 'User can only delete it\'s own post comment'
 
 
+class PostLimitExceededException(ForbiddenException):
+    detail: str = 'Non premium user has limit to create only 3 posts'
+
+
 class WrongPaymentSessionException(ForbiddenException):
     detail: str = 'Wrong payment session'
+
+
+class NonPremiumScheduleException(ForbiddenException):
+    detail: str = 'Only premium users can schedule posts'

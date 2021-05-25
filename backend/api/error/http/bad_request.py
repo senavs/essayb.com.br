@@ -46,3 +46,15 @@ class FollowAlreadyExistsException(BadRequestException):
 
 class LikeAlreadyExistsException(BadRequestException):
     detail: str = 'Like already exists'
+
+
+class PostAlreadyPublishedException(BadRequestException):
+    detail: str = 'Post already published'
+
+
+class IsPublishedAndPublishAtException(BadRequestException):
+    detail: str = 'Post can not be public and has schedule date at the same time'
+
+
+class PastPublishDateException(BadRequestException):
+    detail: str = 'You can only schedule post with future dates'

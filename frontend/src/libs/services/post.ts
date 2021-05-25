@@ -10,6 +10,7 @@ export interface PostInterface {
   title: string
   description: string
   is_published: boolean
+  publish_at?: string
   created_at: string
   updated_at: string
   message?: string
@@ -42,8 +43,20 @@ export default class PostService {
     return await callAPI(urls.post.count.replace('{id_user_or_username}', username), 'GET')
   }
 
-  static async create(title: string, description: string, thumbnail: string, id_category: number, token: string): Promise<PostInterface> {
-    return await callAPI(urls.post.create, 'POST', { title, description, thumbnail, id_category, content: '' }, { 'JWT-Token': `Bearer ${token}` })
+  static async create(title: string, description: string, thumbnail: string, id_category: number, is_published: boolean, publish_at: string, token: string): Promise<PostInterface> {
+    return await callAPI(urls.post.create, 'POST', {
+      title,
+      description,
+      thumbnail,
+      id_category,
+      content: '',
+      is_published,
+      publish_at: publish_at == "" ? null : publish_at
+    }, { 'JWT-Token': `Bearer ${token}` })
+  }
+
+  static async publish(id_post: number, token: string): Promise<PostInterface> {
+    return await callAPI(urls.post.publish, 'POST', { id_post }, { 'JWT-Token': `Bearer ${token}` })
   }
 
   static async update(id_post: number, title?: string, description?: string, thumbnail?: string, id_category?: number, content?: string, token?: string): Promise<PostInterface> {

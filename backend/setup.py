@@ -11,6 +11,7 @@ dev_requirements = [
 
 run_requirements = [
     'bcrypt==3.2.0',
+    'celery==5.0.5',
     'fastapi==0.63.0',
     'gunicorn==20.0.4',
     'httptools==0.1.1',

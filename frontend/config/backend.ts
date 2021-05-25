@@ -36,6 +36,7 @@ export const urls = {
     thumbnail: `${protocol}://${backendDomain}/v1/posts/{id_post}/thumbnail`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
     update: `${protocol}://${backendDomain}/v1/posts/update`,
+    publish: `${protocol}://${backendDomain}/v1/posts/publish`,
     delete: `${protocol}://${backendDomain}/v1/posts/delete`,
   },
   like: {
@@ -62,5 +63,8 @@ export const urls = {
   payment: {
     checkout: `${protocol}://${backendDomain}/v1/payments/checkout`,
     accept: `${protocol}://${backendDomain}/v1/payments/accept`,
+  },
+  premium: {
+    status: `${protocol}://${backendDomain}/v1/premium/status`,
   }
 }

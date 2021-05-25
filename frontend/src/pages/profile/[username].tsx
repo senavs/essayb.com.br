@@ -142,13 +142,18 @@ export default function ProfileIndex({
 
           {/* posts */}
           {posts.map((e, i) => {
+            if (!isLoggedUserProfile && !e.is_published) {
+              return null
+            }
             return (<div className="col-12 col-md-4 mb-4" key={i}>
               <PostCard
                 id_post={e.id_post}
                 title={e.title}
                 descriprion={e.description}
                 category={e.category.category}
-                created_at={e.created_at}
+                is_published={e.is_published}
+                publish_at={e.publish_at}
+                create_at={e.created_at}
               />
             </div>)
           })}
