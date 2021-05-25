@@ -1,7 +1,8 @@
 import { GetServerSideProps } from "next";
+import { useState } from "react"
 import Title from "src/components/common/Title";
 import UserCard from "src/components/profile/UserCard";
-import AnalyticsService, { MostFollowedUsersInterface } from "src/libs/services/analytics";
+import AnalyticsService, { MostFollowedUsersInterface, MostPostLikedUserPremium } from "src/libs/services/analytics";
 
 import Layout from "../components/common/Layout";
 import { AuthenticationData, getAuthenticationData } from "../libs/props/auth";
@@ -14,10 +15,18 @@ interface IndexProps {
   authenticationData: AuthenticationData
   categoryData: CategoryData
   topUsers: MostFollowedUsersInterface
+  topPostMonthly: MostPostLikedUserPremium
 }
 
-export default function Index({ authenticationData, categoryData, topUsers }: IndexProps) {
+export default function Index({ authenticationData, categoryData, topUsers, topPostMonthly }: IndexProps) {
+
+  let post: any
+  let post2: any
+
+  const [posts, setPosts] = useState(topPostMonthly)
+
   return (
+
     <Layout authenticationData={authenticationData} categoryData={categoryData} title="Home page">
       <div className="container">
 
@@ -26,21 +35,61 @@ export default function Index({ authenticationData, categoryData, topUsers }: In
 
           <div className="col-12">
             {/* carousel */}
-            <Carousel/>
+            <Carousel />
           </div>
+
+        </div>
+        <Title> Posts from most liked premium users of the month </Title>
+        <div>
+
         </div>
 
         <div className="row mb-5">
-          
-          <div className="col-md-6 col-12">
-            {/* post 1 */}
-            <CardPost/>
-          </div>
-          <div className="col-md-6 col-12">
-            {/* post 2 */}
-            <CardPost/>
-          </div>
 
+
+
+          {/*  {topPostMonthly.forEach((element, index) => {
+
+            if (index == 0) {
+              <CardPost
+                id_post={element.id_post}
+                title={element.title}
+                descriprion={element.description}
+                created_at={element.created_at}
+              />
+
+            } else if (index == 1) {
+              post2 = element
+            }
+
+          })
+          } */}
+
+
+          {/* post 1 */}
+          {posts.map((e, i) => {
+            if (i == 0) {
+              return (<div className="col-md-6 col-12" key={i}>
+                <CardPost
+                  id_post={e.id_post}
+                  title={e.title}
+                  descriprion={e.description}
+                  created_at={e.created_at}
+                />
+              </div>)
+            }
+            if (i == 1) {
+              return (<div className="col-md-6 col-12" key={i}>
+                <CardPost
+                  id_post={e.id_post}
+                  title={e.title}
+                  descriprion={e.description}
+                  created_at={e.created_at}
+                />
+              </div>)
+            }
+
+          })}
         </div>
 
         {/* post list and users */}
@@ -92,8 +141,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const categoryData = await getCategoryData()
 
   const topUsers = await AnalyticsService.mostFollowedUsers()
+  const topPostMonthly = await AnalyticsService.mostLikedPostUserPremium()
 
   return {
-    props: { authenticationData, categoryData, topUsers }
+    props: { authenticationData, categoryData, topUsers, topPostMonthly }
   }
 }

@@ -1,16 +1,41 @@
-export default function CardPost() {
+import styles from '../../styles/components/post/PostCard.module.css'
+import { formatDate } from '../../libs/utils/form'
+import { urls as backendUrl } from '../../../config/backend'
+
+interface PostProps {
+  id_post: number
+  title: string
+  descriprion: string
+  created_at: string
+}
+
+
+export default function PostCard({ id_post, title, descriprion, created_at }: PostProps) {
+
+
   return (
     <div className="card mb-3 max-width: 540px">
       <div className="row g-0">
         <div className="col-md-4">
-          <img src="..." alt="Thumbnail"></img>
+          <div className="row mb-2">
+            <div className={`${styles.thumbnail} col`}>
+              <img src={backendUrl.post.thumbnail.replace('{id_post}', id_post.toString())} alt="post thumbnail" />
+            </div>
+          </div>
+
         </div>
         <div className="col-md-8">
           <div className="card-body">
-            <h5 className="card-title">Post title</h5>
-            <p className="card-text"><small className="text-muted">Publication date (Ex:10/02/2021)</small></p>
-            <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <a className="stretched-link">"Continue Reading"</a>
+            <h5 className="card-title">{title}</h5>
+            <div>
+              <small className={`${styles.createdAt} text-secondary`}>
+                <strong>Published at: </strong>
+                <i>{formatDate(new Date(created_at))}</i>
+              </small>
+            </div>
+            <p className="card-text">{descriprion}</p>
+            {/* ARRUMAR AQUI */}
+            <a className="stretched-link" target="_blank" href={`/post/${id_post}`}>"Continue Reading"</a>
           </div>
         </div>
       </div>
