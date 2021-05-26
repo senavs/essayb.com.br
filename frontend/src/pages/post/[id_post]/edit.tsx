@@ -40,12 +40,11 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
   } as FormValue)
   const [errorMessage, setErrorMessage] = useState('')
 
-
   function onChange(event) {
-    const { name, value } = event.target
+    const { name, value, type, checked } = event.target
     setFormValue({
       ...formValue,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     })
   }
   function onFileUpload(event) {
@@ -71,9 +70,13 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
 
     PostService.update(postData.id_post, formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, formValue.content, authenticationData.token)
       .then(() => {
-        PostService.publish(postData.id_post, authenticationData.token)
-          .then(() => Router.push(urls.post.search.replace('{id_post}', postData.id_post.toString())))
-          .catch(console.log)
+        if (formValue.is_published) {
+          PostService.publish(postData.id_post, authenticationData.token)
+            .then(() => { })
+            .catch(console.log)
+        }
+
+        Router.push(urls.post.search.replace('{id_post}', postData.id_post.toString()))
       })
       .catch(err => setErrorMessage(err.message))
   }
