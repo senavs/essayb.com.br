@@ -75,7 +75,7 @@ def discovery(top: int, *, connection: DatabaseClient = None) -> list[dict]:
     logger.info(f'List top {top} most followed users')
     with DatabaseClient(connection=connection) as conn:
 
-        posts = conn.query(Post).order_by(func.random())
+        posts = conn.query(Post).order_by(func.random()).limit(top)
 
         result = [post.to_dict() for post in posts.all()]
 

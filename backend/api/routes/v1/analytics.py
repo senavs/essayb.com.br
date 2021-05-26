@@ -22,7 +22,6 @@ def _most_liked_monthly_posts(top: int = Query(10, ge=0)):
     return most_liked_monthly_posts(top)
 
 
-@router.get('/discovery', summary='List random posts', status_code=200,
-            response_model=Discovery)
+@router.get('/discovery', summary='List random posts', status_code=200, response_model=Discovery)
 def _discovery(top: int = Query(10, ge=0)):
     return discovery(top)

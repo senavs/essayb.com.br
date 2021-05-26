@@ -5,7 +5,7 @@ import UserCard from "../components/profile/UserCard";
 import Layout from "../components/common/Layout";
 import Carousel from "../components/homepage/Carousel";
 import CardPost from "../components/homepage/CardPost";
-import Discovery from "../components/homepage/Discovery"
+import DiscoveryCard from "../components/homepage/Discovery"
 import AnalyticsService, { DiscoveryPosts, MostFollowedUsersInterface, MostPostLikedUserPremium } from "../libs/services/analytics";
 import { AuthenticationData, getAuthenticationData } from "../libs/props/auth";
 import { CategoryData, getCategoryData } from "../libs/props/category";
@@ -63,11 +63,8 @@ export default function Index({ authenticationData, categoryData, topUsers, topP
             <div className="row">
               <Title>Discovery</Title>
               {discovery.map((e, i) => {
-                if (i >= 6) {
-                  return
-                }
                 return (<div className="col-md-6" key={i}>
-                  <Discovery
+                  <DiscoveryCard
                     id_post={e.id_post}
                     title={e.title}
                     descriprion={e.description}
@@ -111,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const topUsers = await AnalyticsService.mostFollowedUsers()
   const topPostMonthly = await AnalyticsService.mostLikedPostUserPremium()
-  const discovery = await AnalyticsService.discoveryPosts()
+  const discovery = await AnalyticsService.discoveryPosts(1)
 
   return {
     props: { authenticationData, categoryData, topUsers, topPostMonthly, discovery }
