@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from loguru import logger
-from sqlalchemy import extract, func, text, desc
+from sqlalchemy import desc, extract, func, text
 
 from ...database.client import DatabaseClient
 from ...database.models import Follow, Like, Post, User
