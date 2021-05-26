@@ -61,22 +61,21 @@ export default function Index({ authenticationData, categoryData, topUsers, topP
             </div>
 
             <div className="row">
-                <Title>Discovery</Title>
-                {discovery.map((e, i) => {
-                  if (i >= 6) {
-                    return
-                  }
-                  return (<div className="col-md-6" key={i}>
-                    <Discovery
-                      id_post={e.id_post}
-                      title={e.title}
-                      descriprion={e.description}
-                      created_at={e.created_at}
-                    />
-                  </div>)
-                })}
-
-              </div>
+              <Title>Discovery</Title>
+              {discovery.map((e, i) => {
+                if (i >= 6) {
+                  return
+                }
+                return (<div className="col-md-6" key={i}>
+                  <Discovery
+                    id_post={e.id_post}
+                    title={e.title}
+                    descriprion={e.description}
+                    created_at={e.created_at}
+                  />
+                </div>)
+              })}
+            </div>
           </div>
 
           <div className="col-12 col-md-4">
