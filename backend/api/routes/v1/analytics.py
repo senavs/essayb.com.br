@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 
-from ...modules.v1.analytics import most_followed_users, most_liked_monthly_posts, most_liked_posts, discovery
-from .models.analytics import ListMostFollowedUsers, ListMostLikedPosts, ListMostLikedPostsMonthly, Discovery
+from ...modules.v1.analytics import most_followed_users, most_liked_monthly_posts, most_liked_posts, last_posts, discovery
+from .models.analytics import ListMostFollowedUsers, ListMostLikedPosts, ListMostLikedPostsMonthly, LastPost, Discovery
 
 router = APIRouter(prefix='/analytics', tags=['Analytics'])
 
@@ -20,6 +20,11 @@ def _most_liked_posts(top: int = Query(10, ge=0)):
             response_model=ListMostLikedPostsMonthly)
 def _most_liked_monthly_posts(top: int = Query(10, ge=0)):
     return most_liked_monthly_posts(top)
+
+
+@router.get('/last_posts', summary='List last published posts', status_code=200, response_model=LastPost)
+def _last_posts(skip: int = Query(0, ge=0), limit: int = Query(10, ge=0)):
+    return last_posts(skip=skip, limit=limit)
 
 
 @router.get('/discovery', summary='List random posts', status_code=200, response_model=Discovery)
