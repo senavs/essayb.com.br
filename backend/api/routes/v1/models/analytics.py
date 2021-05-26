@@ -6,3 +6,5 @@ ListMostFollowedUsers = list[User]
 ListMostLikedPosts = list[Post]
 
 ListMostLikedPostsMonthly = list[Post]
+
+Discovery = list[Post]

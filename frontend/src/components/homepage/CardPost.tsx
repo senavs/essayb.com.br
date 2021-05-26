@@ -34,7 +34,7 @@ export default function PostCard({ id_post, title, descriprion, created_at }: Po
               </small>
             </div>
             <p className="card-text">{descriprion}</p>
-            <a className="stretched-link" target="_blank" href={urls.post.search.replace('{id_post}', id_post.toString())} >"Continue Reading"</a>
+            <a className="stretched-link" target="_blank" href={urls.post.search.replace('{id_post}', id_post.toString())} >Continue reading...</a>
           </div>
         </div>
       </div>

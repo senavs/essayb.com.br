@@ -67,3 +67,19 @@ def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> 
     result = [post.to_dict() for post in posts.all()]
     logger.info(f'Listed top {top} most monthly likes of premium users')
     return result
+
+
+def discovery(top: int, *, connection: DatabaseClient = None) -> list[dict]:
+    """List top most followed users"""
+
+    logger.info(f'List top {top} most followed users')
+    with DatabaseClient(connection=connection) as conn:
+
+        posts = conn.query(Post).order_by(func.random()).limit(top)
+
+        result = [post.to_dict() for post in posts.all()]
+
+    logger.info(f'Listed top {top} most followed users successfully')
+    return result
+
+
