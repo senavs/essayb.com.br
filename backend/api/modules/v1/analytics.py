@@ -58,8 +58,8 @@ def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> 
         posts = conn.query(likes_sub) \
             .join(Post, Post.ID_POST == likes_sub.c.ID_POST) \
             .join(User, User.ID_USER == Post.ID_USER) \
-            .filter(extract('month', Post.PUBLISH_AT) == datetime.utcnow().month,
-                    extract('year', Post.PUBLISH_AT) == datetime.utcnow().year,
+            .filter(extract('month', Like.CREATED_AT) == datetime.utcnow().month,
+                    extract('year', Like.CREATED_AT) == datetime.utcnow().year,
                     User.IS_PREMIUM.is_(True)) \
             .limit(top) \
             .with_entities(Post)
@@ -79,4 +79,18 @@ def last_posts(*, connection: DatabaseClient = None, skip: int = 0, limit: int =
         result = [post.to_dict() for post in posts]
 
     logger.info(f'List last published posts successfully')
+    return result
+
+
+def discovery(top: int, *, connection: DatabaseClient = None) -> list[dict]:
+    """List top most followed users"""
+
+    logger.info(f'List top {top} most followed users')
+    with DatabaseClient(connection=connection) as conn:
+
+        posts = conn.query(Post).order_by(func.random()).limit(top)
+
+        result = [post.to_dict() for post in posts.all()]
+
+    logger.info(f'Listed top {top} most followed users successfully')
     return result

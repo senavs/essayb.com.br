@@ -10,8 +10,8 @@ export const urls = {
   analytics: {
     mostFollowedUsers: `${protocol}://${backendDomain}/v1/analytics/most_followed_users`,
     mostLikedPosts: `${protocol}://${backendDomain}/v1/analytics/most_liked_posts`,
-    mostLikedPostUserPremium: `${protocol}://${backendDomain}/v1/analytics/most_liked_posts_monthly`
-
+    mostLikedPostUserPremium: `${protocol}://${backendDomain}/v1/analytics/most_liked_posts_monthly`,
+    discovery: `${protocol}://${backendDomain}/v1/analytics/discovery`
   },
   auth: {
     login: `${protocol}://${backendDomain}/v1/auth/login`,

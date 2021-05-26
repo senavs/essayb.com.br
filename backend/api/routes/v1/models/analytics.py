@@ -8,3 +8,5 @@ ListMostLikedPosts = list[Post]
 ListMostLikedPostsMonthly = list[Post]
 
 LastPost = list[Post]
+
+Discovery = list[Post]

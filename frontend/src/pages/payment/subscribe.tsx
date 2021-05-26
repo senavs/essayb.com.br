@@ -71,10 +71,10 @@ export default function Subscribe({ authenticationData, categoryData }: Subscrib
 
               {/* actions */}
               <div className="mb-4">
-                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">Lorem Ipsum is simply</span></div>
-                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">Dummy text of the printing</span></div>
-                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">Typesetting industry</span></div>
-                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">Dummy text ever</span></div>
+                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">No limit your posts</span></div>
+                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">Schedule your posts</span></div>
+                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">Stand out in your actions</span></div>
+                <div><i className="bi bi-check ms-3 text-success"></i><span className="fs-6 ms-3">Most liked posts in the month appear on homepage</span></div>
               </div>
 
               {/* button */}
