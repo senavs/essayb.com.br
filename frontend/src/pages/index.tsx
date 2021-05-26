@@ -108,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const topUsers = await AnalyticsService.mostFollowedUsers()
   const topPostMonthly = await AnalyticsService.mostLikedPostUserPremium()
-  const discovery = await AnalyticsService.discoveryPosts(1)
+  const discovery = await AnalyticsService.discoveryPosts(6)
 
   return {
     props: { authenticationData, categoryData, topUsers, topPostMonthly, discovery }
