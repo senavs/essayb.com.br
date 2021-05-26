@@ -9,6 +9,7 @@ import DiscoveryCard from "../components/homepage/Discovery"
 import AnalyticsService, { DiscoveryPosts, MostFollowedUsersInterface, MostPostLikedUserPremium } from "../libs/services/analytics";
 import { AuthenticationData, getAuthenticationData } from "../libs/props/auth";
 import { CategoryData, getCategoryData } from "../libs/props/category";
+import About from "src/components/homepage/About";
 
 
 interface IndexProps {
@@ -78,7 +79,11 @@ export default function Index({ authenticationData, categoryData, topUsers, topP
           <div className="col-12 col-md-4">
             <div className="row">
               <div className="col-12">
-                <Title>About</Title>
+
+                <div className="mb-3">
+                  <About />
+                </div>
+
               </div>
 
               <div className="col-12">
@@ -108,7 +113,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const topUsers = await AnalyticsService.mostFollowedUsers()
   const topPostMonthly = await AnalyticsService.mostLikedPostUserPremium()
-  const discovery = await AnalyticsService.discoveryPosts(1)
+  const discovery = await AnalyticsService.discoveryPosts(6)
 
   return {
     props: { authenticationData, categoryData, topUsers, topPostMonthly, discovery }
