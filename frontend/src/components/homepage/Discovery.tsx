@@ -16,15 +16,14 @@ export default function PostCard({ id_post, title, descriprion, created_at }: Po
   return (
     <div className="card mb-3 max-width: 540px">
       <div className="row g-0">
-        <div className="col-md-4">
+        <div className="col-md-5">
           <div className="row mb-2">
             <div className={`${styles.thumbnail} col`}>
               <img src={backendUrl.post.thumbnail.replace('{id_post}', id_post.toString())} alt="post thumbnail" />
             </div>
           </div>
-
         </div>
-        <div className="col-md-8">
+        <div className="col-md-7">
           <div className="card-body">
             <h5 className="card-title">{title}</h5>
             <div>
