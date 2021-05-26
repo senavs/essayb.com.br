@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from loguru import logger
-from sqlalchemy import extract, func, text
+from sqlalchemy import extract, func, text, desc
 
 from ...database.client import DatabaseClient
 from ...database.models import Follow, Like, Post, User
@@ -66,4 +66,17 @@ def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> 
 
     result = [post.to_dict() for post in posts.all()]
     logger.info(f'Listed top {top} most monthly likes of premium users')
+    return result
+
+
+def last_posts(*, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
+    """List last published posts"""
+
+    logger.info(f'List last published posts')
+    with DatabaseClient(connection=connection) as conn:
+        posts = conn.query(Post).order_by(desc(Post.PUBLISH_AT)).offset(skip).limit(limit)
+
+        result = [post.to_dict() for post in posts]
+
+    logger.info(f'List last published posts successfully')
     return result
