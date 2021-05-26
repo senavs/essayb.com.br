@@ -58,8 +58,8 @@ def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> 
         posts = conn.query(likes_sub) \
             .join(Post, Post.ID_POST == likes_sub.c.ID_POST) \
             .join(User, User.ID_USER == Post.ID_USER) \
-            .filter(extract('month', Post.PUBLISH_AT) == datetime.utcnow().month,
-                    extract('year', Post.PUBLISH_AT) == datetime.utcnow().year,
+            .filter(extract('month', Like.CREATED_AT) == datetime.utcnow().month,
+                    extract('year', Like.CREATED_AT) == datetime.utcnow().year,
                     User.IS_PREMIUM.is_(True)) \
             .limit(top) \
             .with_entities(Post)
