@@ -5,8 +5,12 @@ import { PostInterface } from "./post";
 
 
 export type MostFollowedUsersInterface = Array<UserInterface>
+
 export type MostPostLikedUserPremium = Array<PostInterface>
+
 export type DiscoveryPosts = Array<PostInterface>
+
+export type LastPosts = Array<PostInterface>
 
 export default class AnalyticsService {
   static async mostFollowedUsers(): Promise<MostFollowedUsersInterface> {
@@ -19,5 +23,9 @@ export default class AnalyticsService {
 
   static async discoveryPosts(top: number = 10): Promise<DiscoveryPosts> {
     return await callAPI(urls.analytics.discovery + `?top=${top}`, 'GET')
+  }
+
+  static async lastPosts(skip: number = 0, limit: number = 10): Promise<LastPosts> {
+    return await callAPI(urls.analytics.lastPosts + `?skip=${skip}&limit=${limit}`, 'GET')
   }
 }
