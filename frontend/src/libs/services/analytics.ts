@@ -13,8 +13,8 @@ export default class AnalyticsService {
     return await callAPI(urls.analytics.mostFollowedUsers, 'GET')
   }
 
-  static async mostLikedPostUserPremium(): Promise<MostPostLikedUserPremium> {
-    return await callAPI(urls.analytics.mostLikedPostUserPremium, 'GET')
+  static async mostLikedPostUserPremium(top: number = 10): Promise<MostPostLikedUserPremium> {
+    return await callAPI(urls.analytics.mostLikedPostUserPremium + `?top=${top}`, 'GET')
   }
 
   static async discoveryPosts(top: number = 10): Promise<DiscoveryPosts> {

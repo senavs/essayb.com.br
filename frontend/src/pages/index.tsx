@@ -38,9 +38,6 @@ export default function Index({ authenticationData, categoryData, topUsers, topP
         <div className="row mb-5">
           {/* post 1 e 2 */}
           {topPostMonthly.map((e, i) => {
-            if (i >= 2) {
-              return
-            }
             return (<div className="col-md-6 col-12" key={i}>
               <CardPost
                 id_post={e.id_post}
@@ -112,7 +109,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const categoryData = await getCategoryData()
 
   const topUsers = await AnalyticsService.mostFollowedUsers()
-  const topPostMonthly = await AnalyticsService.mostLikedPostUserPremium()
+  const topPostMonthly = await AnalyticsService.mostLikedPostUserPremium(2)
   const discovery = await AnalyticsService.discoveryPosts(6)
 
   return {

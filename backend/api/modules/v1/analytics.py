@@ -51,16 +51,19 @@ def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> 
 
     logger.info(f'List top {top} most monthly likes of premium users')
     with DatabaseClient(connection=connection) as conn:
-        likes_sub = conn.query(Like.ID_POST, func.count(Like.ID_POST)) \
-            .group_by(Like.ID_POST) \
-            .order_by(text('2 DESC')) \
+        today_datetime = datetime.utcnow()
+
+        likes_sub = conn.query(Like.ID_POST, Like.CREATED_AT, func.count(Like.ID_POST)) \
+            .group_by(Like.ID_POST, Like.CREATED_AT) \
+            .order_by(text('3 DESC')) \
             .subquery('likes')
         posts = conn.query(likes_sub) \
             .join(Post, Post.ID_POST == likes_sub.c.ID_POST) \
             .join(User, User.ID_USER == Post.ID_USER) \
-            .filter(extract('month', Like.CREATED_AT) == datetime.utcnow().month,
-                    extract('year', Like.CREATED_AT) == datetime.utcnow().year,
-                    User.IS_PREMIUM.is_(True)) \
+            .filter(extract('month', likes_sub.c.CREATED_AT) == today_datetime.month,
+                    extract('year', likes_sub.c.CREATED_AT) == today_datetime.year,
+                    User.IS_PREMIUM.is_(True),
+                    Post.IS_PUBLISHED.is_(True)) \
             .limit(top) \
             .with_entities(Post)
 
@@ -74,7 +77,11 @@ def last_posts(*, connection: DatabaseClient = None, skip: int = 0, limit: int =
 
     logger.info(f'List last published posts')
     with DatabaseClient(connection=connection) as conn:
-        posts = conn.query(Post).order_by(desc(Post.PUBLISH_AT)).offset(skip).limit(limit)
+        posts = conn.query(Post) \
+            .filter(Post.IS_PUBLISHED.is_(True)) \
+            .order_by(desc(Post.PUBLISH_AT)) \
+            .offset(skip) \
+            .limit(limit)
 
         result = [post.to_dict() for post in posts]
 
@@ -87,8 +94,9 @@ def discovery(top: int, *, connection: DatabaseClient = None) -> list[dict]:
 
     logger.info(f'List top {top} most followed users')
     with DatabaseClient(connection=connection) as conn:
-
-        posts = conn.query(Post).order_by(func.random()).limit(top)
+        posts = conn.query(Post).filter(Post.IS_PUBLISHED.is_(True)) \
+            .order_by(func.random()) \
+            .limit(top)
 
         result = [post.to_dict() for post in posts.all()]
 
