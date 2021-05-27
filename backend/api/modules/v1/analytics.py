@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from loguru import logger
-from sqlalchemy import func, text
+from sqlalchemy import desc, extract, func, text
 
 from ...database.client import DatabaseClient
 from ...database.models import Follow, Like, Post, User
@@ -41,4 +43,54 @@ def most_liked_posts(top: int, *, connection: DatabaseClient = None) -> list[dic
         result = [post.to_dict(exclude=['THUMBNAIL']) for post in posts.all()]
 
     logger.info(f'Listed top {top} most liked posts successfully')
+    return result
+
+
+def most_liked_monthly_posts(top: int, *, connection: DatabaseClient = None) -> list[dict]:
+    """List post with most monthly likes of premium users"""
+
+    logger.info(f'List top {top} most monthly likes of premium users')
+    with DatabaseClient(connection=connection) as conn:
+        likes_sub = conn.query(Like.ID_POST, func.count(Like.ID_POST)) \
+            .group_by(Like.ID_POST) \
+            .order_by(text('2 DESC')) \
+            .subquery('likes')
+        posts = conn.query(likes_sub) \
+            .join(Post, Post.ID_POST == likes_sub.c.ID_POST) \
+            .join(User, User.ID_USER == Post.ID_USER) \
+            .filter(extract('month', Like.CREATED_AT) == datetime.utcnow().month,
+                    extract('year', Like.CREATED_AT) == datetime.utcnow().year,
+                    User.IS_PREMIUM.is_(True)) \
+            .limit(top) \
+            .with_entities(Post)
+
+    result = [post.to_dict() for post in posts.all()]
+    logger.info(f'Listed top {top} most monthly likes of premium users')
+    return result
+
+
+def last_posts(*, connection: DatabaseClient = None, skip: int = 0, limit: int = None) -> list[dict]:
+    """List last published posts"""
+
+    logger.info(f'List last published posts')
+    with DatabaseClient(connection=connection) as conn:
+        posts = conn.query(Post).order_by(desc(Post.PUBLISH_AT)).offset(skip).limit(limit)
+
+        result = [post.to_dict() for post in posts]
+
+    logger.info(f'List last published posts successfully')
+    return result
+
+
+def discovery(top: int, *, connection: DatabaseClient = None) -> list[dict]:
+    """List top most followed users"""
+
+    logger.info(f'List top {top} most followed users')
+    with DatabaseClient(connection=connection) as conn:
+
+        posts = conn.query(Post).order_by(func.random()).limit(top)
+
+        result = [post.to_dict() for post in posts.all()]
+
+    logger.info(f'Listed top {top} most followed users successfully')
     return result

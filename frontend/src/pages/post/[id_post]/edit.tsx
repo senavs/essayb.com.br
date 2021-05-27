@@ -26,6 +26,7 @@ interface FormValue {
   content: string,
   thumbnail: string,
   id_category: number
+  is_published: boolean
 }
 
 export default function Edit({ authenticationData, userPostData, categoryData, postData }: EditProps) {
@@ -34,16 +35,16 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
     description: postData.description,
     content: postData.content,
     thumbnail: null,
-    id_category: postData.category.id_category
+    id_category: postData.category.id_category,
+    is_published: postData.is_published
   } as FormValue)
   const [errorMessage, setErrorMessage] = useState('')
 
-
   function onChange(event) {
-    const { name, value } = event.target
+    const { name, value, type, checked } = event.target
     setFormValue({
       ...formValue,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     })
   }
   function onFileUpload(event) {
@@ -68,7 +69,15 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
     }
 
     PostService.update(postData.id_post, formValue.title, formValue.description, formValue.thumbnail, formValue.id_category, formValue.content, authenticationData.token)
-      .then(() => Router.push(urls.post.search.replace('{id_post}', postData.id_post.toString())))
+      .then(() => {
+        if (formValue.is_published) {
+          PostService.publish(postData.id_post, authenticationData.token)
+            .then(() => { })
+            .catch(console.log)
+        }
+
+        Router.push(urls.post.search.replace('{id_post}', postData.id_post.toString()))
+      })
       .catch(err => setErrorMessage(err.message))
   }
 
@@ -138,24 +147,38 @@ export default function Edit({ authenticationData, userPostData, categoryData, p
                       >
                         {categoryData.map(e => <option key={e.id_category} value={e.id_category}>{e.category}</option>)}
                       </select>
+                    </div>
 
-                      {/* separator */}
-                      <div className="d-flex justify-content-center mt-3">
-                        <span className="h6 ms-2">.</span>
-                        <span className="h6 ms-2">.</span>
-                        <span className="h6 ms-2">.</span>
-                      </div>
-
-                      <div className="mb-3">
-                        <label className="col-form-label">Content:</label>
-                        <textarea
-                          name="content"
-                          rows={10}
-                          className="form-control"
-                          value={formValue.content}
+                    <div className={`mb-3 ${postData.is_published ? "d-none" : ""}`}>
+                      <label className="col-form-label">Public:</label>
+                      <div>
+                        <input
+                          type="checkbox"
+                          className="custom-control-input ms-2"
+                          name="is_published"
+                          checked={formValue.is_published}
                           onChange={onChange}
                         />
+                        <label className="custom-control-label ms-3">Make it public now</label>
                       </div>
+                    </div>
+
+                    {/* separator */}
+                    <div className="d-flex justify-content-center mt-3">
+                      <span className="h6 ms-2">.</span>
+                      <span className="h6 ms-2">.</span>
+                      <span className="h6 ms-2">.</span>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="col-form-label">Content:</label>
+                      <textarea
+                        name="content"
+                        rows={10}
+                        className="form-control"
+                        value={formValue.content}
+                        onChange={onChange}
+                      />
                     </div>
 
                     <small className="d-block my-3 text-danger">{errorMessage}</small>

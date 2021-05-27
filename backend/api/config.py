@@ -20,6 +20,12 @@ class DeploySettings(BaseSettings):
     DEPLOY_ACCESS_LOG: bool = False
 
 
+class DomainSettings(BaseSettings):
+    BACKEND_DOMAIN: str
+    FRONTEND_DOMAIN: str
+    USE_HTTPS: bool = False
+
+
 class LoggingSetting(BaseSettings):
     LOGURU_FORMAT: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <16}</level> | <bold>{message}</bold>'
     LOGGING_IGNORED_PATHS: str = '/metrics /health /docs /redoc /openapi.json /favicon.ico'
@@ -39,16 +45,15 @@ class PaymentSetting(BaseSettings):
     STRIPE_PRICE_ID: str
 
 
-class DomainSettings(BaseSettings):
-    BACKEND_DOMAIN: str
-    FRONTEND_DOMAIN: str
-    USE_HTTPS: bool = False
+class WorkerSetting(BaseSettings):
+    BROKER_URI: str
 
 
 auth = AuthSetting()
 database = DatabaseSettings()
 deploy = DeploySettings()
+domain = DomainSettings()
 logging = LoggingSetting()
 path = PathSetting()
 payment = PaymentSetting()
-domain = DomainSettings()
+worker = WorkerSetting()

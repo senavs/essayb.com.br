@@ -97,6 +97,10 @@ export default function Search({ authenticationData, categoryData }: SearchProps
         {/* posts */}
         <div className="row mt-4 p-3">
           {posts.map((post, index) => {
+            if (!post.is_published) {
+              return null
+            }
+
             return (
               <div className="col-md-4 col-12" key={index}>
                 <PostCard
@@ -104,7 +108,10 @@ export default function Search({ authenticationData, categoryData }: SearchProps
                   category={post.category.category}
                   title={post.title}
                   descriprion={post.description}
-                  created_at={post.created_at} />
+                  is_published={post.is_published}
+                  publish_at={post.publish_at}
+                  create_at={post.created_at}
+                />
               </div>
             )
           })}

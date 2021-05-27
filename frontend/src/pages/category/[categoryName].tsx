@@ -63,7 +63,9 @@ export default function Category({ authenticationData, categoryData, category, p
                 title={e.title}
                 descriprion={e.description}
                 category={e.category.category}
-                created_at={e.created_at}
+                is_published={e.is_published}
+                publish_at={e.publish_at}
+                create_at={e.created_at}
               />
             </div>)
           })}

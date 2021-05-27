@@ -9,10 +9,17 @@ interface PostCardProps {
   category: string
   title: string
   descriprion: string
-  created_at: string
+  is_published: boolean
+  publish_at: string
+  create_at: string
 }
 
-export default function PostCard({ id_post, category, title, descriprion, created_at }: PostCardProps) {
+export default function PostCard({ id_post, category, title, descriprion, is_published, publish_at, create_at }: PostCardProps) {
+  const isLock = !is_published && !publish_at
+  const isSchedule = !is_published && publish_at
+
+  const date = publish_at ? publish_at : create_at
+
   return (
     <a className={styles.button} href={frontendUrl.post.search.replace('{id_post}', id_post.toString())}>
       <div className={`${styles.body} container border rounded shadow-sm p-2`}>
@@ -29,6 +36,8 @@ export default function PostCard({ id_post, category, title, descriprion, create
             </div>
 
             <div className={`${styles.title} mb-2`}>
+              {isLock && <span><i className="text-dark bi bi-lock-fill"></i> </span>}
+              {isSchedule && <span><i className="text-dark bi bi-clock-fill"></i> </span>}
               <span className="fw-bold text-dark">{title}</span>
             </div>
 
@@ -39,7 +48,7 @@ export default function PostCard({ id_post, category, title, descriprion, create
             <div>
               <small className={`${styles.createdAt} text-secondary`}>
                 <strong>Published at: </strong>
-                <i>{formatDate(new Date(created_at))}</i>
+                <i>{formatDate(new Date(date))}</i>
               </small>
             </div>
           </div>

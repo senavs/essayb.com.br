@@ -10,6 +10,8 @@ export const urls = {
   analytics: {
     mostFollowedUsers: `${protocol}://${backendDomain}/v1/analytics/most_followed_users`,
     mostLikedPosts: `${protocol}://${backendDomain}/v1/analytics/most_liked_posts`,
+    mostLikedPostUserPremium: `${protocol}://${backendDomain}/v1/analytics/most_liked_posts_monthly`,
+    discovery: `${protocol}://${backendDomain}/v1/analytics/discovery`
   },
   auth: {
     login: `${protocol}://${backendDomain}/v1/auth/login`,
@@ -36,6 +38,7 @@ export const urls = {
     thumbnail: `${protocol}://${backendDomain}/v1/posts/{id_post}/thumbnail`,
     create: `${protocol}://${backendDomain}/v1/posts/create`,
     update: `${protocol}://${backendDomain}/v1/posts/update`,
+    publish: `${protocol}://${backendDomain}/v1/posts/publish`,
     delete: `${protocol}://${backendDomain}/v1/posts/delete`,
   },
   like: {
@@ -62,5 +65,8 @@ export const urls = {
   payment: {
     checkout: `${protocol}://${backendDomain}/v1/payments/checkout`,
     accept: `${protocol}://${backendDomain}/v1/payments/accept`,
+  },
+  premium: {
+    status: `${protocol}://${backendDomain}/v1/premium/status`,
   }
 }
